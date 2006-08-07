@@ -6,14 +6,14 @@
 (show-paren-mode)
 
 
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
+;(add-hook 'text-mode-hook 'turn-on-auto-fill)
 
 (setq load-path (cons "~/.emacs.d" load-path))
 (require 'ruby-mode)
-
+(setq auto-mode-alist (cons '("\\.rb\\'" . ruby-mode) auto-mode-alist))
 
 (defun insert-date ()
-  "Insert a date at point"
+  "Insert the current date at point"
   (interactive)
   (insert (format-time-string "%d.%m.%y")))
 
@@ -26,9 +26,12 @@
 ;(if (fboundp 'menu-bar-mode) (menu-bar-mode -1)) 
 
 
-;; enable copy-paste within X Window
+;; enable copy-paste within X Window under Linux
 (setq x-select-enable-clipboard t)
-(setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
+(if x-no-window-manager
+    (progn 
+      (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
+      (message "cut-and-paste with x enabled")))
 
 
 (fset 'to-java-string
@@ -88,8 +91,3 @@
 (condition-case ()
     (require 'rails)
   (error (message "  rails not present - error on loading")))
-
-
-
-
-
