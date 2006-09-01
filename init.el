@@ -8,9 +8,11 @@
 
 ;(add-hook 'text-mode-hook 'turn-on-auto-fill)
 
+
 (setq load-path (cons "~/.emacs.d" load-path))
 (require 'ruby-mode)
 (setq auto-mode-alist (cons '("\\.rb\\'" . ruby-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.rhtml\\'" . html-mode) auto-mode-alist))
 
 (defun insert-date ()
   "Insert the current date at point"
@@ -43,15 +45,19 @@
 (fset 'mark-as-done
       [?\C-e ?  ?( ?\M-x ?i ?n ?s ?e ?r ?t ?- ?d ?a ?t ?e return ?) ?\C-a ?\C-k ?\C-k ?\C-s ?D ?O ?N ?E ?\C-m return ?\C-y ?\C-k ?\C-r ?T ?O ?D ?O ?\C-m ?\C-n])
 (global-set-key [f2] 'mark-as-done)
+(fset 'ruby-extract-local
+   [?\C-x ?\C-k ?\C-p ?\C-e return ?\C-y ?\C-a tab ?= ?  ?\C-b ?\C-b])
+(global-set-key [C-f6] 'ruby-extract-local)
 
 
 (global-set-key [f5] 'call-last-kbd-macro)
 (global-set-key [f3] 'edit-last-kbd-macro)
 
 ;; free strokes
-;; C-# as new/custom duplicate-line keybinding  
-;; M-p another free keybinding
+;; C-# -> as new/custom duplicate-line keybinding  
+;; M-p 
 ;; C-. 
+;; C-f8 -> make ruby local_var from region
 
 (global-set-key "\C-c\C-m" 'execute-extended-command)
 ;(global-set-key "\C-x\C-m" 'execute-extended-command)
@@ -64,9 +70,9 @@
 
 (add-to-list 'load-path "~/Development/Lisp/slime-cvs")
 ;; Optionally, specify the lisp program to use. Default is "lisp"
-(setq inferior-lisp-program "cmucl") 
+;(setq inferior-lisp-program "cmucl") 
 ;(setq inferior-lisp-program "clisp -K full") 
-;(setq inferior-lisp-program "sbcl")
+(setq inferior-lisp-program "sbcl")
 (condition-case ()
     (progn
       (require 'slime)
