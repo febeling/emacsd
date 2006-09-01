@@ -8,6 +8,11 @@
 
 ;(add-hook 'text-mode-hook 'turn-on-auto-fill)
 
+(setq-default abbrev-file-name "~/.emacs.d/abbrev_defs")
+(setq-default abbrev-mode t)
+(read-abbrev-file)
+(setq save-abbrevs t)
+
 
 (setq load-path (cons "~/.emacs.d" load-path))
 (require 'ruby-mode)
