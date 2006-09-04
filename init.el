@@ -4,15 +4,16 @@
 
 (global-font-lock-mode)
 (show-paren-mode)
-
+(defalias 'qrr 'query-replace-regexp)
 
 ;(add-hook 'text-mode-hook 'turn-on-auto-fill)
+
+
 
 (setq-default abbrev-file-name "~/.emacs.d/abbrev_defs")
 (setq-default abbrev-mode t)
 (read-abbrev-file)
 (setq save-abbrevs t)
-
 
 (setq load-path (cons "~/.emacs.d" load-path))
 (require 'ruby-mode)
@@ -54,9 +55,9 @@
    [?\C-x ?\C-k ?\C-p ?\C-e return ?\C-y ?\C-a tab ?= ?  ?\C-b ?\C-b])
 (global-set-key [C-f6] 'ruby-extract-local)
 
-
 (global-set-key [f5] 'call-last-kbd-macro)
 (global-set-key [f3] 'edit-last-kbd-macro)
+(global-set-key (kbd "C-S-l") 'goto-line)
 
 ;; free strokes
 ;; C-# -> as new/custom duplicate-line keybinding  
@@ -67,10 +68,23 @@
 (global-set-key "\C-c\C-m" 'execute-extended-command)
 ;(global-set-key "\C-x\C-m" 'execute-extended-command)
 
-
 (global-set-key "\C-w" 'backward-kill-word)
 ;(global-set-key "\C-c\C-k" 'kill-region)
 (global-set-key "\C-x\C-k" 'kill-region)
+
+
+
+;; Snippets
+(require 'snippet)
+;; C
+(snippet-with-abbrev-table 'c-mode-abbrev-table
+			   ("tc" . "START_TEST ($${test_name})
+{
+$.
+}
+END_TEST")
+			   ("inc" . "#include \"$${header}.h\""))
+
 
 
 (add-to-list 'load-path "~/Development/Lisp/slime-cvs")
