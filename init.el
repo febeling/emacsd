@@ -5,6 +5,7 @@
 (global-font-lock-mode)
 (show-paren-mode)
 (defalias 'qrr 'query-replace-regexp)
+(defalias 'qr 'query-replace)
 
 ;(add-hook 'text-mode-hook 'turn-on-auto-fill)
 
