@@ -14,7 +14,7 @@
 (setq-default abbrev-file-name "~/.emacs.d/abbrev_defs")
 (setq-default abbrev-mode t)
 (read-abbrev-file)
-;(setq save-abbrevs t)
+(setq save-abbrevs nil)
 
 (setq load-path (cons "~/.emacs.d" load-path))
 (require 'ruby-mode)
@@ -87,7 +87,7 @@ END_TEST
 ")
 			   ("inc" . "#include \"$${header}.h\"")
 			   ("ins" . "#include <$${header}.h>")
-			   ("h" . "#ifndef $${name}_H
+			   ("hf" . "#ifndef $${name}_H
 #define $${name}_H
 
 $.
