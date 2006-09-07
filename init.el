@@ -93,7 +93,8 @@ END_TEST
 $.
 
 #endif /* $${name}_H */
-"))
+")
+			   ("tca" . "tcase_add_test(tc_core, test_$${name});"))
 
 
 
