@@ -81,7 +81,7 @@
 (snippet-with-abbrev-table 'c-mode-abbrev-table
 			   ("tc" . "START_TEST ($${test_name})
 {
-$.
+$.fail(\"+++\");
 }
 END_TEST
 ")
@@ -94,7 +94,7 @@ $.
 
 #endif /* $${name}_H */
 ")
-			   ("tca" . "tcase_add_test(tc_core, test_$${name});"))
+			   ("tca" . "tcase_add_test(tc_core, test_$${name});$>"))
 
 
 
