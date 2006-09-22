@@ -1,11 +1,16 @@
+(if (equal (system-name) "dev14.iconmobile.de")
+    (find-file "~/TODO"))
+
 (setq make-backup-files nil)
 (setq default-case-fold-search t)
 (setq auto-compression-mode t)
 
-(global-font-lock-mode)
-(show-paren-mode)
+(global-font-lock-mode 1)
+(show-paren-mode 1)
+
 (defalias 'qrr 'query-replace-regexp)
 (defalias 'qr 'query-replace)
+
 
 ;(add-hook 'text-mode-hook 'turn-on-auto-fill)
 
@@ -16,9 +21,12 @@
 (setq save-abbrevs nil)
 
 (setq load-path (cons "~/.emacs.d" load-path))
+
+
 (require 'ruby-mode)
 (setq auto-mode-alist (cons '("\\.rb\\'" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.rhtml\\'" . html-mode) auto-mode-alist))
+
 
 (defun insert-date ()
   "Insert the current date at point"
@@ -77,24 +85,30 @@
 ;; Snippets
 (require 'snippet)
 ;; C
-(snippet-with-abbrev-table 'c-mode-abbrev-table
-			   ("tc" . "START_TEST ($${test_name})
+(snippet-with-abbrev-table 
+ 'c-mode-abbrev-table
+ ("tc" . "START_TEST ($${test_name})
 {
 $.fail(\"+++\");
 }
 END_TEST
 ")
-			   ("inc" . "#include \"$${header}.h\"")
-			   ("ins" . "#include <$${header}.h>")
-			   ("hf" . "#ifndef $${name}_H
+ ("inc" . "#include \"$${header}.h\"")
+ ("ins" . "#include <$${header}.h>")
+ ("hf" . "#ifndef $${name}_H
 #define $${name}_H
 
 $.
 
 #endif /* $${name}_H */
 ")
-			   ("tca" . "tcase_add_test(tc_core, test_$${name});$>"))
+ ("tca" . "tcase_add_test(tc_core, test_$${name});$>"))
 
+(snippet-with-abbrev-table 
+ 'ruby-mode-abbrev-table
+ ("def" . "def $.
+
+  end"))
 
 
 (add-to-list 'load-path "~/Development/Lisp/slime-cvs")
