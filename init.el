@@ -4,6 +4,7 @@
 (setq make-backup-files nil)
 (setq default-case-fold-search t)
 (setq auto-compression-mode t)
+(setq uniquify-buffer-name-style 'post-forward)
 
 (global-font-lock-mode 1)
 (show-paren-mode 1)
@@ -27,6 +28,7 @@
 (setq auto-mode-alist (cons '("\\.rb\\'" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.rhtml\\'" . html-mode) auto-mode-alist))
 
+(setq auto-mode-alist (cons '("\\.smil\\'" . sgml-mode) auto-mode-alist))
 
 (defun insert-date ()
   "Insert the current date at point"
@@ -106,7 +108,7 @@ $.
 
 (snippet-with-abbrev-table 
  'ruby-mode-abbrev-table
- ("def" . "def $.
+ ("def" . "def$.
 
   end"))
 
