@@ -1,10 +1,11 @@
+
 (if (equal (system-name) "dev14.iconmobile.de")
     (find-file "~/TODO"))
 
 (setq make-backup-files nil)
 (setq default-case-fold-search t)
 (setq auto-compression-mode t)
-(setq uniquify-buffer-name-style 'post-forward)
+(setq-default uniquify-buffer-name-style 'post-forward)
 
 (global-font-lock-mode 1)
 (show-paren-mode 1)
@@ -23,12 +24,12 @@
 
 (setq load-path (cons "~/.emacs.d" load-path))
 
-
 (require 'ruby-mode)
+
 (setq auto-mode-alist (cons '("\\.rb\\'" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.rhtml\\'" . html-mode) auto-mode-alist))
-
 (setq auto-mode-alist (cons '("\\.smil\\'" . sgml-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.asd\\'" . lisp-mode) auto-mode-alist))
 
 (defun insert-date ()
   "Insert the current date at point"
@@ -68,6 +69,7 @@
 (global-set-key [f5] 'call-last-kbd-macro)
 (global-set-key [f3] 'edit-last-kbd-macro)
 (global-set-key (kbd "C-S-l") 'goto-line)
+(global-set-key (kbd "C-+") 'other-window)
 
 ;; free strokes
 ;; C-# -> as new/custom duplicate-line keybinding  
@@ -121,7 +123,8 @@ $.
 (condition-case ()
     (progn
       (require 'slime)
-      (slime-setup))
+      (slime-setup)
+      (setq slime-net-coding-system 'utf-8-unix))
   (error (message "  slime not present - error on loading")))
 
 ;; from slime/HACKING:
