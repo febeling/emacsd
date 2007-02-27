@@ -1,3 +1,9 @@
+(setq load-path (cons "~/.emacs.d" load-path))
+
+(setq default-frame-alist '((top . 1) (left . 1) (width . 120) (height . 52)))
+
+(if (equal (system-name) "florian-ebelings-computer.local")
+    (load "osx" t)) 
 
 (if (equal (system-name) "dev14.iconmobile.de")
     (find-file "~/TODO"))
@@ -22,7 +28,6 @@
 (read-abbrev-file)
 (setq save-abbrevs nil)
 
-(setq load-path (cons "~/.emacs.d" load-path))
 
 (require 'ruby-mode)
 
@@ -37,7 +42,7 @@
   (insert (format-time-string "%d.%m.%y")))
 
 
-(setq default-frame-alist '((top . 1) (left . 1) (width . 120) (height . 52)))
+
 
 
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1)) 
