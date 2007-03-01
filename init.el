@@ -16,9 +16,14 @@
 (global-font-lock-mode 1)
 (show-paren-mode 1)
 
+;; for emacsclient
+(server-start) 
+
 (defalias 'qrr 'query-replace-regexp)
 (defalias 'qr 'query-replace)
-
+(defalias 'cr 'comment-region)
+(defalias 'ucr 'uncomment-region)
+(defalias 'ir 'indent-region)
 
 ;(add-hook 'text-mode-hook 'turn-on-auto-fill)
 
@@ -57,6 +62,16 @@
       (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
       (message "cut-and-paste with x enabled")))
 
+(defun scroll-up-1 ()
+  (interactive)
+  (scroll-up 1))
+
+(defun scroll-down-1 ()
+  (interactive)
+  (scroll-down 1))
+
+(define-key global-map [S-down] 'scroll-up-1)
+(define-key global-map [S-up] 'scroll-down-1)
 
 (fset 'to-java-string
       [?\C-a ?" ?\C-e ?" ?  ?+ down])
