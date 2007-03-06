@@ -2,13 +2,13 @@
 
 (setq default-frame-alist '((top . 1) (left . 1) (width . 120) (height . 52)))
 
-(if (equal (system-name) "florian-ebelings-computer.local")
-    (load "osx" t)) 
+(if (equal (system-name) "flomac.local")
+    (load "osx" t))
 
 (if (equal (system-name) "dev14.iconmobile.de")
     (find-file "~/TODO"))
 
-(setq make-backup-files nil)
+;;(setq make-backup-files nil)
 (setq default-case-fold-search t)
 (setq auto-compression-mode t)
 (setq-default uniquify-buffer-name-style 'post-forward)
@@ -134,18 +134,22 @@ $.
 
   end"))
 
-
-(add-to-list 'load-path "~/Development/Lisp/slime-cvs")
-;; Optionally, specify the lisp program to use. Default is "lisp"
+(let ((slime-dir-path "~/slime"))
+  (if (file-exists-p slime-dir-path)
+      (progn 
+	(add-to-list 'load-path slime-dir-path)
+;;; Optionally, specify the lisp program to use. Default is "lisp"
 ;(setq inferior-lisp-program "cmucl") 
 ;(setq inferior-lisp-program "clisp -K full") 
-(setq inferior-lisp-program "sbcl")
-(condition-case ()
-    (progn
-      (require 'slime)
-      (slime-setup)
-      (setq slime-net-coding-system 'utf-8-unix))
-  (error (message "  slime not present - error on loading")))
+	(setq inferior-lisp-program "sbcl")
+	(condition-case ()
+	    (progn
+	      (require 'slime)
+	      (slime-setup)
+	      (setq slime-net-coding-system 'utf-8-unix))
+	  (error (with-output-to-temp-buffer "slime - error on loading"))))
+    (with-output-to-temp-buffer "slime init warnings" 
+      (princ (format "slime-dir-path does not exist: '%s'" slime-dir-path)))))
 
 ;; from slime/HACKING:
 (defun show-outline-structure ()
