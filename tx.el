@@ -1,3 +1,5 @@
+;; tool extension functions
+;; 01.03.2007
 
 (defconst *whitespace* '(?  ?\t ?\n))
 
@@ -44,11 +46,11 @@
   s)
 
 ;; max 64 characters
-;; no hyphens, rather unserscrores
+;; no hyphens, rather underscores
 (defun colname (name)
   (downcase (concat "\"j2me_" (tr (substring (tr name ?- ?_ 0) 1) ?. ?_ 0))))
 
-(defun tx ()
+(defun tx-disp ()
   (interactive)
   (unless (bolp) 
     (beginning-of-line))
@@ -76,7 +78,35 @@
 		      "/>")))
     (forward-line 1)))
 
-(global-set-key [f4] 'tx)
+(defun tx-java ()
+  (interactive)
+  (unless (bolp) 
+    (beginning-of-line))
+  (let (name
+	type
+	sample
+	displayname
+	display
+	comment)
+    (setf name (strip-last (del-to-char 1 ?,)))
+    (setf type (strip-last (del-to-char 1 ?,)))
+    (del-to-char 1 ?,)
+    (setf sample (strip-last (del-to-char 1 ?,)))
+    (setf comment (strip-last (del-to-char 1 ?,)))
+    (delete-and-extract-region (point)
+			       (progn
+				 (end-of-visible-line)
+				 (point)))
+    (message "name: %s type: %s sample: %s displayname: %s comment: %s" name type sample displayname comment)
+    (when (got name)
+      (insert (concat (format "\t<attr name=%s type=%s " (colname name) (if (string= "\"boolean\"" type) "\"tinyint(1)\"" type))
+		      (if (got sample) (format "sample=%s " sample) "")
+		      (if (got comment) (format "comment=%s " comment) "")
+		      (if (string= "\"boolean\"" type) "display=\"checkbox\" " "")
+		      "/>")))
+    (forward-line 1)))
+
+(global-set-key [f4] 'tx-disp)
 
 
 
