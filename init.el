@@ -2,11 +2,24 @@
 
 (setq default-frame-alist '((top . 1) (left . 1) (width . 120) (height . 52)))
 
-(if (equal (system-name) "flomac.local")
-    (load "osx" t))
 
-(if (equal (system-name) "dev14.iconmobile.de")
+(let ((hostname (system-name)))
+  (cond
+   ((equal hostname "dev14.iconmobile.de")
+    (message "Intializing for host %s" hostname)
+    (require 'psvn)
     (find-file "~/TODO"))
+   (nil ;; todo: somehow test for ubuntu laptop
+    (message "Intializing for host %s" hostname)
+    (let ((slime-dir-path "~/slime"))
+      (if (file-exists-p slime-dir-path)
+	  (add-to-list 'load-path slime-dir-path)
+	(with-output-to-temp-buffer "*slime init warnings*" 
+	  (princ (format "slime-dir-path does not exist: '%s'" slime-dir-path))))))
+   ((equal hostname "flomac.local")
+    (message "Initializing for host %s" hostname)
+    (load "osx" t))))
+
 
 ;;(setq make-backup-files nil)
 (setq default-case-fold-search t)
@@ -104,7 +117,7 @@
 ;(global-set-key "\C-c\C-k" 'kill-region)
 (global-set-key "\C-x\C-k" 'kill-region)
 
-
+(add-hook 'nxml-mode-hook '(lambda () (define-key nxml-mode-map [C-tab] 'nxml-complete)))
 
 ;; Snippets
 (require 'snippet)
@@ -134,22 +147,15 @@ $.
 
   end"))
 
-(let ((slime-dir-path "~/slime"))
-  (if (file-exists-p slime-dir-path)
-      (progn 
-	(add-to-list 'load-path slime-dir-path)
+
+(require 'slime)
 ;;; Optionally, specify the lisp program to use. Default is "lisp"
 ;(setq inferior-lisp-program "cmucl") 
 ;(setq inferior-lisp-program "clisp -K full") 
-	(setq inferior-lisp-program "sbcl")
-	(condition-case ()
-	    (progn
-	      (require 'slime)
-	      (slime-setup)
-	      (setq slime-net-coding-system 'utf-8-unix))
-	  (error (with-output-to-temp-buffer "slime - error on loading"))))
-    (with-output-to-temp-buffer "slime init warnings" 
-      (princ (format "slime-dir-path does not exist: '%s'" slime-dir-path)))))
+(setq inferior-lisp-program "sbcl")
+(slime-setup)
+
+(setq slime-net-coding-system 'utf-8-unix)
 
 ;; from slime/HACKING:
 (defun show-outline-structure ()
