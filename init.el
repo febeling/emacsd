@@ -153,7 +153,13 @@ $.
 ;(setq inferior-lisp-program "cmucl") 
 ;(setq inferior-lisp-program "clisp -K full") 
 (setq inferior-lisp-program "sbcl")
+;(setq inferior-lisp-program "guile")
 (slime-setup)
+
+(add-hook 'slime-mode-hook
+	  (lambda ()
+	    (unless (slime-connected-p)
+	      (save-excursion (slime)))))
 
 (setq slime-net-coding-system 'utf-8-unix)
 
