@@ -154,6 +154,7 @@ $.
 ;(setq inferior-lisp-program "clisp -K full") 
 (setq inferior-lisp-program "sbcl")
 ;(setq inferior-lisp-program "guile")
+;(setq inferior-lisp-program "scheme48")
 (slime-setup)
 
 (add-hook 'slime-mode-hook
