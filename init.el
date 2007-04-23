@@ -2,6 +2,31 @@
 
 (setq default-frame-alist '((top . 1) (left . 1) (width . 120) (height . 52)))
 
+(defun symq ()
+  "symbol quote, puts double quotes around word."
+  (interactive)
+  (save-excursion 
+    (if (not (word-beginning-p)) 
+	(backward-word 1))
+    (insert-char ?\" 1)
+    (forward-word 1)
+    (insert-char ?\" 1))
+  (forward-word 2))
+
+(global-set-key [f8] 'symq)
+
+(defun word-beginning-p ()
+  (interactive)
+  (word-boundary 'car))
+(defun word-ending-p ()
+  (interactive)
+  (word-boundary 'cdr))
+(defun word-boundary (func)
+  (if (equal (funcall func (bounds-of-thing-at-point 'word)) (point))
+      (progn 
+	(message "cursor is at a word boundary")
+	t)
+    nil))
 
 (let ((hostname (system-name)))
   (cond
@@ -25,6 +50,7 @@
 (setq default-case-fold-search t)
 (setq auto-compression-mode t)
 (setq-default uniquify-buffer-name-style 'post-forward)
+(setq-default tab-width 8)
 
 (global-font-lock-mode 1)
 (show-paren-mode 1)
@@ -182,3 +208,4 @@ $.
 (condition-case ()
     (require 'rails)
   (error (message "  rails not present - error on loading")))
+
