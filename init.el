@@ -173,11 +173,9 @@ $.
 
   end"))
 
-(snippet-with-abbrev-table 
- 'cperl-mode-abbrev-table
- ("item" . "=item1$.
-
-=cut"))
+(add-hook 'cperl-mode-hook 
+	  '(lambda () (snippet-with-abbrev-table 'cperl-mode-abbrev-table
+						 ("head" . "=head3$.\n\n=cut\n"))))
 
 
 (require 'slime)
