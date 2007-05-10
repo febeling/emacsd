@@ -2,6 +2,23 @@
 
 (setq default-frame-alist '((top . 1) (left . 1) (width . 120) (height . 52)))
 
+(defun pull-line-up ()
+  "Drags a line up by one, and moves point accordingly."
+  (interactive)
+  (transpose-lines 1)
+  (forward-line -2))
+
+(global-set-key [M-up] 'pull-line-up)
+
+(defun pull-line-down ()
+  "Drags a line down by one, and moves point accordingly."
+  (interactive)
+  (forward-line 1)
+  (transpose-lines 1)
+  (forward-line -1))
+
+(global-set-key [M-down] 'pull-line-down)
+
 (defun symq ()
   "symbol quote, puts double quotes around word."
   (interactive)
@@ -18,9 +35,11 @@
 (defun word-beginning-p ()
   (interactive)
   (word-boundary 'car))
+
 (defun word-ending-p ()
   (interactive)
   (word-boundary 'cdr))
+
 (defun word-boundary (func)
   (if (equal (funcall func (bounds-of-thing-at-point 'word)) (point))
       (progn 
