@@ -124,11 +124,12 @@
   (interactive)
   (scroll-up 1))
 
+(define-key global-map [S-down] 'scroll-up-1)
+
 (defun scroll-down-1 ()
   (interactive)
   (scroll-down 1))
 
-(define-key global-map [S-down] 'scroll-up-1)
 (define-key global-map [S-up] 'scroll-down-1)
 
 (fset 'to-java-string
@@ -148,6 +149,7 @@
 (global-set-key [f3] 'edit-last-kbd-macro)
 (global-set-key (kbd "C-S-l") 'goto-line)
 (global-set-key (kbd "C-+") 'other-window)
+(global-set-key [C-tab] 'indent-region)
 
 ;; free strokes
 ;; C-# -> as new/custom duplicate-line keybinding  
