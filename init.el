@@ -19,6 +19,14 @@
 
 (global-set-key [M-down] 'pull-line-down)
 
+(defun indent-buffer ()
+  ;; Author: Mathias Creutz
+  "Indent every line in the buffer."
+  (interactive)
+  (indent-region (point-min) (point-max) nil))
+
+(global-set-key "\M-i" 'indent-buffer)
+
 (defun symq ()
   "symbol quote, puts double quotes around word."
   (interactive)
