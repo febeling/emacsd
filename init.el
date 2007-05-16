@@ -25,6 +25,7 @@
   (interactive)
   (indent-region (point-min) (point-max) nil))
 
+;; shadows tab-to-tab-stop binding.
 (global-set-key "\M-i" 'indent-buffer)
 
 (defun symq ()
