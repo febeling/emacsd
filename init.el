@@ -1,4 +1,6 @@
-(setq load-path (cons "~/.emacs.d" load-path))
+;; emacs init.el - Florian Ebeling
+
+(add-to-list 'load-path "~/.emacs.d")
 
 (setq default-frame-alist '((top . 1) (left . 1) (width . 120) (height . 52)))
 
@@ -73,7 +75,6 @@
     (message "Initializing for host %s" hostname)
     (load "osx" t))))
 
-
 ;;(setq make-backup-files nil)
 (setq default-case-fold-search t)
 (setq auto-compression-mode t)
@@ -92,35 +93,19 @@
 (defalias 'ucr 'uncomment-region)
 (defalias 'ir 'indent-region)
 
-;(add-hook 'text-mode-hook 'turn-on-auto-fill)
-
-
 (setq-default abbrev-file-name "~/.emacs.d/abbrev_defs")
 (setq-default abbrev-mode t)
 (read-abbrev-file)
 (setq save-abbrevs nil)
-
-
-(require 'ruby-mode)
-
-(setq auto-mode-alist (cons '("\\.rb\\'" . ruby-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.rhtml\\'" . html-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.smil\\'" . sgml-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.asd\\'" . lisp-mode) auto-mode-alist))
 
 (defun insert-date ()
   "Insert the current date at point"
   (interactive)
   (insert (format-time-string "%d.%m.%y")))
 
-
-
-
-
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1)) 
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1)) 
 ;(if (fboundp 'menu-bar-mode) (menu-bar-mode -1)) 
-
 
 ;; enable copy-paste within X Window under Linux
 (setq x-select-enable-clipboard t)
@@ -175,9 +160,8 @@
 
 (add-hook 'nxml-mode-hook '(lambda () (define-key nxml-mode-map [C-tab] 'nxml-complete)))
 
-;; Snippets
 (require 'snippet)
-;; C
+
 (snippet-with-abbrev-table 
  'c-mode-abbrev-table
  ("tc" . "START_TEST ($${test_name})
@@ -204,9 +188,10 @@ $.
   end"))
 
 (add-hook 'cperl-mode-hook 
-	  '(lambda () (snippet-with-abbrev-table 'cperl-mode-abbrev-table
-						 ("head" . "=head3$.\n\n=cut\n"))))
-
+	  '(lambda () 
+	     (snippet-with-abbrev-table 
+	      'cperl-mode-abbrev-table
+	      ("head" . "=head3$.\n\n=cut\n"))))
 
 (require 'slime)
 ;;; Optionally, specify the lisp program to use. Default is "lisp"
@@ -230,18 +215,23 @@ $.
   (interactive)
   (occur (concat "^" outline-regexp)))
 
+(require 'ruby-mode)
 
+(setq auto-mode-alist (cons '("\\.rb\\'" . ruby-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.rhtml\\'" . html-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.smil\\'" . sgml-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.asd\\'" . lisp-mode) auto-mode-alist))
 
-(add-to-list 'load-path "~/Development/emacs-rails-svn")
-(defun try-complete-abbrev (old)
-  (if (expand-abbrev) t nil))
-(setq hippie-expand-try-functions-list
-      '(try-complete-abbrev
-	try-complete-file-name
-	try-expand-dabbrev))
-(condition-case ()
-    (require 'rails)
-  (error (message "  rails not present - error on loading")))
+;; (add-to-list 'load-path "~/Development/emacs-rails-svn")
+;; (defun try-complete-abbrev (old)
+;;   (if (expand-abbrev) t nil))
+;; (setq hippie-expand-try-functions-list
+;;       '(try-complete-abbrev
+;; 	try-complete-file-name
+;; 	try-expand-dabbrev))
+;; (condition-case ()
+;;     (require 'rails)
+;;   (error (message "  rails not present - error on loading")))
 
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
