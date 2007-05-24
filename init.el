@@ -158,6 +158,10 @@
 ;(global-set-key "\C-c\C-k" 'kill-region)
 (global-set-key "\C-x\C-k" 'kill-region)
 
+(autoload 'css-mode "css-mode")
+(setq auto-mode-alist       
+      (cons '("\\.css\\'" . css-mode) auto-mode-alist))
+
 (add-hook 'nxml-mode-hook '(lambda () (define-key nxml-mode-map [C-tab] 'nxml-complete)))
 
 (require 'snippet)
