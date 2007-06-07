@@ -92,6 +92,8 @@
 (defalias 'cr 'comment-region)
 (defalias 'ucr 'uncomment-region)
 (defalias 'ir 'indent-region)
+(defalias 'bb 'beginning-of-buffer)
+(defalias 'eb 'end-of-buffer)
 
 (setq-default abbrev-file-name "~/.emacs.d/abbrev_defs")
 (setq-default abbrev-mode t)
@@ -143,7 +145,9 @@
 (global-set-key [f3] 'edit-last-kbd-macro)
 (global-set-key (kbd "C-S-l") 'goto-line)
 (global-set-key (kbd "C-+") 'other-window)
-(global-set-key [C-tab] 'indent-region)
+(global-set-key [C-z] 'yank) ;; using a us key layout, this makes sense.
+(global-set-key [C-tab] 'indent-line)
+
 
 ;; free strokes
 ;; C-# -> as new/custom duplicate-line keybinding  
@@ -221,6 +225,7 @@ $.
 
 (require 'ruby-mode)
 
+(setq auto-mode-alist (cons '("\\.cap\\'" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.rb\\'" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.rhtml\\'" . html-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.smil\\'" . sgml-mode) auto-mode-alist))
