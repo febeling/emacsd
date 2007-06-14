@@ -128,6 +128,16 @@
 
 (define-key global-map [S-up] 'scroll-down-1)
 
+;;; general key remapping
+
+;; free strokes
+;; C-# -> as new/custom duplicate-line keybinding  
+;; M-p 
+;; C-. 
+;; C-f8 -> make ruby local_var from region
+
+(global-set-key (kbd "C-.") 'find-file-at-point)
+
 (fset 'to-java-string
       [?\C-a ?" ?\C-e ?" ?  ?+ down])
 (global-set-key [f6] 'to-java-string)
@@ -149,11 +159,6 @@
 (global-set-key [C-tab] 'indent-line)
 
 
-;; free strokes
-;; C-# -> as new/custom duplicate-line keybinding  
-;; M-p 
-;; C-. 
-;; C-f8 -> make ruby local_var from region
 
 (global-set-key "\C-c\C-m" 'execute-extended-command)
 ;(global-set-key "\C-x\C-m" 'execute-extended-command)
@@ -162,9 +167,33 @@
 ;(global-set-key "\C-c\C-k" 'kill-region)
 (global-set-key "\C-x\C-k" 'kill-region)
 
+;;;;;
+(defvar ffap-ruby-path '("~/dev/rptn/test/" "~/dev/rptn/lib/"))
+
+(defun ffap-ruby-mode (name)
+  (message "ffap-ruby-mode, in")
+  (message "name: %s" name)
+  (ffap-locate-file name '(".rb" ".rhtml" ".cap" "") ffap-ruby-path t)
+  (message "ffap-ruby-mode, return"))
+
+(add-to-list 'ffap-alist '("\\.rb\\'" . ffap-ruby-mode))
+
+;;ffap-alist
+
+;;auto-mode-alist
+
+
+;;(setq auto-mode-alist (cdr auto-mode-alist))
+;;;;;
+
 (autoload 'css-mode "css-mode")
 (setq auto-mode-alist       
       (cons '("\\.css\\'" . css-mode) auto-mode-alist))
+
+(add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
+(autoload 'csv-mode "csv-mode"
+  "Major mode for editing comma-separated value files." t)
+
 
 (add-hook 'nxml-mode-hook '(lambda () (define-key nxml-mode-map [C-tab] 'nxml-complete)))
 
