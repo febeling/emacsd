@@ -168,15 +168,15 @@
 (global-set-key "\C-x\C-k" 'kill-region)
 
 ;;;;;
-(defvar ffap-ruby-path '("~/dev/rptn/test/" "~/dev/rptn/lib/"))
+;; (defvar ffap-ruby-path '("~/dev/rptn/test/" "~/dev/rptn/lib/"))
 
-(defun ffap-ruby-mode (name)
-  (message "ffap-ruby-mode, in")
-  (message "name: %s" name)
-  (ffap-locate-file name '(".rb" ".rhtml" ".cap" "") ffap-ruby-path t)
-  (message "ffap-ruby-mode, return"))
+;; (defun ffap-ruby-mode (name)
+;;   (message "ffap-ruby-mode, in")
+;;   (message "name: %s" name)
+;;   (ffap-locate-file name '(".rb" ".rhtml" ".cap" "") ffap-ruby-path t)
+;;   (message "ffap-ruby-mode, return"))
 
-(add-to-list 'ffap-alist '("\\.rb\\'" . ffap-ruby-mode))
+;; (add-to-list 'ffap-alist '("\\.rb\\'" . ffap-ruby-mode))
 
 ;;ffap-alist
 
