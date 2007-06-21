@@ -256,6 +256,7 @@ $.
 
 (setq auto-mode-alist (cons '("\\.cap\\'" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.rb\\'" . ruby-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.rake\\'" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.rhtml\\'" . html-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.smil\\'" . sgml-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.asd\\'" . lisp-mode) auto-mode-alist))
