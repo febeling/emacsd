@@ -75,6 +75,12 @@
     (message "Initializing for host %s" hostname)
     (load "osx" t))))
 
+(setq otp-path "/opt/local/lib/erlang/lib/tools-2.5.5/emacs/")
+(setq load-path (cons otp-path load-path))
+(setq erlang-root-dir "/opt/local/bin")
+(setq exec-path (cons "/opt/local/lib/erlang" exec-path))
+(require 'erlang-start)
+
 ;;(setq make-backup-files nil)
 (setq default-case-fold-search t)
 (setq auto-compression-mode t)
