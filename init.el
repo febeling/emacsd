@@ -4,6 +4,14 @@
 
 (setq default-frame-alist '((top . 1) (left . 1) (width . 120) (height . 52)))
 
+(defun ruby-run ()
+  "One day, this guy can run ruby tests via key stroke."
+  (interactive)
+  (let ((file (buffer-file-name)))
+    (cond 
+     (file (message "'%s'" file))
+     (t (message "nil found")))))
+
 (defun pull-line-up ()
   "Drags a line up by one, and moves point accordingly."
   (interactive)
