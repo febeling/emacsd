@@ -5,18 +5,21 @@
 (setq default-frame-alist '((top . 1) (left . 1) (width . 130) (height . 44)))
 (speedbar)
 
-(defun ruby-run ()
-  "Run ruby tests via key stroke."
+(defun ruby-run-buffer-file-as-test ()
+  "Run buffer's file as ruby test (spec or test/unit)."
   (interactive)
-  (let ((file (buffer-file-name)))
+  (let ((file (buffer-file-name))
+	(fname "ruby-run-buffer-file-as-test"))
     (if file 
 	(cond
 	 ((string-match "spec\.rb$" file) 
 	  (shell-command (format "spec %s" file)))
 	 ((string-match "test\.rb$" file) 
 	  (shell-command (format "/opt/local/bin/ruby %s" file)))
-	 (t (message "file not recognized as ruby test or spec.")))
-      (message "buffer file name is nil"))))
+	 (t (message "%s: file not recognized as ruby test or spec." fname)))
+      (message  "%s: buffer file name is nil" fname))))
+
+(global-set-key (kbd "C-x t") 'ruby-run-buffer-file-as-test)
 
 (defun pull-line-up ()
   "Drags a line up by one, and moves point accordingly."
