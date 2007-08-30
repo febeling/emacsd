@@ -2,15 +2,21 @@
 
 (add-to-list 'load-path "~/.emacs.d")
 
-(setq default-frame-alist '((top . 1) (left . 1) (width . 120) (height . 52)))
+(setq default-frame-alist '((top . 1) (left . 1) (width . 130) (height . 44)))
+(speedbar)
 
 (defun ruby-run ()
-  "One day, this guy can run ruby tests via key stroke."
+  "Run ruby tests via key stroke."
   (interactive)
   (let ((file (buffer-file-name)))
-    (cond 
-     (file (message "'%s'" file))
-     (t (message "nil found")))))
+    (if file 
+	(cond
+	 ((string-match "spec\.rb$" file) 
+	  (shell-command (format "spec %s" file)))
+	 ((string-match "test\.rb$" file) 
+	  (shell-command (format "/opt/local/bin/ruby %s" file)))
+	 (t (message "file not recognized as ruby test or spec.")))
+      (message "buffer file name is nil"))))
 
 (defun pull-line-up ()
   "Drags a line up by one, and moves point accordingly."
@@ -81,13 +87,15 @@
 	  (princ (format "slime-dir-path does not exist: '%s'" slime-dir-path))))))
    ((equal hostname "flomac.local")
     (message "Initializing for host %s" hostname)
-    (load "osx" t))))
+    (setq otp-path "/opt/local/lib/erlang/lib/tools-2.5.5/emacs/")
+    (setq load-path (cons otp-path load-path))
+    (setq erlang-root-dir "/opt/local/bin")
+    (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
+    (require 'erlang-start)
+    (load "osx" t))
+))
 
-(setq otp-path "/opt/local/lib/erlang/lib/tools-2.5.5/emacs/")
-(setq load-path (cons otp-path load-path))
-(setq erlang-root-dir "/opt/local/bin")
-(setq exec-path (cons "/opt/local/lib/erlang" exec-path))
-(require 'erlang-start)
+(ido-mode)
 
 ;;(setq make-backup-files nil)
 (setq default-case-fold-search t)
@@ -292,3 +300,9 @@ $.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  '(safe-local-variable-values (quote ((cperl-indent-level . 4) (cperl-indent-level . 2)))))
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(default ((t (:stipple nil :background "white" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 160 :width normal :family "apple-monaco")))))
