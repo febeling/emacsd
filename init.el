@@ -12,12 +12,16 @@
 	(fname "ruby-run-buffer-file-as-test"))
     (if file 
 	(cond
-	 ((string-match "spec\.rb$" file) 
-	  (shell-command (format "spec %s" file)))
+	 ((string-match "spec\.rb$" file)
+	  (message "Running spec...")
+	  (shell-command (format "spec %s" file))
+	  (message "Spec done."))
 	 ((string-match "test\.rb$" file) 
-	  (shell-command (format "/opt/local/bin/ruby %s" file)))
+	  (message "Running unit tests...")
+	  (shell-command (format "/opt/local/bin/ruby %s" file))
+	  (message "Tests done."))
 	 (t (message "%s: file not recognized as ruby test or spec." fname)))
-      (message  "%s: buffer file name is nil" fname))))
+      (message "%s: buffer file name is nil" fname))))
 
 (global-set-key (kbd "C-x t") 'ruby-run-buffer-file-as-test)
 
