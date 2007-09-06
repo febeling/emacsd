@@ -5,6 +5,22 @@
 (setq default-frame-alist '((top . 1) (left . 1) (width . 130) (height . 44)))
 (speedbar)
 
+(defun ruby-spec-p (filename)
+  (string-match "spec\.rb$" filename))
+
+(defun ruby-test-p (filename)
+  (string-match "test\.rb$" filename))
+
+(defun ruby-any-test-p (filename)
+  (or (ruby-spec-p filename)
+      (ruby-test-p filename)))
+
+(defun select (ls fn)
+  (let ((res nil))
+    (dolist (elt ls res)
+      (if (funcall fn elt)
+	  (sefq res (cons elt res))))))
+
 (defun ruby-run-buffer-file-as-test ()
   "Run buffer's file as ruby test (spec or test/unit)."
   (interactive)
@@ -12,16 +28,20 @@
 	(fname "ruby-run-buffer-file-as-test"))
     (if file 
 	(cond
-	 ((string-match "spec\.rb$" file)
+	 ((ruby-spec-p file)
 	  (message "Running spec...")
 	  (shell-command (format "spec %s" file))
 	  (message "Spec done."))
-	 ((string-match "test\.rb$" file) 
+	 ((ruby-test-p file)
 	  (message "Running unit tests...")
-	  (shell-command (format "/opt/local/bin/ruby %s" file))
+	  (shell-command (format "/opt/local/bin/ruby %s" file)) ;; fix with interactive shell, etc.
 	  (message "Tests done."))
-	 (t (message "%s: file not recognized as ruby test or spec." fname)))
-      (message "%s: buffer file name is nil" fname))))
+	 (t (let ((test-win))
+	      (mapcar (lambda (wn) (or ((buffer-file-name wn)) (window-list)
+
+))
+      (message "%s: buffer file name is nil" fname)
+))
 
 (global-set-key (kbd "C-x t") 'ruby-run-buffer-file-as-test)
 
