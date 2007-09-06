@@ -21,27 +21,27 @@
       (if (funcall fn elt)
 	  (sefq res (cons elt res))))))
 
-(defun ruby-run-buffer-file-as-test ()
-  "Run buffer's file as ruby test (spec or test/unit)."
-  (interactive)
-  (let ((file (buffer-file-name))
-	(fname "ruby-run-buffer-file-as-test"))
-    (if file 
-	(cond
-	 ((ruby-spec-p file)
-	  (message "Running spec...")
-	  (shell-command (format "spec %s" file))
-	  (message "Spec done."))
-	 ((ruby-test-p file)
-	  (message "Running unit tests...")
-	  (shell-command (format "/opt/local/bin/ruby %s" file)) ;; fix with interactive shell, etc.
-	  (message "Tests done."))
-	 (t (let ((test-win))
-	      (mapcar (lambda (wn) (or ((buffer-file-name wn)) (window-list)
+;; (defun ruby-run-buffer-file-as-test ()
+;;   "Run buffer's file as ruby test (spec or test/unit)."
+;;   (interactive)
+;;   (let ((file (buffer-file-name))
+;; 	(fname "ruby-run-buffer-file-as-test"))
+;;     (if file 
+;; 	(cond
+;; 	 ((ruby-spec-p file)
+;; 	  (message "Running spec...")
+;; 	  (shell-command (format "spec %s" file))
+;; 	  (message "Spec done."))
+;; 	 ((ruby-test-p file)
+;; 	  (message "Running unit tests...")
+;; 	  (shell-command (format "/opt/local/bin/ruby %s" file)) ;; fix with interactive shell, etc.
+;; 	  (message "Tests done."))
+;; 	 (t (let ((test-win))
+;; 	      (mapcar (lambda (wn) (or ((buffer-file-name wn)) (window-list)
 
-))
-      (message "%s: buffer file name is nil" fname)
-))
+;; ))
+;;       (message "%s: buffer file name is nil" fname)
+;; ))
 
 (global-set-key (kbd "C-x t") 'ruby-run-buffer-file-as-test)
 
