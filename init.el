@@ -141,7 +141,7 @@
     (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
     (require 'erlang-start)
     (load "osx" t))
-))
+   ))
 
 (ido-mode)
 
@@ -177,7 +177,7 @@
 
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1)) 
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1)) 
-;(if (fboundp 'menu-bar-mode) (menu-bar-mode -1)) 
+					;(if (fboundp 'menu-bar-mode) (menu-bar-mode -1)) 
 
 ;; enable copy-paste within X Window under Linux
 (setq x-select-enable-clipboard t)
@@ -218,7 +218,7 @@
       [?\C-e ?  ?( ?\M-x ?i ?n ?s ?e ?r ?t ?- ?d ?a ?t ?e return ?) ?\C-a ?\C-k ?\C-k ?\C-s ?D ?O ?N ?E ?\C-m return ?\C-y ?\C-k ?\C-r ?T ?O ?D ?O ?\C-m ?\C-n])
 (global-set-key [f2] 'mark-as-done)
 (fset 'ruby-extract-local
-   [?\C-x ?\C-k ?\C-p ?\C-e return ?\C-y ?\C-a tab ?= ?  ?\C-b ?\C-b])
+      [?\C-x ?\C-k ?\C-p ?\C-e return ?\C-y ?\C-a tab ?= ?  ?\C-b ?\C-b])
 (global-set-key [C-f6] 'ruby-extract-local)
 
 (global-set-key [f5] 'call-last-kbd-macro)
@@ -231,10 +231,10 @@
 
 
 (global-set-key "\C-c\C-m" 'execute-extended-command)
-;(global-set-key "\C-x\C-m" 'execute-extended-command)
+					;(global-set-key "\C-x\C-m" 'execute-extended-command)
 
 (global-set-key "\C-w" 'backward-kill-word)
-;(global-set-key "\C-c\C-k" 'kill-region)
+					;(global-set-key "\C-c\C-k" 'kill-region)
 (global-set-key "\C-x\C-k" 'kill-region)
 
 ;;;;;
@@ -302,11 +302,11 @@ $.
 
 (require 'slime)
 ;;; Optionally, specify the lisp program to use. Default is "lisp"
-;(setq inferior-lisp-program "cmucl") 
-;(setq inferior-lisp-program "clisp -K full") 
+					;(setq inferior-lisp-program "cmucl") 
+					;(setq inferior-lisp-program "clisp -K full") 
 (setq inferior-lisp-program "sbcl")
-;(setq inferior-lisp-program "guile")
-;(setq inferior-lisp-program "scheme48")
+					;(setq inferior-lisp-program "guile")
+					;(setq inferior-lisp-program "scheme48")
 (slime-setup)
 
 (add-hook 'slime-mode-hook
@@ -343,14 +343,14 @@ $.
 ;;   (error (message "  rails not present - error on loading")))
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(safe-local-variable-values (quote ((cperl-indent-level . 4) (cperl-indent-level . 2)))))
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(default ((t (:stipple nil :background "white" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 160 :width normal :family "apple-monaco")))))
