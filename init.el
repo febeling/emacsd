@@ -19,19 +19,13 @@
 
 (defun even-p (i) (= 0 (mod i 2)))
 
-(defun select (ls fn)
-  (let ((res nil))
-    (dolist (elt ls res)
-      (if (funcall fn elt)
-	  (sefq res (cons elt res))))))
-(defalias 'find-all 'select)
-
 (defun select (fn ls)
   (let ((result nil))
     (dolist (item ls)
       (if (funcall fn item)
-	  (setq result (cons item res))))
+	  (setq result (cons item result))))
     (reverse result)))
+(defalias 'find-all 'select)
 
 (defun ruby-run-buffer-file-as-test ()
   "Run buffer's file or first visible window file as ruby test (rspec or test/unit)."
