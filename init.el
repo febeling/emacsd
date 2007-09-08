@@ -316,12 +316,6 @@ $.
 
 (setq slime-net-coding-system 'utf-8-unix)
 
-;; from slime/HACKING:
-(defun show-outline-structure ()
-  "Show the outline-mode structure of the current buffer."
-  (interactive)
-  (occur (concat "^" outline-regexp)))
-
 (require 'ruby-mode)
 
 (setq auto-mode-alist (cons '("\\.cap\\'" . ruby-mode) auto-mode-alist))
@@ -330,17 +324,6 @@ $.
 (setq auto-mode-alist (cons '("\\.rhtml\\'" . html-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.smil\\'" . sgml-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.asd\\'" . lisp-mode) auto-mode-alist))
-
-;; (add-to-list 'load-path "~/Development/emacs-rails-svn")
-;; (defun try-complete-abbrev (old)
-;;   (if (expand-abbrev) t nil))
-;; (setq hippie-expand-try-functions-list
-;;       '(try-complete-abbrev
-;; 	try-complete-file-name
-;; 	try-expand-dabbrev))
-;; (condition-case ()
-;;     (require 'rails)
-;;   (error (message "  rails not present - error on loading")))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
