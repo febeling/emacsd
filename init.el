@@ -24,6 +24,7 @@
     (dolist (elt ls res)
       (if (funcall fn elt)
 	  (sefq res (cons elt res))))))
+(defalias 'find-all 'select)
 
 (defun select (fn ls)
   (let ((result nil))
@@ -49,11 +50,11 @@
 	  (cond
 	   ((ruby-spec-p file) (run-spec file))
 	   ((ruby-test-p file) (run-test file))
-	   (t (let ((test-file)
-		    (select 'ruby-any-test-p (mapcar 
-					      (lambda (wn) 
-						(buffer-file-name wn))
-					      (window-list))))
+	   (t (let ((visible-test-file
+		     (car (select 'ruby-any-test-p (mapcar 
+						    (lambda (wn) 
+						      (buffer-file-name (window-buffer wn)))
+						    (window-list))))))
 		(if visible-test-file
 		    (cond
 		     ((ruby-spec-p visible-test-file)
