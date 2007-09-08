@@ -15,33 +15,53 @@
   (or (ruby-spec-p filename)
       (ruby-test-p filename)))
 
+(defun odd-p (i) (= 1 (mod i 2)))
+
+(defun even-p (i) (= 0 (mod i 2)))
+
 (defun select (ls fn)
   (let ((res nil))
     (dolist (elt ls res)
       (if (funcall fn elt)
 	  (sefq res (cons elt res))))))
 
-;; (defun ruby-run-buffer-file-as-test ()
-;;   "Run buffer's file as ruby test (spec or test/unit)."
-;;   (interactive)
-;;   (let ((file (buffer-file-name))
-;; 	(fname "ruby-run-buffer-file-as-test"))
-;;     (if file 
-;; 	(cond
-;; 	 ((ruby-spec-p file)
-;; 	  (message "Running spec...")
-;; 	  (shell-command (format "spec %s" file))
-;; 	  (message "Spec done."))
-;; 	 ((ruby-test-p file)
-;; 	  (message "Running unit tests...")
-;; 	  (shell-command (format "/opt/local/bin/ruby %s" file)) ;; fix with interactive shell, etc.
-;; 	  (message "Tests done."))
-;; 	 (t (let ((test-win))
-;; 	      (mapcar (lambda (wn) (or ((buffer-file-name wn)) (window-list)
+(defun select (fn ls)
+  (let ((result nil))
+    (dolist (item ls)
+      (if (funcall fn item)
+	  (setq result (cons item res))))
+    (reverse result)))
 
-;; ))
-;;       (message "%s: buffer file name is nil" fname)
-;; ))
+(defun ruby-run-buffer-file-as-test ()
+  "Run buffer's file or first visible window file as ruby test (rspec or test/unit)."
+  (interactive)
+  (let ((file (buffer-file-name))
+	(fname "ruby-run-buffer-file-as-test"))
+    (flet ((run-spec (file)
+		     (message "Running spec...")
+		     (shell-command (format "spec %s" file))
+		     (message "Spec done."))
+	   (run-test (file)
+		     (message "Running unit tests...")
+		     (shell-command (format "/opt/local/bin/ruby %s" file)) ;; fix with interactive shell, etc.
+		     (message "Tests done.")))
+      (if file 
+	  (cond
+	   ((ruby-spec-p file) (run-spec file))
+	   ((ruby-test-p file) (run-test file))
+	   (t (let ((test-file)
+		    (select 'ruby-any-test-p (mapcar 
+					      (lambda (wn) 
+						(buffer-file-name wn))
+					      (window-list))))
+		(if visible-test-file
+		    (cond
+		     ((ruby-spec-p visible-test-file)
+		      (run-spec visible-test-file))
+		     ((ruby-test-p visible-test-file)
+		      (run-test visible-test-file))
+		     (t (message "SHOULD NOT GET HERE.")))
+		  (message "No test among visible buffers.")))))))))
 
 (global-set-key (kbd "C-x t") 'ruby-run-buffer-file-as-test)
 
