@@ -139,7 +139,7 @@
    ((equal hostname "flomac-work.local")
     (message "Initializing for nugg.ad")
     ;; ...
-   ))
+   )))
 
 ;;(setq make-backup-files nil)
 (setq default-case-fold-search t)
