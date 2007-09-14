@@ -131,7 +131,7 @@
     (message "Initializing for host %s" hostname)
     (setq default-frame-alist '((top . 1) (left . 1) 
 				(width . 125) (height . 35)))
-    (setq add-log-mailing-address "florian.ebeling@gmail.com")
+    (setq mail-host-address "florian.ebeling@gmail.com")
     ;; erlang
     (setq otp-path "/opt/local/lib/erlang/lib/tools-2.5.5/emacs/")
     (setq load-path (cons otp-path load-path))
@@ -143,7 +143,7 @@
     (setq default-frame-alist '((top . 1) (left . 1) 
 				(width . 220) (height . 30)))
     (message "Initializing for nugg.ad")
-    (setq add-log-mailing-address "florian.ebeling@nugg.ad")
+    (setq mail-host-address "florian.ebeling@nugg.ad")
     (find-file "~/todo")
     ;;
    )))
