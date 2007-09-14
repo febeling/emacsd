@@ -3,7 +3,6 @@
 (add-to-list 'load-path "~/.emacs.d")
 
 (setq default-frame-alist '((top . 1) (left . 1) (width . 130) (height . 44)))
-(speedbar)
 
 (defun ruby-spec-p (filename)
   (string-match "spec\.rb$" filename))
@@ -121,7 +120,7 @@
     (message "Intializing for host %s" hostname)
     (require 'psvn)
     (find-file "~/TODO"))
-   (nil ;; todo: somehow test for ubuntu laptop
+   (nil ;; todo: test for ubuntu laptop
     (message "Intializing for host %s" hostname)
     (let ((slime-dir-path "~/slime"))
       (if (file-exists-p slime-dir-path)
@@ -130,6 +129,8 @@
 	  (princ (format "slime-dir-path does not exist: '%s'" slime-dir-path))))))
    ((equal hostname "flomac.local")
     (message "Initializing for host %s" hostname)
+    (setq default-frame-alist '((top . 1) (left . 1) 
+				(width . 125) (height . 35)))
     (setq add-log-mailing-address "florian.ebeling@gmail.com")
     ;; erlang
     (setq otp-path "/opt/local/lib/erlang/lib/tools-2.5.5/emacs/")
@@ -139,6 +140,8 @@
     (require 'erlang-start)
     (load "osx" t))
    ((equal hostname "flomac-work.local")
+    (setq default-frame-alist '((top . 1) (left . 1) 
+				(width . 220) (height . 30)))
     (message "Initializing for nugg.ad")
     (setq add-log-mailing-address "florian.ebeling@nugg.ad")
     (find-file "~/todo")
