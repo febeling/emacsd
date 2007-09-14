@@ -43,21 +43,22 @@
 	  (cond
 	   ((ruby-spec-p file) (run-spec file))
 	   ((ruby-test-p file) (run-test file))
-	   (t (let ((visible-test-file
-		     (car (select 'ruby-any-test-p (mapcar 
-						    (lambda (wn) 
-						      (buffer-file-name (window-buffer wn)))
-						    (window-list))))))
+	   (t (let* ((filenames (mapcar 
+				 (lambda (wn) (buffer-file-name (window-buffer wn)))
+				 (window-list)))
+		     (existing-files (select 'identity filenames))
+		     (visible-test-file (car (select 'ruby-any-test-p existing-files))))
 		(if visible-test-file
 		    (cond
 		     ((ruby-spec-p visible-test-file)
 		      (run-spec visible-test-file))
 		     ((ruby-test-p visible-test-file)
 		      (run-test visible-test-file))
-		     (t (message "SHOULD NOT GET HERE.")))
+		     (t (error "Should not get here.")))
 		  (message "No test among visible buffers.")))))))))
 
 (global-set-key (kbd "C-x t") 'ruby-run-buffer-file-as-test)
+(global-set-key (kbd "C-x SPC") 'ruby-run-buffer-file-as-test)
 
 (defun pull-line-up ()
   "Drags a line up by one, and moves point accordingly."
@@ -146,7 +147,7 @@
     (setq mail-host-address "florian.ebeling@nugg.ad")
     (find-file "~/todo")
     ;;
-   )))
+    )))
 
 ;;(setq make-backup-files nil)
 (setq default-case-fold-search t)
