@@ -141,7 +141,6 @@
     (setq erlang-root-dir "/opt/local/bin")
     (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
     (require 'erlang-start)
-    (load "osx" t))
    ((equal hostname "flomac-work.local")
     (setq default-frame-alist '((top . 1) (left . 1) 
 				(width . 220) (height . 30)))
