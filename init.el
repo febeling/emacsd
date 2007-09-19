@@ -204,6 +204,12 @@
 
 (define-key global-map [S-up] 'scroll-down-1)
 
+(defun flip-buffer ()
+  (interactive)
+  (switch-to-buffer nil))
+
+(global-set-key [C-S-down] 'flip-buffer)
+
 ;;; general key remapping
 
 ;; free strokes
