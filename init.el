@@ -1,5 +1,7 @@
 ;; emacs init.el - Florian Ebeling
 
+;; \M-n toggle-buffer oder so
+
 (add-to-list 'load-path "~/.emacs.d")
 
 (setq default-frame-alist '((top . 1) (left . 1) (width . 130) (height . 44)))
@@ -211,6 +213,8 @@
 ;; C-f8 -> make ruby local_var from region
 
 (global-set-key (kbd "C-.") 'find-file-at-point)
+(global-set-key [C-S-left] 'previous-buffer)
+(global-set-key [C-S-right] 'next-buffer)
 
 (fset 'to-java-string
       [?\C-a ?" ?\C-e ?" ?  ?+ down])
