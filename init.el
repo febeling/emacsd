@@ -159,6 +159,7 @@
 
 (global-font-lock-mode 1)
 (show-paren-mode 1)
+(setq visible-bell t)
 
 ;; for emacsclient
 (server-start) 
