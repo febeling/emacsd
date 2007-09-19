@@ -238,14 +238,9 @@
 (global-set-key [f3] 'edit-last-kbd-macro)
 (global-set-key (kbd "C-S-l") 'goto-line)
 (global-set-key (kbd "C-+") 'other-window)
-;;(global-set-key (kbd "C-z") 'yank) ;; using a us key layout, this makes sense.
 (global-set-key [C-tab] 'indent-line)
-
 (global-set-key "\C-c\C-m" 'execute-extended-command)
-;; ;(global-set-key "\C-x\C-m" 'execute-extended-command)
-
 (global-set-key "\C-w" 'backward-kill-word)
-;; ;(global-set-key "\C-c\C-k" 'kill-region)
 (global-set-key "\C-x\C-k" 'kill-region)
 
 (autoload 'css-mode "css-mode")
