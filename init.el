@@ -140,7 +140,7 @@
     (setq load-path (cons otp-path load-path))
     (setq erlang-root-dir "/opt/local/bin")
     (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
-    (require 'erlang-start)
+    (require 'erlang-start))
    ((equal hostname "flomac-work.local")
     (setq default-frame-alist '((top . 1) (left . 1) 
 				(width . 220) (height . 30)))
