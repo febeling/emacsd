@@ -210,6 +210,8 @@
 
 (global-set-key [C-S-down] 'flip-buffer)
 
+(global-set-key [C-S-up] 'buffer-menu)
+
 ;;; general key remapping
 
 ;; free strokes
