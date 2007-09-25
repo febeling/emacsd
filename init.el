@@ -210,6 +210,13 @@
 
 (global-set-key [C-S-down] 'flip-buffer)
 
+(defun buffer-select ()
+  "Select a buffer from a buffer-menu-like list, but do not put it into recent-buffer list."
+  (interactive)
+  (switch-to-buffer (list-buffers-noselect nil) 'norecord))
+
+(global-set-key [C-S-up] 'buffer-select)
+
 ;;; general key remapping
 
 ;; free strokes
@@ -218,7 +225,6 @@
 ;; C-. 
 ;; C-f8 -> make ruby local_var from region
 
-(global-set-key [C-S-up] 'buffer-menu)
 (global-set-key (kbd "C-.") 'find-file-at-point)
 (global-set-key [C-S-left] 'previous-buffer)
 (global-set-key [C-S-right] 'next-buffer)
