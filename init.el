@@ -1,11 +1,5 @@
 ;; emacs init.el - Florian Ebeling
 
-;; \M-n toggle-buffer oder so
-
-(add-to-list 'load-path "~/.emacs.d")
-
-(setq default-frame-alist '((top . 1) (left . 1) (width . 130) (height . 44)))
-
 (defun ruby-spec-p (filename)
   (string-match "spec\.rb$" filename))
 
@@ -123,6 +117,43 @@
 	t)
     nil))
 
+(defun scroll-up-1 ()
+  (interactive)
+  (scroll-up 1))
+
+(define-key global-map [S-down] 'scroll-up-1)
+
+(defun scroll-down-1 ()
+  (interactive)
+  (scroll-down 1))
+
+(define-key global-map [S-up] 'scroll-down-1)
+
+(defun flip-buffer ()
+  (interactive)
+  (switch-to-buffer nil))
+
+(global-set-key [C-S-down] 'flip-buffer)
+
+(defun buffer-select ()
+  "Select a buffer from a buffer-menu-like list, but do not put it into recent-buffer list."
+  (interactive)
+  (let ((files-only t))
+  (switch-to-buffer (list-buffers-noselect files-only) 'norecord)))
+
+(global-set-key [C-S-up] 'buffer-select)
+
+(defun insert-date ()
+  "Insert the current date at point"
+  (interactive)
+  (insert (format-time-string "%d.%m.%y")))
+
+;; configuration section
+
+(setq default-frame-alist '((top . 1) (left . 1) (width . 130) (height . 44)))
+
+(add-to-list 'load-path "~/.emacs.d")
+
 ;; workstation-specific settings.
 (let ((hostname (system-name)))
   (cond
@@ -183,11 +214,6 @@
 (read-abbrev-file)
 (setq save-abbrevs nil)
 
-(defun insert-date ()
-  "Insert the current date at point"
-  (interactive)
-  (insert (format-time-string "%d.%m.%y")))
-
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1)) 
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1)) 
 ;;(if (fboundp 'menu-bar-mode) (menu-bar-mode -1)) 
@@ -198,32 +224,6 @@
     (progn 
       (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
       (message "cut-and-paste with x enabled")))
-
-(defun scroll-up-1 ()
-  (interactive)
-  (scroll-up 1))
-
-(define-key global-map [S-down] 'scroll-up-1)
-
-(defun scroll-down-1 ()
-  (interactive)
-  (scroll-down 1))
-
-(define-key global-map [S-up] 'scroll-down-1)
-
-(defun flip-buffer ()
-  (interactive)
-  (switch-to-buffer nil))
-
-(global-set-key [C-S-down] 'flip-buffer)
-
-(defun buffer-select ()
-  "Select a buffer from a buffer-menu-like list, but do not put it into recent-buffer list."
-  (interactive)
-  (let ((files-only t))
-  (switch-to-buffer (list-buffers-noselect files-only) 'norecord)))
-
-(global-set-key [C-S-up] 'buffer-select)
 
 ;;; general key remapping
 
