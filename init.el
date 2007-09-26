@@ -15,6 +15,7 @@
 (defun even-p (i) (= 0 (mod i 2)))
 
 (defun select (fn ls)
+  "Create a list for which fn return non-nil"
   (let ((result nil))
     (dolist (item ls)
       (if (funcall fn item)
