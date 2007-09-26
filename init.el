@@ -220,7 +220,8 @@
 (defun buffer-select ()
   "Select a buffer from a buffer-menu-like list, but do not put it into recent-buffer list."
   (interactive)
-  (switch-to-buffer (list-buffers-noselect nil) 'norecord))
+  (let ((files-only t))
+  (switch-to-buffer (list-buffers-noselect files-only) 'norecord)))
 
 (global-set-key [C-S-up] 'buffer-select)
 
