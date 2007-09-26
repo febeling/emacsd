@@ -32,14 +32,21 @@
   "Run buffer's file or first visible window file as ruby test (rspec or test/unit)."
   (interactive)
   (let ((file (buffer-file-name))
-	(fname "ruby-run-buffer-file-as-test"))
+	(fname "ruby-run-buffer-file-as-test")
+	(test-output-buffer "Ruby Tests"))
     (flet ((run-spec (file)
 		     (message "Running spec...")
-		     (shell-command (format "spec %s" file))
+		     (shell-command (format "spec %s" file) test-output-buffer)
+		     (save-excursion
+		       (set-buffer test-output-buffer)
+		       (goto-char (point-max)))
 		     (message "Spec done."))
 	   (run-test (file)
 		     (message "Running unit tests...")
-		     (shell-command (format "/opt/local/bin/ruby %s" file)) ;; fix with interactive shell, etc.
+		     (shell-command (format "/opt/local/bin/ruby %s" file) test-output-buffer) ;; fix with interactive shell, etc.
+		     (save-excursion
+		       (set-buffer test-output-buffer)
+		       (goto-char (point-max)))
 		     (message "Tests done.")))
       (if file 
 	  (cond
