@@ -28,10 +28,11 @@
   (interactive)
   (let ((file (buffer-file-name))
 	(fname "ruby-run-buffer-file-as-test")
-	(test-output-buffer "Ruby Tests"))
+	(test-output-buffer "*Ruby-Tests*"))
     (flet ((run-spec (file)
 		     (message "Running spec...")
 		     (shell-command (format "spec %s" file) test-output-buffer)
+		     (display-buffer test-output-buffer)
 		     (save-excursion
 		       (set-buffer test-output-buffer)
 		       (goto-char (point-max)))
@@ -39,6 +40,7 @@
 	   (run-test (file)
 		     (message "Running unit tests...")
 		     (shell-command (format "/opt/local/bin/ruby %s" file) test-output-buffer) ;; fix with interactive shell, etc.
+		     (display-buffer test-output-buffer)
 		     (save-excursion
 		       (set-buffer test-output-buffer)
 		       (goto-char (point-max)))
@@ -123,12 +125,14 @@
   (scroll-up 1))
 
 (define-key global-map [S-down] 'scroll-up-1)
+;(define-key global-map "\C-\S-n" 'scroll-up-1)
 
 (defun scroll-down-1 ()
   (interactive)
   (scroll-down 1))
 
 (define-key global-map [S-up] 'scroll-down-1)
+;(define-key global-map [C-S-P] 'scroll-down-1)
 
 (defun flip-buffer ()
   (interactive)
@@ -254,7 +258,6 @@
 (global-set-key [f3] 'edit-last-kbd-macro)
 (global-set-key (kbd "C-S-l") 'goto-line)
 (global-set-key (kbd "C-+") 'other-window)
-(global-set-key [C-tab] 'indent-line)
 (global-set-key "\C-c\C-m" 'execute-extended-command)
 (global-set-key "\C-w" 'backward-kill-word)
 (global-set-key "\C-x\C-k" 'kill-region)
@@ -268,8 +271,12 @@
   "Major mode for editing comma-separated value files." t)
 
 
-(add-hook 'nxml-mode-hook '(lambda () 
-			     (define-key nxml-mode-map [C-tab] 'nxml-complete)))
+(add-hook 'nxml-mode-hook 
+	  '(lambda ()
+	     (define-key nxml-mode-map [C-tab] 'nxml-complete)))
+(add-hook 'emacs-lisp-mode-hook 
+	  '(lambda () 
+	     (define-key emacs-lisp-mode-map [C-tab] 'lisp-complete-symbol)))
 
 (require 'snippet)
 
@@ -330,14 +337,14 @@ $.
 (setq auto-mode-alist (cons '("\\.asd\\'" . lisp-mode) auto-mode-alist))
 
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
  '(safe-local-variable-values (quote ((cperl-indent-level . 4) (cperl-indent-level . 2)))))
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:stipple nil :background "white" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 160 :width normal :family "apple-monaco")))))
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(default ((t (:stipple nil :background "white" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :family "apple-monaco")))))
