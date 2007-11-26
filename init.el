@@ -1,5 +1,7 @@
 ;; emacs init.el - Florian Ebeling
 
+
+
 (defun ruby-spec-p (filename)
   (string-match "spec\.rb$" filename))
 
@@ -158,6 +160,7 @@
 (setq default-frame-alist '((top . 1) (left . 1) (width . 130) (height . 44)))
 
 (add-to-list 'load-path "~/.emacs.d")
+(add-to-list 'Info-default-directory-list "/opt/local/share/info/")
 
 ;; workstation-specific settings.
 (let ((hostname (system-name)))
@@ -263,10 +266,7 @@
 (global-set-key "\C-x\C-k" 'kill-region)
 
 (autoload 'css-mode "css-mode")
-(setq auto-mode-alist       
-      (cons '("\\.css\\'" . css-mode) auto-mode-alist))
 
-(add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
 (autoload 'csv-mode "csv-mode"
   "Major mode for editing comma-separated value files." t)
 
@@ -335,6 +335,9 @@ $.
 (setq auto-mode-alist (cons '("\\.rhtml\\'" . html-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.smil\\'" . sgml-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.asd\\'" . lisp-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.css\\'" . css-mode) auto-mode-alist))
+(add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
+(add-to-list 'auto-mode-alist '("Portfile" . tcl-mode))
 
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
