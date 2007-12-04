@@ -25,6 +25,9 @@
     (reverse result)))
 (defalias 'find-all 'select)
 
+;; todo
+;;   - save latest run test in variable and run in case no other test is visible on invoke
+;;   - output points as feedback on test progress
 (defun ruby-run-buffer-file-as-test ()
   "Run buffer's file or first visible window file as ruby test (rspec or test/unit)."
   (interactive)
