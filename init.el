@@ -25,48 +25,51 @@
     (reverse result)))
 (defalias 'find-all 'select)
 
+;; (defvar buffer-save-without-query nil
+;;   "Non-nil means `save-some-buffers' should save this buffer without asking.")
+;; (make-variable-buffer-local 'buffer-save-without-query)
+
 ;; todo
 ;;   - save latest run test in variable and run in case no other test is visible on invoke
 ;;   - output points as feedback on test progress
-(defun ruby-run-buffer-file-as-test ()
-  "Run buffer's file or first visible window file as ruby test (rspec or test/unit)."
-  (interactive)
-  (let ((file (buffer-file-name))
-	(fname "ruby-run-buffer-file-as-test")
-	(test-output-buffer "*Ruby-Tests*"))
-    (flet ((run-spec (file)
-		     (message "Running spec...")
-		     (shell-command (format "spec %s" file) test-output-buffer)
-		     (display-buffer test-output-buffer)
-		     (save-excursion
-		       (set-buffer test-output-buffer)
-		       (goto-char (point-max)))
-		     (message "Spec done."))
-	   (run-test (file)
-		     (message "Running unit tests...")
-		     (shell-command (format "/opt/local/bin/ruby %s" file) test-output-buffer) ;; fix with interactive shell, etc.
-		     (display-buffer test-output-buffer)
-		     (save-excursion
-		       (set-buffer test-output-buffer)
-		       (goto-char (point-max)))
-		     (message "Tests done.")))
-      (if file 
-	  (cond
-	   ((ruby-spec-p file) (run-spec file))
-	   ((ruby-test-p file) (run-test file))
-	   (t (let* ((filenames (mapcar 
-				 (lambda (wn) (buffer-file-name (window-buffer wn)))
-				 (window-list)))
-		     (existing-files (select 'identity filenames))
-		     (visible-test-file (car (select 'ruby-any-test-p existing-files))))
-		(if visible-test-file
-		    (cond
-		     ((ruby-spec-p visible-test-file)
-		      (run-spec visible-test-file))
-		     ((ruby-test-p visible-test-file)
-		      (run-test visible-test-file))
-		     (t (error "Should not get here.")))
-		  (message "No test among visible buffers.")))))))))
+;;   - color for ok/fail
+(let ((last-run-test-file))
+  (defun ruby-run-buffer-file-as-test ()
+    "Run buffer's file or first visible window file as ruby test (rspec or test/unit)."
+    (interactive)
+    (let ((file (buffer-file-name))
+	  (fname "ruby-run-buffer-file-as-test")
+	  (test-output-buffer (get-buffer-create "*Ruby-Tests*")))
+      (flet ((run-test-file (command-string category)
+			    (message (format "Running %s..." category))
+			    (display-buffer test-output-buffer)
+			    (setq last-run-test-file file)
+			    (shell-command (format command-string file) test-output-buffer)
+			    (save-excursion
+			      (set-buffer test-output-buffer)
+			      (goto-char (point-max)))
+			    (message (format "%s done." (capitalize category)))))
+	(flet ((run-spec (file)
+			 (run-test-file "spec %s" "spec"))
+	       (run-test (file)
+			 (run-test-file "/opt/local/bin/ruby %s" "unit test")))
+	  (if file 
+	      (cond
+	       ((ruby-spec-p file) (run-spec file))
+	       ((ruby-test-p file) (run-test file))
+	       (t (let* ((filenames (mapcar 
+				     (lambda (wn) (buffer-file-name (window-buffer wn)))
+				     (window-list)))
+			 (existing-files (select 'identity filenames))
+			 (visible-test-file (car (select 'ruby-any-test-p existing-files))))
+		    (if visible-test-file
+			(cond
+			 ((ruby-spec-p visible-test-file)
+			  (run-spec visible-test-file))
+			 ((ruby-test-p visible-test-file)
+			  (run-test visible-test-file))
+			 (t (error "Should not get here.")))
+		      (message "No test among visible buffers.")))))))))))
 
 (global-set-key (kbd "C-x t") 'ruby-run-buffer-file-as-test)
 (global-set-key (kbd "C-x SPC") 'ruby-run-buffer-file-as-test)
