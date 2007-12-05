@@ -74,7 +74,7 @@
 	(test-output-buffer (get-buffer-create "*Ruby-Tests*"))
 	(test-file (find-ruby-test-file)))
     (if test-file (run-test-file test-file)
-      (message "No test among visible buffers."))))
+      (message "No test among visible buffers or run earlier."))))
 
 (global-set-key (kbd "C-x t") 'ruby-run-buffer-file-as-test)
 (global-set-key (kbd "C-x SPC") 'ruby-run-buffer-file-as-test)
