@@ -63,10 +63,8 @@
 (defvar spec-path nil "Set the spec exectable to be used.")
 
 ;; todo
-;;   - save latest run test in variable and run in case no other test is visible on invoke
 ;;   - output points as feedback on test progress
 ;;   - color for ok/fail
-;; (make-variable-buffer-local 'buffer-save-without-query)
 (defun ruby-run-buffer-file-as-test ()
   "Run buffer's file, first visible window file or last-run as ruby test (or spec)."
   (interactive)
