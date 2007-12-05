@@ -1,12 +1,10 @@
 ;; emacs init.el - Florian Ebeling
 
-
-
 (defun ruby-spec-p (filename)
-  (string-match "spec\.rb$" filename))
+  (and (stringp filename) (string-match "spec\.rb$" filename)))
 
 (defun ruby-test-p (filename)
-  (string-match "test\.rb$" filename))
+  (and (stringp filename) (string-match "test\.rb$" filename)))
 
 (defun ruby-any-test-p (filename)
   (or (ruby-spec-p filename)
@@ -25,6 +23,42 @@
     (reverse result)))
 (defalias 'find-all 'select)
 
+(defun invoke-test-file (command-string category)
+  (message (format "Running %s..." category))
+  (display-buffer test-output-buffer)
+  (setq last-run-test-file file)
+  (shell-command (format command-string file) test-output-buffer)
+  (save-excursion
+    (set-buffer test-output-buffer)
+    (goto-char (point-max)))
+  (message (format "%s done." (capitalize category))))
+
+(defun run-spec (file)
+  (invoke-test-file (concat spec-binary " %s") "spec"))
+
+(defun run-test (file)
+  (invoke-test-file (concat ruby-binary " %s") "unit test"))
+
+(defun run-test-file (file)
+  (cond
+   ((ruby-spec-p file) (run-spec file))
+   ((ruby-test-p file) (run-test file))
+   (t (error "File is not a known ruby test file"))))
+
+(let ((last-run-test-file))
+  (defun find-ruby-test-file ()
+    (message "existing value last...: %s" last-run-test-file)
+    (setq last-run-test-file
+	  (car (select 'ruby-any-test-p 
+		       (select 'identity
+			       (append
+				(cons 
+				 (buffer-file-name)
+				 (mapcar 
+				  (lambda (win-name) (buffer-file-name (window-buffer win-name)))
+				  (window-list))) 
+				(list last-run-test-file))))))))
+
 (defvar ruby-path "/opt/local/bin/ruby" "Set the ruby binary to be used.")
 (defvar spec-path nil "Set the spec exectable to be used.")
 
@@ -33,43 +67,16 @@
 ;;   - output points as feedback on test progress
 ;;   - color for ok/fail
 ;; (make-variable-buffer-local 'buffer-save-without-query)
-(let ((last-run-test-file))
-  (defun ruby-run-buffer-file-as-test ()
-    "Run buffer's file, first visible window file or last-run as ruby test (or spec)."
-    (interactive)
-    (let ((file (buffer-file-name))
-	  (fname "ruby-run-buffer-file-as-test")
-	  (ruby-binary (or ruby-path "ruby"))
-	  (spec-binary (or spec-path "spec"))
-	  (test-output-buffer (get-buffer-create "*Ruby-Tests*")))
-      (flet ((run-test-file (command-string category)
-			    (message (format "Running %s..." category))
-			    (display-buffer test-output-buffer)
-			    (setq last-run-test-file file)
-			    (shell-command (format command-string file) test-output-buffer)
-			    (save-excursion
-			      (set-buffer test-output-buffer)
-			      (goto-char (point-max)))
-			    (message (format "%s done." (capitalize category)))))
-	(flet ((run-spec (file)
-			 (run-test-file (concat spec-binary " %s") "spec"))
-	       (run-test (file)
-			 (run-test-file (concat ruby-binary " %s") "unit test")))
-	  (if file 
-	      (cond
-	       ((ruby-spec-p file) (run-spec file))
-	       ((ruby-test-p file) (run-test file))
-	       (t (let* ((filenames (mapcar 
-				     (lambda (wn) (buffer-file-name (window-buffer wn)))
-				     (window-list)))
-			 (existing-files (select 'identity filenames))
-			 (visible-test-file (car (select 'ruby-any-test-p existing-files))))
-		    (if visible-test-file
-			(cond
-			 ((ruby-spec-p visible-test-file) (run-spec visible-test-file))
-			 ((ruby-test-p visible-test-file) (run-test visible-test-file))
-			 (t (error "Should not get here.")))
-		      (message "No test among visible buffers.")))))))))))
+(defun ruby-run-buffer-file-as-test ()
+  "Run buffer's file, first visible window file or last-run as ruby test (or spec)."
+  (interactive)
+  (let ((fname "ruby-run-buffer-file-as-test") ;; how to find the function name reflectively?
+	(ruby-binary (or ruby-path "ruby"))
+	(spec-binary (or spec-path "spec"))
+	(test-output-buffer (get-buffer-create "*Ruby-Tests*"))
+	(test-file (find-ruby-test-file)))
+    (if test-file (run-test-file test-file)
+      (message "No test among visible buffers."))))
 
 (global-set-key (kbd "C-x t") 'ruby-run-buffer-file-as-test)
 (global-set-key (kbd "C-x SPC") 'ruby-run-buffer-file-as-test)
@@ -133,14 +140,14 @@
   (scroll-up 1))
 
 (define-key global-map [S-down] 'scroll-up-1)
-;(define-key global-map "\C-\S-n" 'scroll-up-1)
+					;(define-key global-map "\C-\S-n" 'scroll-up-1)
 
 (defun scroll-down-1 ()
   (interactive)
   (scroll-down 1))
 
 (define-key global-map [S-up] 'scroll-down-1)
-;(define-key global-map [C-S-P] 'scroll-down-1)
+					;(define-key global-map [C-S-P] 'scroll-down-1)
 
 (defun flip-buffer ()
   (interactive)
@@ -152,7 +159,7 @@
   "Select a buffer from a buffer-menu-like list, but do not put it into recent-buffer list."
   (interactive)
   (let ((files-only t))
-  (switch-to-buffer (list-buffers-noselect files-only) 'norecord)))
+    (switch-to-buffer (list-buffers-noselect files-only) 'norecord)))
 
 (global-set-key [C-S-up] 'buffer-select)
 
@@ -346,14 +353,14 @@ $.
 (add-to-list 'auto-mode-alist '("Portfile" . tcl-mode))
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(safe-local-variable-values (quote ((cperl-indent-level . 4) (cperl-indent-level . 2)))))
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(default ((t (:stipple nil :background "white" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :family "apple-monaco")))))
