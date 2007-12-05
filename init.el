@@ -25,20 +25,22 @@
     (reverse result)))
 (defalias 'find-all 'select)
 
-;; (defvar buffer-save-without-query nil
-;;   "Non-nil means `save-some-buffers' should save this buffer without asking.")
-;; (make-variable-buffer-local 'buffer-save-without-query)
+(defvar ruby-path "/opt/local/bin/ruby" "Set the ruby binary to be used.")
+(defvar spec-path nil "Set the spec exectable to be used.")
 
 ;; todo
 ;;   - save latest run test in variable and run in case no other test is visible on invoke
 ;;   - output points as feedback on test progress
 ;;   - color for ok/fail
+;; (make-variable-buffer-local 'buffer-save-without-query)
 (let ((last-run-test-file))
   (defun ruby-run-buffer-file-as-test ()
-    "Run buffer's file or first visible window file as ruby test (rspec or test/unit)."
+    "Run buffer's file, first visible window file or last-run as ruby test (or spec)."
     (interactive)
     (let ((file (buffer-file-name))
 	  (fname "ruby-run-buffer-file-as-test")
+	  (ruby-binary (or ruby-path "ruby"))
+	  (spec-binary (or spec-path "spec"))
 	  (test-output-buffer (get-buffer-create "*Ruby-Tests*")))
       (flet ((run-test-file (command-string category)
 			    (message (format "Running %s..." category))
@@ -50,9 +52,9 @@
 			      (goto-char (point-max)))
 			    (message (format "%s done." (capitalize category)))))
 	(flet ((run-spec (file)
-			 (run-test-file "spec %s" "spec"))
+			 (run-test-file (concat spec-binary " %s") "spec"))
 	       (run-test (file)
-			 (run-test-file "/opt/local/bin/ruby %s" "unit test")))
+			 (run-test-file (concat ruby-binary " %s") "unit test")))
 	  (if file 
 	      (cond
 	       ((ruby-spec-p file) (run-spec file))
@@ -64,10 +66,8 @@
 			 (visible-test-file (car (select 'ruby-any-test-p existing-files))))
 		    (if visible-test-file
 			(cond
-			 ((ruby-spec-p visible-test-file)
-			  (run-spec visible-test-file))
-			 ((ruby-test-p visible-test-file)
-			  (run-test visible-test-file))
+			 ((ruby-spec-p visible-test-file) (run-spec visible-test-file))
+			 ((ruby-test-p visible-test-file) (run-test visible-test-file))
 			 (t (error "Should not get here.")))
 		      (message "No test among visible buffers.")))))))))))
 
