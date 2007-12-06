@@ -32,21 +32,21 @@
     (reverse result)))
 (defalias 'find-all 'select)
 
-(defun invoke-test-file (command-string category)
-  (message (format "Running %s..." category))
+(defun invoke-test-file (command-string category file)
+  (message (format "Running %s '%s'..." category file))
   (display-buffer test-output-buffer)
   (setq last-run-test-file file)
-  (shell-command (format command-string file) test-output-buffer)
   (save-excursion
     (set-buffer test-output-buffer)
+    (shell-command (format command-string file) test-output-buffer)
     (goto-char (point-max)))
-  (message (format "%s done." (capitalize category))))
+  (message (format "%s '%s' done." (capitalize category) file)))
 
 (defun run-spec (file)
-  (invoke-test-file (concat spec-binary " %s") "spec"))
+  (invoke-test-file (concat spec-binary " %s") "spec" file))
 
 (defun run-test (file)
-  (invoke-test-file (concat ruby-binary " %s") "unit test"))
+  (invoke-test-file (concat ruby-binary " %s") "unit test" file))
 
 (defun run-test-file (file)
   (cond
@@ -55,7 +55,6 @@
    (t (error "File is not a known ruby test file"))))
 
 (defun find-ruby-test-file ()
-  (message "existing value last...: %s" last-run-test-file)
   (setq last-run-test-file
 	(car (select 'ruby-any-test-p 
 		     (select 'identity
