@@ -1,83 +1,7 @@
 ;; emacs init.el - Florian Ebeling
+(add-to-list 'load-path "~/.emacs.d")
 
-(defun ruby-spec-p (filename)
-  (and (stringp filename) (string-match "spec\.rb$" filename)))
-
-(defun ruby-test-p (filename)
-  (and (stringp filename) (string-match "test\.rb$" filename)))
-
-(defun ruby-any-test-p (filename)
-  (or (ruby-spec-p filename)
-      (ruby-test-p filename)))
-
-(defun odd-p (i) (= 1 (mod i 2)))
-
-(defun even-p (i) (= 0 (mod i 2)))
-
-(defun select (fn ls)
-  "Create a list for which fn return non-nil"
-  (let ((result nil))
-    (dolist (item ls)
-      (if (funcall fn item)
-	  (setq result (cons item result))))
-    (reverse result)))
-(defalias 'find-all 'select)
-
-(defun invoke-test-file (command-string category)
-  (message (format "Running %s..." category))
-  (display-buffer test-output-buffer)
-  (setq last-run-test-file file)
-  (shell-command (format command-string file) test-output-buffer)
-  (save-excursion
-    (set-buffer test-output-buffer)
-    (goto-char (point-max)))
-  (message (format "%s done." (capitalize category))))
-
-(defun run-spec (file)
-  (invoke-test-file (concat spec-binary " %s") "spec"))
-
-(defun run-test (file)
-  (invoke-test-file (concat ruby-binary " %s") "unit test"))
-
-(defun run-test-file (file)
-  (cond
-   ((ruby-spec-p file) (run-spec file))
-   ((ruby-test-p file) (run-test file))
-   (t (error "File is not a known ruby test file"))))
-
-(let ((last-run-test-file))
-  (defun find-ruby-test-file ()
-    (message "existing value last...: %s" last-run-test-file)
-    (setq last-run-test-file
-	  (car (select 'ruby-any-test-p 
-		       (select 'identity
-			       (append
-				(cons 
-				 (buffer-file-name)
-				 (mapcar 
-				  (lambda (win-name) (buffer-file-name (window-buffer win-name)))
-				  (window-list))) 
-				(list last-run-test-file))))))))
-
-(defvar ruby-path "/opt/local/bin/ruby" "Set the ruby binary to be used.")
-(defvar spec-path nil "Set the spec exectable to be used.")
-
-;; todo
-;;   - output points as feedback on test progress
-;;   - color for ok/fail
-(defun ruby-run-buffer-file-as-test ()
-  "Run buffer's file, first visible window file or last-run as ruby test (or spec)."
-  (interactive)
-  (let ((fname "ruby-run-buffer-file-as-test") ;; how to find the function name reflectively?
-	(ruby-binary (or ruby-path "ruby"))
-	(spec-binary (or spec-path "spec"))
-	(test-output-buffer (get-buffer-create "*Ruby-Tests*"))
-	(test-file (find-ruby-test-file)))
-    (if test-file (run-test-file test-file)
-      (message "No test among visible buffers or run earlier."))))
-
-(global-set-key (kbd "C-x t") 'ruby-run-buffer-file-as-test)
-(global-set-key (kbd "C-x SPC") 'ruby-run-buffer-file-as-test)
+(require 'ruby-test)
 
 (defun pull-line-up ()
   "Drags a line up by one, and moves point accordingly."
@@ -170,7 +94,6 @@
 
 (setq default-frame-alist '((top . 1) (left . 1) (width . 130) (height . 44)))
 
-(add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'Info-default-directory-list "/opt/local/share/info/")
 
 ;; workstation-specific settings.
@@ -291,36 +214,40 @@
 
 (require 'snippet)
 
-(snippet-with-abbrev-table 
- 'c-mode-abbrev-table
- ("tc" . "START_TEST ($${test_name})
+(add-hook 'c-mode-hook 
+	  '(lambda ()
+	     (snippet-with-abbrev-table 
+	      'c-mode-abbrev-table
+	      ("tc" . "START_TEST ($${test_name})
 {
 $.fail(\"+++\");
 }
 END_TEST
 ")
- ("inc" . "#include \"$${header}.h\"")
- ("ins" . "#include <$${header}.h>")
- ("hf" . "#ifndef $${name}_H
+	      ("inc" . "#include \"$${header}.h\"")
+	      ("ins" . "#include <$${header}.h>")
+	      ("hf" . "#ifndef $${name}_H
 #define $${name}_H
 
 $.
 
 #endif /* $${name}_H */
 ")
- ("tca" . "tcase_add_test(tc_core, test_$${name});$>"))
+	      ("tca" . "tcase_add_test(tc_core, test_$${name});$>"))))
 
-(snippet-with-abbrev-table 
- 'ruby-mode-abbrev-table
- ("defm" . "def$.
+(add-hook 'ruby-mode
+	  '(lambda ()
+	     (snippet-with-abbrev-table 
+	      'ruby-mode-abbrev-table
+	      ("defm" . "def$.
 
   end"))
 
-(add-hook 'cperl-mode-hook 
-	  '(lambda () 
-	     (snippet-with-abbrev-table 
-	      'cperl-mode-abbrev-table
-	      ("head" . "=head3$.\n\n=cut\n"))))
+	     (add-hook 'cperl-mode-hook 
+		       '(lambda () 
+			  (snippet-with-abbrev-table 
+			   'cperl-mode-abbrev-table
+			   ("head" . "=head3$.\n\n=cut\n"))))))
 
 (require 'slime)
 ;;; Optionally, specify the lisp program to use. Default is "lisp"
