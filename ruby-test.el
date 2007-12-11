@@ -73,7 +73,7 @@
   (interactive)
   (let ((ruby-binary (or ruby-path "ruby"))
 	(spec-binary (or spec-path "spec"))
-	(test-output-buffer (get-buffer-create "*Ruby-Tests*"))
+	(test-output-buffer (get-buffer-create "*Ruby-Test*"))
 	(test-file (find-ruby-test-file)))
     (if test-file 
 	(run-test-file test-file)
