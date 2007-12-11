@@ -38,15 +38,17 @@
   (setq last-run-test-file file)
   (save-excursion
     (set-buffer test-output-buffer)
-    (shell-command (format command-string file) test-output-buffer)
+    (erase-buffer)
+    (start-process "process-ruby-test" test-output-buffer
+		   command-string file)
     (goto-char (point-max)))
   (message (format "%s '%s' done." (capitalize category) file)))
 
 (defun run-spec (file)
-  (invoke-test-file (concat spec-binary " %s") "spec" file))
+  (invoke-test-file spec-binary "spec" file))
 
 (defun run-test (file)
-  (invoke-test-file (concat ruby-binary " %s") "unit test" file))
+  (invoke-test-file ruby-binary "unit test" file))
 
 (defun run-test-file (file)
   (cond
