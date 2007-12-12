@@ -4,6 +4,9 @@
 ;; todo
 ;;   - output points as feedback on test progress
 ;;   - color for ok/fail
+;;   - buffer-variable: ruby-test-file
+;;   - run single test method
+;;   - use small window for output
 
 (defvar last-run-test-file nil)
 (defvar ruby-path "/opt/local/bin/ruby" "Set the ruby binary to be used.")
