@@ -12,6 +12,8 @@
 (defvar ruby-path "/opt/local/bin/ruby" "Set the ruby binary to be used.")
 (defvar spec-path nil "Set the spec exectable to be used.")
 
+(defvar ruby-test-buffer nil)
+
 (defun ruby-spec-p (filename)
   (and (stringp filename) (string-match "spec\.rb$" filename)))
 
@@ -35,28 +37,32 @@
     (reverse result)))
 (defalias 'find-all 'select)
 
-(defun invoke-test-file (command-string category file)
+(defun invoke-test-file (command-string category file buffer)
   (message (format "Running %s '%s'..." category file))
-  (display-buffer test-output-buffer)
+  (display-buffer buffer)
   (setq last-run-test-file file)
   (save-excursion
-    (set-buffer test-output-buffer)
+    (set-buffer buffer)
     (erase-buffer)
-    (start-process "process-ruby-test" test-output-buffer
-		   command-string file)
-    (goto-char (point-max)))
+    (let ((proc (start-process "ruby-test" buffer command-string file)))
+      (set-process-sentinel proc 'runner-sentinel)))
   (message (format "%s '%s' done." (capitalize category) file)))
 
-(defun run-spec (file)
-  (invoke-test-file spec-binary "spec" file))
+(defun runner-sentinel (process event)
+  (save-excursion
+    (set-buffer ruby-test-buffer)
+    (insert (format "[\n%s]" event))))
 
-(defun run-test (file)
-  (invoke-test-file ruby-binary "unit test" file))
+(defun run-spec (file buffer)
+  (invoke-test-file spec-binary "spec" file buffer))
 
-(defun run-test-file (file)
+(defun run-test (file buffer)
+  (invoke-test-file ruby-binary "unit test" file buffer))
+
+(defun run-test-file (file buffer)
   (cond
-   ((ruby-spec-p file) (run-spec file))
-   ((ruby-test-p file) (run-test file))
+   ((ruby-spec-p file) (run-spec file buffer))
+   ((ruby-test-p file) (run-test file buffer))
    (t (error "File is not a known ruby test file"))))
 
 (defun find-ruby-test-file ()
@@ -74,12 +80,12 @@
 (defun ruby-run-buffer-file-as-test ()
   "Run buffer's file, first visible window file or last-run as ruby test (or spec)."
   (interactive)
+  (setq ruby-test-buffer (get-buffer-create "*Ruby-Test*"))
   (let ((ruby-binary (or ruby-path "ruby"))
 	(spec-binary (or spec-path "spec"))
-	(test-output-buffer (get-buffer-create "*Ruby-Test*"))
 	(test-file (find-ruby-test-file)))
     (if test-file 
-	(run-test-file test-file)
+	(run-test-file test-file test-output-buffer)
       (message "No test among visible buffers or run earlier."))))
 
 (global-set-key (kbd "C-x t") 'ruby-run-buffer-file-as-test)
