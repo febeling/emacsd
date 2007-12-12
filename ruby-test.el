@@ -54,7 +54,7 @@
     (insert (format "[\n%s]" event))))
 
 (defun run-spec (file buffer)
-  (invoke-test-file spec-binary "spec" file buffer))
+  (invoke-test-file spec-binary "spec -Dc -c" file buffer))
 
 (defun run-test (file buffer)
   (invoke-test-file ruby-binary "unit test" file buffer))
