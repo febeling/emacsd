@@ -85,7 +85,7 @@
 	(spec-binary (or spec-path "spec"))
 	(test-file (find-ruby-test-file)))
     (if test-file 
-	(run-test-file test-file test-output-buffer)
+	(run-test-file test-file ruby-test-buffer)
       (message "No test among visible buffers or run earlier."))))
 
 (global-set-key (kbd "C-x t") 'ruby-run-buffer-file-as-test)
