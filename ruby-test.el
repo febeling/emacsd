@@ -1,6 +1,6 @@
 ;; ruby-test.el
-;; Caspar Florian Ebeling, 2007-12-06
-;; GPLv2 applies.
+;; Caspar Florian Ebeling <florian.ebeling@gmail.com>, 2007-12-06
+;; This software can be redistributed. GPL v2 applies.
 
 ;; todo
 ;;   - color for ok/fail
