@@ -1,15 +1,15 @@
 ;; ruby-test.el
 ;; Caspar Florian Ebeling, 2007-12-06
+;; GPLv2 applies.
 
 ;; todo
 ;;   - color for ok/fail
 ;;   - run single test method
 ;;   - use small window for output
 
-
 (defvar ruby-test-buffer-name "*Ruby-Test*")
 
-;;; template for key map.
+;;; template for key map:
 ;;(defvar ruby-test-mode-map () 
 ;;  "Keymap of commands active in the output buffer.")
 ;; (if ruby-test-mode-map
@@ -114,15 +114,16 @@
   "Major mode for running ruby tests and display results."
   (interactive)
   (kill-all-local-variables)
-;;  (set-syntax-table wpdl-mode-syntax-table)
-;;  (use-local-map wpdl-mode-map)
+;;  (use-local-map ruby-test-mode-map)
   (set (make-local-variable 'font-lock-defaults) '((ruby-test-font-lock-keywords) nil nil))
   (set (make-local-variable 'font-lock-keywords) 'ruby-test-font-lock-keywords)
-;;  (set (make-local-variable 'indent-line-function) 'wpdl-indent-line) 
+;;  (set (make-local-variable 'indent-line-function) 'ruby-test-indent-line) 
   (setq major-mode 'ruby-test-mode)
   (setq mode-name "Ruby-Test")
   (run-hooks 'ruby-test-mode-hook))
 
+;; global, since these bindings should be visible in other windows 
+;; operating on the `last-run-test-file'.
 (global-set-key (kbd "C-x t") 'ruby-run-buffer-file-as-test)
 (global-set-key (kbd "C-x SPC") 'ruby-run-buffer-file-as-test)
 
