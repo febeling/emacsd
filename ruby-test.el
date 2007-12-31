@@ -2,17 +2,32 @@
 ;; Caspar Florian Ebeling, 2007-12-06
 
 ;; todo
-;;   - output points as feedback on test progress
 ;;   - color for ok/fail
-;;   - buffer-variable: ruby-test-file
 ;;   - run single test method
 ;;   - use small window for output
 
-(defvar last-run-test-file nil)
-(defvar ruby-path "/opt/local/bin/ruby" "Set the ruby binary to be used.")
-(defvar spec-path nil "Set the spec exectable to be used.")
 
-(defvar ruby-test-buffer nil)
+(defvar ruby-test-buffer-name "*Ruby-Test*")
+
+;;; template for key map.
+;;(defvar ruby-test-mode-map () 
+;;  "Keymap of commands active in the output buffer.")
+;; (if ruby-test-mode-map
+;;     nil
+;;   (setq ruby-test-mode-map (make-keymap))
+;;   (define-key ruby-test-mode-map ...))
+
+(defvar ruby-test-mode-hook)
+
+(defvar last-run-test-file)
+
+(defvar ruby-path "/opt/local/bin/ruby" 
+  "Set the ruby binary to be used.")
+
+(defvar spec-path nil 
+  "Set the spec exectable to be used.")
+
+(defvar ruby-test-buffer)
 
 (defun ruby-spec-p (filename)
   (and (stringp filename) (string-match "spec\.rb$" filename)))
@@ -44,6 +59,7 @@
   (save-excursion
     (set-buffer buffer)
     (erase-buffer)
+    (insert "-*- mode: ruby-test -*-\n\n")
     (let ((proc (start-process "ruby-test" buffer command-string file)))
       (set-process-sentinel proc 'runner-sentinel)))
   (message (format "%s '%s' done." (capitalize category) file)))
@@ -51,7 +67,8 @@
 (defun runner-sentinel (process event)
   (save-excursion
     (set-buffer ruby-test-buffer)
-    (insert (format "[\n%s]" event))))
+;;    (insert (format "[\n%s]" event))
+    ))
 
 (defun run-spec (file buffer)
   (invoke-test-file spec-binary "spec -Dc -c" file buffer))
@@ -80,13 +97,31 @@
 (defun ruby-run-buffer-file-as-test ()
   "Run buffer's file, first visible window file or last-run as ruby test (or spec)."
   (interactive)
-  (setq ruby-test-buffer (get-buffer-create "*Ruby-Test*"))
+  (setq ruby-test-buffer (get-buffer-create ruby-test-buffer-name))
   (let ((ruby-binary (or ruby-path "ruby"))
 	(spec-binary (or spec-path "spec"))
 	(test-file (find-ruby-test-file)))
     (if test-file 
 	(run-test-file test-file ruby-test-buffer)
       (message "No test among visible buffers or run earlier."))))
+
+(defvar ruby-test-font-lock-keywords
+  (list 
+   '("^\\(\\(.*\\):\\([0-9]+\\)\\):" 1 font-lock-warning-face)
+   ))
+
+(defun ruby-test-mode ()
+  "Major mode for running ruby tests and display results."
+  (interactive)
+  (kill-all-local-variables)
+;;  (set-syntax-table wpdl-mode-syntax-table)
+;;  (use-local-map wpdl-mode-map)
+  (set (make-local-variable 'font-lock-defaults) '((ruby-test-font-lock-keywords) nil nil))
+  (set (make-local-variable 'font-lock-keywords) 'ruby-test-font-lock-keywords)
+;;  (set (make-local-variable 'indent-line-function) 'wpdl-indent-line) 
+  (setq major-mode 'ruby-test-mode)
+  (setq mode-name "Ruby-Test")
+  (run-hooks 'ruby-test-mode-hook))
 
 (global-set-key (kbd "C-x t") 'ruby-run-buffer-file-as-test)
 (global-set-key (kbd "C-x SPC") 'ruby-run-buffer-file-as-test)
