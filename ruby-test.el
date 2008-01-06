@@ -85,14 +85,16 @@
 (defun find-ruby-test-file ()
   (setq last-run-test-file
 	(car (select 'ruby-any-test-p 
-		     (select 'identity
-			     (nconc
-			      (cons 
-			       (buffer-file-name)
-			       (mapcar 
-				(lambda (win-name) (buffer-file-name (window-buffer win-name)))
-				(window-list))) 
-			      (list last-run-test-file)))))))
+		     (let ((files (nconc
+				   (cons 
+				    (buffer-file-name)
+				    (mapcar 
+				     (lambda (win-name) (buffer-file-name (window-buffer win-name)))
+				     (window-list))))))
+		       (if (boundp 'last-run-test-file)
+			   (nconc files '(last-run-test-file)))
+		       (mapcar 'message files)
+		       (select 'identity files))))))
 
 (defun ruby-run-buffer-file-as-test ()
   "Run buffer's file, first visible window file or last-run as ruby test (or spec)."
