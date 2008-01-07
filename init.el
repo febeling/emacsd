@@ -92,6 +92,7 @@
 
 ;; configuration section
 
+(setq show-paren-style 'expression)
 (setq default-frame-alist '((top . 1) (left . 1) (width . 130) (height . 44)))
 
 (add-to-list 'Info-default-directory-list "/opt/local/share/info/")
