@@ -62,14 +62,14 @@
   (scroll-up 1))
 
 (define-key global-map [S-down] 'scroll-up-1)
-					;(define-key global-map "\C-\S-n" 'scroll-up-1)
+;;(define-key global-map "\C-\S-n" 'scroll-up-1)
 
 (defun scroll-down-1 ()
   (interactive)
   (scroll-down 1))
 
 (define-key global-map [S-up] 'scroll-down-1)
-					;(define-key global-map [C-S-P] 'scroll-down-1)
+;;(define-key global-map [C-S-P] 'scroll-down-1)
 
 (defun flip-buffer ()
   (interactive)
@@ -250,14 +250,15 @@ $.
 			   'cperl-mode-abbrev-table
 			   ("head" . "=head3$.\n\n=cut\n"))))))
 
-(require 'slime)
+;;(require 'slime)
 ;;; Optionally, specify the lisp program to use. Default is "lisp"
 ;; ;(setq inferior-lisp-program "cmucl") 
 ;; ;(setq inferior-lisp-program "clisp -K full") 
-(setq inferior-lisp-program "sbcl")
+;;(setq inferior-lisp-program "sbcl")
 ;; ;(setq inferior-lisp-program "guile")
 ;; ;(setq inferior-lisp-program "scheme48")
-(slime-setup)
+(setq inferior-lisp-program "~/dev/vendor/arc0/arc.sh")
+;;(slime-setup)
 
 (add-hook 'slime-mode-hook
 	  (lambda ()
@@ -277,16 +278,18 @@ $.
 (setq auto-mode-alist (cons '("\\.css\\'" . css-mode) auto-mode-alist))
 (add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
 (add-to-list 'auto-mode-alist '("Portfile" . tcl-mode))
+(add-to-list 'auto-mode-alist '("\\.r[hl]\\'" . c-mode))
 
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
  '(safe-local-variable-values (quote ((cperl-indent-level . 4) (cperl-indent-level . 2)))))
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:stipple nil :background "white" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :family "apple-monaco")))))
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(default ((t (:stipple nil :background "white" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :family "apple-monaco"))))
+ '(show-paren-match ((((class color) (background light)) (:background "lemon chiffon")))))
