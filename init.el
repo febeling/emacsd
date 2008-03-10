@@ -88,7 +88,9 @@
 (defun insert-date ()
   "Insert the current date at point"
   (interactive)
-  (insert (format-time-string "%d.%m.%y")))
+  (insert (format-time-string "%Y-%m-%d")))
+
+(global-set-key (kbd "C-c d") 'insert-date)
 
 ;; configuration section
 
@@ -294,3 +296,5 @@ $.
   ;; If there is more than one, they won't work right.
  '(default ((t (:stipple nil :background "white" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :family "apple-monaco"))))
  '(show-paren-match ((((class color) (background light)) (:background "lemon chiffon")))))
+
+(put 'erase-buffer 'disabled nil)
