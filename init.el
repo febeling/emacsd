@@ -1,5 +1,6 @@
 ;; emacs init.el - Florian Ebeling
 (add-to-list 'load-path "~/.emacs.d")
+(add-to-list 'load-path "~/.emacs.d/ruby-test-mode")
 
 (require 'ruby-test)
 
@@ -119,11 +120,12 @@
 				(width . 125) (height . 35)))
     (setq mail-host-address "florian.ebeling@gmail.com")
     ;; erlang
-    (setq otp-path "/opt/local/lib/erlang/lib/tools-2.5.5/emacs/")
-    (setq load-path (cons otp-path load-path))
-    (setq erlang-root-dir "/opt/local/bin")
-    (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
-    (require 'erlang-start))
+;;     (setq otp-path "/opt/local/lib/erlang/lib/tools-2.5.5/emacs/")
+;;     (setq load-path (cons otp-path load-path))
+;;     (setq erlang-root-dir "/opt/local/bin")
+;;     (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
+;;     (require 'erlang-start)
+)
    ((equal hostname "flomac-work.local")
     (setq default-frame-alist '((top . 1) (left . 1) 
 				(width . 220) (height . 30)))
