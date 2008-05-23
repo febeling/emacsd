@@ -97,8 +97,8 @@
   "*The file to save breakpoint in")
 
 (defun ruby-break ()
-  "Toggle ruby-debug breakpoint for current line, writing to a buffer `~/rdebugrc',
-and save it. This file gets read by `rdebug' by default."
+  "Toggle ruby-debug breakpoint for current line, writing to a buffer `~/.rdebugrc',
+and save it."
   (interactive)
   (let ((breakpoint (format "break %s:%s" (buffer-file-name) (line-number-at-pos)))
 	line-seen)
@@ -113,8 +113,7 @@ and save it. This file gets read by `rdebug' by default."
 		(progn
 		  (delete-region (point) (line-end-position))
 		  (if (char-equal (char-after) ?\n)
-		      (delete-char 1))
-		  (message "Breakpoint off")))
+		      (delete-char 1))))
 	    (forward-line)))
 	(if (not line-seen)
 	    (progn
