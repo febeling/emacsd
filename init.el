@@ -93,6 +93,35 @@
 
 (global-set-key (kbd "C-c d") 'insert-date)
 
+(defvar ruby-break-file "~/.rdebugrc")
+
+(defun ruby-break ()
+  "Toggle ruby-debug breakpoint for current line, writing to a buffer `b',
+and save"
+  (interactive)
+  (let ((breakpoint (format "break %s:%s" (buffer-file-name) (line-number-at-pos))))
+    (save-excursion
+      (let ((breakspoint-buffer (get-buffer-create "b"))
+	    (line-seen nil))
+	(set-buffer breakspoint-buffer)
+	(goto-char (point-min))
+	(while (and (not line-seen) (< (point) (point-max)))
+	  (let ((this-line (buffer-substring (point) (line-end-position))))
+	    (setq line-seen (string= this-line breakpoint))
+	    (if line-seen
+		(progn
+		  (delete-region (point) (line-end-position))
+		  (if (char-equal (char-after) ?\n)
+		      (delete-char 1))))
+	    (forward-line)))
+	(if (not line-seen)
+	    (progn
+	      (insert breakpoint)
+	      (newline))))
+      (save-buffer 0))))
+
+(global-set-key (kbd "C-c b") 'ruby-break)
+
 ;; configuration section
 
 (setq show-paren-style 'expression)
@@ -140,6 +169,7 @@
 (setq auto-compression-mode t)
 (setq-default uniquify-buffer-name-style 'post-forward)
 (setq-default tab-width 8)
+(setq-default scroll-margin 2)
 
 (global-font-lock-mode 1)
 (show-paren-mode 1)
@@ -207,10 +237,6 @@
 (global-set-key (kbd "C-S-c C-S-c") 'uncomment-region)
 
 (autoload 'css-mode "css-mode")
-
-(autoload 'csv-mode "csv-mode"
-  "Major mode for editing comma-separated value files." t)
-
 
 (add-hook 'nxml-mode-hook 
 	  '(lambda ()
@@ -282,7 +308,7 @@ $.
 (setq auto-mode-alist (cons '("\\.smil\\'" . sgml-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.asd\\'" . lisp-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.css\\'" . css-mode) auto-mode-alist))
-(add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
+;;(add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
 (add-to-list 'auto-mode-alist '("Portfile" . tcl-mode))
 (add-to-list 'auto-mode-alist '("\\.r[hl]\\'" . c-mode))
 
