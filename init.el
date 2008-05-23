@@ -96,12 +96,12 @@
 (defvar ruby-break-file "~/.rdebugrc")
 
 (defun ruby-break ()
-  "Toggle ruby-debug breakpoint for current line, writing to a buffer `b',
-and save"
+  "Toggle ruby-debug breakpoint for current line, writing to a buffer `~/rdebugrc',
+and save it. This file gets read by `rdebug' by default."
   (interactive)
   (let ((breakpoint (format "break %s:%s" (buffer-file-name) (line-number-at-pos))))
     (save-excursion
-      (let ((breakspoint-buffer (get-buffer-create "b"))
+      (let ((breakspoint-buffer (find-file-noselect ruby-break-file))
 	    (line-seen nil))
 	(set-buffer breakspoint-buffer)
 	(goto-char (point-min))
@@ -112,15 +112,18 @@ and save"
 		(progn
 		  (delete-region (point) (line-end-position))
 		  (if (char-equal (char-after) ?\n)
-		      (delete-char 1))))
+		      (delete-char 1))
+		  (message "Breakpoint off")))
 	    (forward-line)))
 	(if (not line-seen)
 	    (progn
 	      (insert breakpoint)
-	      (newline))))
-      (save-buffer 0))))
+	      (newline)
+	      (message "Breakpoint on"))))
+      (save-current-buffer 0))))
 
 (global-set-key (kbd "C-c b") 'ruby-break)
+(global-set-key (kbd "C-c C-b") 'ruby-break)
 
 ;; configuration section
 
