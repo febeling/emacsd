@@ -292,15 +292,22 @@ $.
 	      'cperl-mode-abbrev-table
 	      ("head" . "=head3$.\n\n=cut\n"))))
 
-;;(require 'slime)
+(add-hook 'tcl-mode-hook
+	  '(lambda ()
+	     (message "on tcl-mode-hook: %s" (current-buffer))
+	     (setq tcl-indent-level 8)
+	     (setq tcl-continued-indent-level 8)
+	     (setq tcl-tab-always-indent 'smart)))
+
+(require 'slime)
 ;;; Optionally, specify the lisp program to use. Default is "lisp"
 ;; ;(setq inferior-lisp-program "cmucl") 
 ;; ;(setq inferior-lisp-program "clisp -K full") 
-;;(setq inferior-lisp-program "sbcl")
+(setq inferior-lisp-program "sbcl")
 ;; ;(setq inferior-lisp-program "guile")
 ;; ;(setq inferior-lisp-program "scheme48")
-(setq inferior-lisp-program "~/dev/vendor/arc0/arc.sh")
-;;(slime-setup)
+;;(setq inferior-lisp-program "~/dev/vendor/arc0/arc.sh")
+(slime-setup)
 
 (add-hook 'slime-mode-hook
 	  (lambda ()
