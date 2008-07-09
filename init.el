@@ -160,12 +160,17 @@ and save it."
 ;;     (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
 ;;     (require 'erlang-start)
 )
-   ((equal hostname "flomac-work.local")
+   ((equal hostname "febeling.office.nugg.ad")
     (setq default-frame-alist '((top . 1) (left . 1) 
 				(width . 220) (height . 30)))
     (message "Initializing for nugg.ad")
     (setq mail-host-address "florian.ebeling@nugg.ad")
-    (find-file "~/todo")
+    (find-file "~/dev/febeling/TODO")
+    (setq otp-path "/opt/local/lib/erlang/lib/tools-2.6.1/emacs/")
+    (setq load-path (cons otp-path load-path))
+    (setq erlang-root-dir "/opt/local/bin")
+    (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
+    (require 'erlang-start)
     ;;
     )))
 
@@ -308,6 +313,7 @@ $.
 
 (setq auto-mode-alist (cons '("\\.cap\\'" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.rb\\'" . ruby-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("Rakefile" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.rake\\'" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.rhtml\\'" . html-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.smil\\'" . sgml-mode) auto-mode-alist))
