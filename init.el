@@ -130,7 +130,7 @@ and save it."
 ;; configuration section
 
 (setq show-paren-style 'expression)
-(setq default-frame-alist '((top . 1) (left . 1) (width . 130) (height . 44)))
+(setq default-frame-alist '((top . 1) (left . 1) (width . 130) (height . 50)))
 
 (add-to-list 'Info-default-directory-list "/opt/local/share/info/")
 
@@ -160,21 +160,23 @@ and save it."
 ;;     (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
 ;;     (require 'erlang-start)
 )
-   ((equal hostname "febeling.office.nugg.ad")
+   ((equal hostname "ws-febeling.office.nugg.ad")
     (setq default-frame-alist '((top . 1) (left . 1) 
 				(width . 220) (height . 30)))
     (message "Initializing for nugg.ad")
     (setq mail-host-address "florian.ebeling@nugg.ad")
-    (find-file "~/dev/febeling/TODO")
+;;    (find-file "~/dev/febeling/TODO")
     (setq otp-path "/opt/local/lib/erlang/lib/tools-2.6.1/emacs/")
     (setq load-path (cons otp-path load-path))
-    (setq erlang-root-dir "/opt/local/bin")
+    (setq erlang-root-dir "/opt/local/lib/erlang")
     (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
     (require 'erlang-start)
     ;;
     )))
 
+
 ;;(setq make-backup-files nil)
+(setq Man-width 70)
 (setq default-case-fold-search t)
 (setq auto-compression-mode t)
 (setq-default uniquify-buffer-name-style 'post-forward)
@@ -191,7 +193,7 @@ and save it."
 (defalias 'qrr 'query-replace-regexp)
 (defalias 'qr 'query-replace)
 (defalias 'cr 'comment-region)
-(defalias 'ucr 'uncomment-region)
+(defalias 'ur 'uncomment-region)
 (defalias 'ir 'indent-region)
 (defalias 'bb 'beginning-of-buffer)
 (defalias 'eb 'end-of-buffer)
@@ -217,7 +219,6 @@ and save it."
 ;; free strokes
 ;; C-# -> as new/custom duplicate-line keybinding  
 ;; M-p 
-;; C-. 
 ;; C-f8 -> make ruby local_var from region
 
 (global-set-key (kbd "C-.") 'find-file-at-point)
@@ -335,6 +336,7 @@ $.
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
+ '(Man-width nil)
  '(safe-local-variable-values (quote ((cperl-indent-level . 4) (cperl-indent-level . 2))))
  '(speedbar-show-unknown-files t))
 (custom-set-faces
