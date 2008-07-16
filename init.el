@@ -317,6 +317,10 @@ $.
 
 (setq slime-net-coding-system 'utf-8-unix)
 
+(require 'oddmuse)
+;; (setq url-proxy-services '(("http" . "your.proxy.host:portnumber")) ; if needed
+(oddmuse-mode-initialize)
+
 (require 'ruby-mode)
 
 (setq auto-mode-alist (cons '("\\.cap\\'" . ruby-mode) auto-mode-alist))
