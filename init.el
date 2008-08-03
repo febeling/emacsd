@@ -4,6 +4,10 @@
 
 (require 'ruby-test)
 
+(defun odd-p (i) (= 1 (mod i 2)))
+
+(defun even-p (i) (= 0 (mod i 2)))
+
 (defun pull-line-up ()
   "Drags a line up by one, and moves point accordingly."
   (interactive)
