@@ -164,7 +164,7 @@ and save it."
 ;;     (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
 ;;     (require 'erlang-start)
 )
-   ((equal hostname (or "ws-febeling.office.nugg.ad" "flomac-work.local")
+   ((equal hostname (or "ws-febeling.office.nugg.ad" "flomac-work.local"))
     (setq default-frame-alist '((top . 1) (left . 1) 
 				(width . 220) (height . 30)))
     (message "Initializing for nugg.ad")
