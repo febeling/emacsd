@@ -2,6 +2,9 @@
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/ruby-test-mode")
 
+;; C-M-arrows: up, down, next-sib, prev-sib
+;; C-M-SPC: mark sexp
+
 (require 'ruby-test)
 
 (defun odd-p (i) (= 1 (mod i 2)))
@@ -128,6 +131,26 @@ and save it."
 	(message "Breakpoint *off*")
       (message "Breakpoint *on*"))))
 
+;; (global-set-key [C-S-left] (lambda () 
+;; 			     (interactive)
+;; 			     (let (kill (rotate-yank-pointer -1))
+;; 			       (set-text-properties 0 (length kill) nil kill)
+;; 			       (message "%s" kill))))
+
+;; (global-set-key [C-S-right] (lambda () 
+;; 			     (interactive)
+;; 			     (let (kill (rotate-yank-pointer 1))
+;; 			       (set-text-properties 0 (length kill) nil kill)
+;; 			       (message "%s" kill))))
+
+
+;; make mac option key the Hyper
+(setq mac-option-modifier 'hyper)
+
+(global-set-key (kbd "H-j") (lambda () (interactive) (insert "{}") (backward-char 1)))
+(global-set-key (kbd "H-k") (lambda () (interactive) (insert "()") (backward-char 1)))
+(global-set-key (kbd "H-l") (lambda () (interactive) (insert "[]") (backward-char 1)))
+
 (global-set-key (kbd "C-c b") 'ruby-break)
 (global-set-key (kbd "C-c C-b") 'ruby-break)
 
@@ -158,12 +181,12 @@ and save it."
 				(width . 125) (height . 35)))
     (setq mail-host-address "florian.ebeling@gmail.com")
     ;; erlang
-;;     (setq otp-path "/opt/local/lib/erlang/lib/tools-2.5.5/emacs/")
-;;     (setq load-path (cons otp-path load-path))
-;;     (setq erlang-root-dir "/opt/local/bin")
-;;     (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
-;;     (require 'erlang-start)
-)
+    (setq otp-path "/opt/local/lib/erlang/lib/tools-2.6.1/emacs/")
+    (setq load-path (cons otp-path load-path))
+    (setq erlang-root-dir "/opt/local/bin")
+    (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
+    (require 'erlang-start)
+    )
    ((equal hostname "ws-febeling.office.nugg.ad")
     (setq default-frame-alist '((top . 1) (left . 1) 
 				(width . 220) (height . 30)))
@@ -226,8 +249,8 @@ and save it."
 ;; C-f8 -> make ruby local_var from region
 
 (global-set-key (kbd "C-.") 'find-file-at-point)
-(global-set-key [C-S-left] 'previous-buffer)
-(global-set-key [C-S-right] 'next-buffer)
+;;(global-set-key [C-S-left] 'previous-buffer)
+;;(global-set-key [C-S-right] 'next-buffer)
 
 (fset 'to-java-string
       [?\C-a ?" ?\C-e ?" ?  ?+ down])
@@ -344,8 +367,8 @@ $.
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- '(Man-width nil)
- '(safe-local-variable-values (quote ((cperl-indent-level . 4) (cperl-indent-level . 2))))
+ '(Man-width nil t)
+ '(safe-local-variable-values (quote ((encoding . utf-8) (cperl-indent-level . 4) (cperl-indent-level . 2))))
  '(speedbar-show-unknown-files t))
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
