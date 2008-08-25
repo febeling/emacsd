@@ -198,9 +198,15 @@ and save it."
     (setq erlang-root-dir "/opt/local/lib/erlang")
     (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
     (require 'erlang-start)
+    ;; This is needed for Distel setup
+    (let ((distel-dir "/Users/florianebeling/personal/distel/elisp"))
+      (unless (member distel-dir load-path)
+	;; Add distel-dir to the end of load-path
+	(setq load-path (append load-path (list distel-dir)))))
+    (require 'distel)
+    (distel-setup)
     ;;
     )))
-
 
 ;;(setq make-backup-files nil)
 (setq Man-width 70)
