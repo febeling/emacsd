@@ -356,6 +356,8 @@ $.
 
 (require 'ruby-mode)
 
+(require 'nxml-mode)
+
 (setq auto-mode-alist (cons '("\\.cap\\'" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.rb\\'" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("Rakefile" . ruby-mode) auto-mode-alist))
@@ -367,6 +369,7 @@ $.
 ;;(add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
 (add-to-list 'auto-mode-alist '("Portfile" . tcl-mode))
 (add-to-list 'auto-mode-alist '("\\.r[hl]\\'" . c-mode))
+(add-to-list 'auto-mode-alist '("\\.xml\\'" . nxml-mode) auto-mode-alist)
 
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
