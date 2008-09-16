@@ -356,11 +356,13 @@ $.
 
 (require 'ruby-mode)
 
-(require 'nxml-mode)
+;; nxml
+(load "/Applications/Emacs.app/Contents/Resources/site-lisp/nxml/autostart.el")
 
 (setq auto-mode-alist (cons '("\\.cap\\'" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.rb\\'" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("Rakefile" . ruby-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("Capfile" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.rake\\'" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.rhtml\\'" . html-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.smil\\'" . sgml-mode) auto-mode-alist))
