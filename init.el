@@ -193,7 +193,7 @@ and save it."
     (message "Initializing for nugg.ad")
     (setq mail-host-address "florian.ebeling@nugg.ad")
 ;;    (find-file "~/dev/febeling/TODO")
-    (setq otp-path "/opt/local/lib/erlang/lib/tools-2.6.1/emacs/")
+    (setq otp-path "/opt/local/lib/erlang/lib/tools-2.6.2/emacs/")
     (setq load-path (cons otp-path load-path))
     (setq erlang-root-dir "/opt/local/lib/erlang")
     (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
