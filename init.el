@@ -2,8 +2,35 @@
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/ruby-test-mode")
 
+;; please remember eventually:
 ;; C-M-arrows: up, down, next-sib, prev-sib
 ;; C-M-SPC: mark sexp
+
+(defun dired-next-item-or-descend ()
+  "Easily step through dired view looking at each file or
+directory, as a preview."
+  (interactive)
+  (dired-iterate-item-or-descend 'dired-next-line))
+
+(defun dired-previous-item-or-descend ()
+  "Easily step backwards through dired view looking at each file
+or directory, as a preview."
+  (interactive)
+  (dired-iterate-item-or-descend 'dired-previous-line))
+
+(defun dired-iterate-item-or-descend (move-function)
+  (let ((file (dired-get-file-for-visit)))
+    (cond 
+     ((file-directory-p file) (find-file file))
+     ((and (file-exists-p file) (file-readable-p file))
+      (save-selected-window (find-file-other-window file))
+      (funcall move-function 1))
+     (t (error "Neither readable file nor directory")))))
+
+(add-hook 'dired-mode-hook 
+	  '(lambda ()
+	     (define-key dired-mode-map " " 'dired-next-item-or-descend)
+	     (define-key dired-mode-map (kbd "S-SPC") 'dired-previous-item-or-descend)))
 
 (require 'ruby-test)
 
@@ -145,7 +172,7 @@ and save it."
 
 
 ;; make mac option key the Hyper
-(setq mac-option-modifier 'hyper)
+;;(setq mac-option-modifier 'hyper)
 
 (global-set-key (kbd "H-j") (lambda () (interactive) (insert "{}") (backward-char 1)))
 (global-set-key (kbd "H-k") (lambda () (interactive) (insert "()") (backward-char 1)))
@@ -192,7 +219,7 @@ and save it."
 				(width . 220) (height . 30)))
     (message "Initializing for nugg.ad")
     (setq mail-host-address "florian.ebeling@nugg.ad")
-;;    (find-file "~/dev/febeling/TODO")
+    ;;    (find-file "~/dev/febeling/TODO")
     (setq otp-path "/opt/local/lib/erlang/lib/tools-2.6.2/emacs/")
     (setq load-path (cons otp-path load-path))
     (setq erlang-root-dir "/opt/local/lib/erlang")
@@ -374,18 +401,18 @@ $.
 (add-to-list 'auto-mode-alist '("\\.xml\\'" . nxml-mode) auto-mode-alist)
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(Man-width nil t)
  '(safe-local-variable-values (quote ((encoding . utf-8) (cperl-indent-level . 4) (cperl-indent-level . 2))))
  '(speedbar-show-unknown-files t))
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(default ((t (:stipple nil :background "white" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :family "apple-monaco"))))
  '(show-paren-match ((((class color) (background light)) (:background "lemon chiffon")))))
 
