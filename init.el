@@ -34,6 +34,9 @@ or directory, as a preview."
 
 (require 'ruby-test)
 
+(defun argc (&rest args)
+  (length args))
+
 (defun odd-p (i) (= 1 (mod i 2)))
 
 (defun even-p (i) (= 0 (mod i 2)))
