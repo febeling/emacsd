@@ -219,7 +219,7 @@ and save it."
     )
    ((equal hostname "ws-febeling.office.nugg.ad")
     (setq default-frame-alist '((top . 1) (left . 1) 
-				(width . 220) (height . 30)))
+				(width . 220) (height . 55)))
     (message "Initializing for nugg.ad")
     (setq mail-host-address "florian.ebeling@nugg.ad")
     ;;    (find-file "~/dev/febeling/TODO")
