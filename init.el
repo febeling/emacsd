@@ -2,9 +2,18 @@
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/ruby-test-mode")
 
+;; from http://blog.zenspider.com/2007/09/emacs-is-ber.html
+(defadvice find-file-at-point (around goto-line compile activate)
+  (let ((line (and (looking-at ".*:\\([0-9]+\\)")
+                   (string-to-number (match-string 1)))))
+    ad-do-it
+    (and line (goto-line line))))
+
 ;; please remember eventually:
 ;; C-M-arrows: up, down, next-sib, prev-sib
 ;; C-M-SPC: mark sexp
+
+;;; Todos:
 
 (defun dired-next-item-or-descend ()
   "Easily step through dired view looking at each file or
@@ -48,6 +57,7 @@ or directory, as a preview."
   (forward-line -2))
 
 (global-set-key [M-up] 'pull-line-up)
+(global-set-key (kbd "C-S-p") 'pull-line-up)
 
 (defun pull-line-down ()
   "Drags a line down by one, and moves point accordingly."
@@ -57,6 +67,7 @@ or directory, as a preview."
   (forward-line -1))
 
 (global-set-key [M-down] 'pull-line-down)
+(global-set-key (kbd "C-S-n") 'pull-line-down)
 
 (defun indent-buffer ()
   ;; Author: Mathias Creutz
@@ -356,14 +367,25 @@ $.
 	      'cperl-mode-abbrev-table
 	      ("head" . "=head3$.\n\n=cut\n"))))
 
+;; Modeline from the macports guide:
+;; # -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
 (add-hook 'tcl-mode-hook
 	  '(lambda ()
-	     (message "on tcl-mode-hook: %s" (current-buffer))
-	     (setq tcl-indent-level 8)
-	     (setq tcl-continued-indent-level 8)
-	     (setq tcl-tab-always-indent 'smart)))
+	     (message "[Running tcl-mode hook: '%s']" (current-buffer))
+	     (make-local-variable 'coding)
+	     (setq coding "utf-8")
+	     (make-local-variable 'tab-width)
+	     (setq tab-width 4)
+	     (make-local-variable 'indent-tab-mode)
+	     (setq indent-tab-mode nil)
+	     (make-local-variable 'c-basic-offset)
+	     (setq c-basic-offset 4)
+	     ;; (setq tcl-indent-level 8)
+	     ;; (setq tcl-continued-indent-level 8)
+	     ;; (setq tcl-tab-always-indent 'smart)
+	     ))
 
-(require 'slime)
+;;(require 'slime)
 ;;; Optionally, specify the lisp program to use. Default is "lisp"
 ;; ;(setq inferior-lisp-program "cmucl") 
 ;; ;(setq inferior-lisp-program "clisp -K full") 
@@ -371,7 +393,7 @@ $.
 ;; ;(setq inferior-lisp-program "guile")
 ;; ;(setq inferior-lisp-program "scheme48")
 ;;(setq inferior-lisp-program "~/dev/vendor/arc0/arc.sh")
-(slime-setup)
+;;(slime-setup)
 
 (add-hook 'slime-mode-hook
 	  (lambda ()
@@ -387,7 +409,7 @@ $.
 (require 'ruby-mode)
 
 ;; nxml
-(load "/Applications/Emacs.app/Contents/Resources/site-lisp/nxml/autostart.el")
+;;(load "/Applications/Emacs.app/Contents/Resources/site-lisp/nxml/autostart.el")
 
 (setq auto-mode-alist (cons '("\\.cap\\'" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.rb\\'" . ruby-mode) auto-mode-alist))
