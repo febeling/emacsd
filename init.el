@@ -13,7 +13,38 @@
 ;; C-M-arrows: up, down, next-sib, prev-sib
 ;; C-M-SPC: mark sexp
 
+
+
+
+
+
+
+
+
+
 ;;; Todos:
+
+;; Rotating through the kill-ring
+
+(defun rotate-yank-pointer-backward () 
+  "Step through the kill-ring, or the emacs clip board, and show
+the current content in the mini-buffer. Backwards."
+  (interactive)
+  (let ((text (current-kill -1)))
+    (message "%s" text)))
+
+(global-set-key [C-S-left] 'rotate-yank-pointer-backward)
+
+(defun rotate-yank-pointer-forward ()
+  "Step through the kill-ring, or the emacs clip board, and show
+the current content in the mini-buffer. Forwards."
+  (interactive)
+  (let ((text (current-kill 1)))
+    (message "%s" text)))
+
+(global-set-key [C-S-right] 'rotate-yank-pointer-forward)
+
+;; Paging through a dired listing with SPC (and Shift-SPC, backwards)
 
 (defun dired-next-item-or-descend ()
   "Easily step through dired view looking at each file or
@@ -171,19 +202,6 @@ and save it."
     (if line-seen
 	(message "Breakpoint *off*")
       (message "Breakpoint *on*"))))
-
-;; (global-set-key [C-S-left] (lambda () 
-;; 			     (interactive)
-;; 			     (let (kill (rotate-yank-pointer -1))
-;; 			       (set-text-properties 0 (length kill) nil kill)
-;; 			       (message "%s" kill))))
-
-;; (global-set-key [C-S-right] (lambda () 
-;; 			     (interactive)
-;; 			     (let (kill (rotate-yank-pointer 1))
-;; 			       (set-text-properties 0 (length kill) nil kill)
-;; 			       (message "%s" kill))))
-
 
 ;; make mac option key the Hyper
 ;;(setq mac-option-modifier 'hyper)
