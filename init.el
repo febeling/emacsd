@@ -63,10 +63,22 @@ or directory, as a preview."
 	     (define-key dired-mode-map " " 'dired-next-item-or-descend)
 	     (define-key dired-mode-map (kbd "S-SPC") 'dired-previous-item-or-descend)))
 
-(require 'ruby-test)
+;; Move rest of line above (mostly for moving comments at line ends)
 
-(defun argc (&rest args)
-  (length args))
+(defun move-up-rest-of-line ()
+  "Moves everthing from point to line end up into a new line
+directly above the current one. This is nice for moving comments
+after a line to extend them."
+  (interactive)
+  (insert "\n")
+  (transpose-lines 1)
+  (forward-line -2))
+
+(global-set-key [S-return] 'move-up-rest-of-line)
+
+;;;
+
+(require 'ruby-test)
 
 (defun odd-p (i) (= 1 (mod i 2)))
 
