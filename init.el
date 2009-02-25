@@ -13,15 +13,6 @@
 ;; C-M-arrows: up, down, next-sib, prev-sib
 ;; C-M-SPC: mark sexp
 
-
-
-
-
-
-
-
-
-
 ;;; Todos:
 
 ;; Rotating through the kill-ring
