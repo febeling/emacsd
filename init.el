@@ -15,8 +15,6 @@
 
 ;;; Todos:
 
-;; Rotating through the kill-ring
-
 (defun rotate-yank-pointer-backward () 
   "Step through the kill-ring, or the emacs clip board, and show
 the current content in the mini-buffer. Backwards."
