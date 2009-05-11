@@ -74,9 +74,16 @@ after a line to extend them."
 
 (global-set-key [S-return] 'move-up-rest-of-line)
 
-;;;
+;;; Requires:
 
+(require 'haml-mode "haml.el")
+(require 'ruby-mode)
 (require 'ruby-test)
+(require 'oddmuse)
+;; (setq url-proxy-services '(("http" . "your.proxy.host:portnumber")) ; if needed
+(oddmuse-mode-initialize)
+
+;;;
 
 (defun odd-p (i) (= 1 (mod i 2)))
 
@@ -259,10 +266,10 @@ and save it."
     (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
     (require 'erlang-start)
     ;; This is needed for Distel setup
-    (let ((distel-dir "/Users/florianebeling/personal/distel/elisp"))
+    (let ((distel-dir "/Users/febeling/personal/distel/elisp"))
       (unless (member distel-dir load-path)
-	;; Add distel-dir to the end of load-path
-	(setq load-path (append load-path (list distel-dir)))))
+ 	;; Add distel-dir to the end of load-path
+ 	(setq load-path (append load-path (list distel-dir)))))
     (require 'distel)
     (distel-setup)
     ;;
@@ -421,14 +428,10 @@ $.
 
 (setq slime-net-coding-system 'utf-8-unix)
 
-(require 'oddmuse)
-;; (setq url-proxy-services '(("http" . "your.proxy.host:portnumber")) ; if needed
-(oddmuse-mode-initialize)
-
-(require 'ruby-mode)
-
 ;; nxml
 ;;(load "/Applications/Emacs.app/Contents/Resources/site-lisp/nxml/autostart.el")
+
+;;; File extension mode settings
 
 (setq auto-mode-alist (cons '("\\.cap\\'" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.rb\\'" . ruby-mode) auto-mode-alist))
@@ -443,6 +446,7 @@ $.
 (add-to-list 'auto-mode-alist '("Portfile" . tcl-mode))
 (add-to-list 'auto-mode-alist '("\\.r[hl]\\'" . c-mode))
 (add-to-list 'auto-mode-alist '("\\.xml\\'" . nxml-mode) auto-mode-alist)
+(add-to-list 'auto-mode-alist '("\\.haml\\'" . haml-mode) auto-mode-alist)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
