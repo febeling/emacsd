@@ -248,7 +248,7 @@ and save it."
 				(width . 125) (height . 35)))
     (setq mail-host-address "florian.ebeling@gmail.com")
     ;; erlang
-    (setq otp-path "/opt/local/lib/erlang/lib/tools-2.6.2/emacs/")
+    (setq otp-path "/opt/local/lib/erlang/lib/tools-2.6.4/emacs/")
     (setq load-path (cons otp-path load-path))
     (setq erlang-root-dir "/opt/local/bin")
     (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
