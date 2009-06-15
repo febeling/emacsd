@@ -2,8 +2,8 @@
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/ruby-test-mode")
 
-(set-foreground-color "gainsboro")
-(set-background-color "gray8")
+;;(set-foreground-color "gainsboro")
+;;(set-background-color "gray8")
 
 ;; from http://blog.zenspider.com/2007/09/emacs-is-ber.html
 (defadvice find-file-at-point (around goto-line compile activate)
