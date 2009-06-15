@@ -18,6 +18,13 @@
 
 ;;; Todos:
 
+(defun port-open (name)
+  "Open the portfile for named MacPorts port."
+  (interactive "MPort: ")
+  (let ((path (substring (shell-command-to-string (format "port file %s" name)) 0 -1)))
+    (if (file-exists-p path)
+	(find-file-other-window path))))
+
 (defun rotate-yank-pointer-backward () 
   "Step through the kill-ring, or the emacs clip board, and show
 the current content in the mini-buffer. Backwards."
