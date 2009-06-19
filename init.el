@@ -25,6 +25,14 @@
     (if (file-exists-p path)
 	(find-file-other-window path))))
 
+(defun gem-open (name)
+  "Open named the ruby gem directory. Specify the require name,
+not the gem's name in cases where they differ."
+  (interactive "MGem: ")
+  (let ((path (elt (split-string (shell-command-to-string (format "gem1.9 which %s" name)) "\n") 1)))
+    (if (> (length path) 0)
+	(find-file-other-window path))))
+
 (defun rotate-yank-pointer-backward () 
   "Step through the kill-ring, or the emacs clip board, and show
 the current content in the mini-buffer. Backwards."
@@ -459,18 +467,18 @@ $.
 (add-to-list 'auto-mode-alist '("\\.haml\\'" . haml-mode) auto-mode-alist)
 
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
  '(Man-width nil t)
- '(safe-local-variable-values (quote ((encoding . utf-8) (cperl-indent-level . 4) (cperl-indent-level . 2))))
+ '(safe-local-variable-values (quote ((encoding . iso-8859-1) (encoding . utf-8) (cperl-indent-level . 4) (cperl-indent-level . 2))))
  '(speedbar-show-unknown-files t))
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
  '(default ((t (:stipple nil :background "white" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :family "apple-monaco"))))
  '(show-paren-match ((((class color) (background light)) (:background "lemon chiffon")))))
 
