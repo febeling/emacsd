@@ -253,6 +253,14 @@ and save it."
     (setq erlang-root-dir "/opt/local/bin")
     (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
     (require 'erlang-start)
+    ;; slime and clojure
+    (autoload 'clojure-mode "clojure-mode" "A major mode for Clojure" t)
+    (add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode))
+
+    (add-hook 'clojure-mode-hook 
+	      '(lambda ()
+		 (clojure-slime-config "/Users/febeling/.emacs.d/clojure-install-src")))
+	     
     )
    ((equal hostname "ws-febeling.office.nugg.ad")
     (setq default-frame-alist '((top . 1) (left . 1) 
@@ -309,7 +317,7 @@ and save it."
 
 ;; enable copy-paste within X Window under Linux
 (setq x-select-enable-clipboard t)
-(if x-no-window-manager
+(if (boundp 'x-no-window-manager)
     (progn 
       (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
       (message "cut-and-paste with x enabled")))
@@ -356,7 +364,7 @@ and save it."
 	  '(lambda () 
 	     (define-key emacs-lisp-mode-map [C-tab] 'lisp-complete-symbol)))
 
-(require 'snippet)
+;(require 'snippet)
 
 (add-hook 'c-mode-hook 
 	  '(lambda ()
@@ -449,19 +457,30 @@ $.
 (add-to-list 'auto-mode-alist '("\\.haml\\'" . haml-mode) auto-mode-alist)
 
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
  '(Man-width nil t)
- '(safe-local-variable-values (quote ((encoding . utf-8) (cperl-indent-level . 4) (cperl-indent-level . 2))))
+ '(safe-local-variable-values (quote ((sh-basic-offset . 3) (encoding . utf-8) (cperl-indent-level . 4) (cperl-indent-level . 2))))
  '(speedbar-show-unknown-files t))
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:stipple nil :background "white" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :family "apple-monaco"))))
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+;; '(default ((t (:stipple nil :background "white" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :family "apple-monaco"))))
  '(show-paren-match ((((class color) (background light)) (:background "lemon chiffon")))))
 
 (put 'erase-buffer 'disabled nil)
+
+
+;;; This was installed by package-install.el.
+;;; This provides support for the package system and
+;;; interfacing with ELPA, the package archive.
+;;; Move this code earlier if you want to reference
+;;; packages in your .emacs.
+(when
+    (load
+     (expand-file-name "~/.emacs.d/elpa/package.el"))
+  (package-initialize))
