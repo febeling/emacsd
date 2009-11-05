@@ -1,9 +1,27 @@
 ;; emacs init.el - Florian Ebeling
+
+;; please remember eventually:
+;; C-M-arrows: up, down, next-sib, prev-sib
+;; C-M-SPC: mark sexp
+
+;;; Todos:
+
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/ruby-test-mode")
 
-;;(set-foreground-color "gainsboro")
-;;(set-background-color "gray8")
+;;; This was (originally) installed by
+;;; package-install.el.  This provides support for
+;;; the package system and interfacing with ELPA,
+;;; the package archive.  Move this code earlier
+;;; if you want to reference packages in your
+;;; .emacs.
+(when
+    (load
+     (expand-file-name "~/.emacs.d/elpa/package.el"))
+  (package-initialize))
+
+;; (set-foreground-color "gainsboro")
+;; (set-background-color "gray8")
 
 ;; from http://blog.zenspider.com/2007/09/emacs-is-ber.html
 (defadvice find-file-at-point (around goto-line compile activate)
@@ -12,11 +30,18 @@
     ad-do-it
     (and line (goto-line line))))
 
-;; please remember eventually:
-;; C-M-arrows: up, down, next-sib, prev-sib
-;; C-M-SPC: mark sexp
+(defadvice find-file (around goto-line compile activate)
+  "Got to a line number in a file, if one is appended to the file
+name (separated by a colon).
 
-;;; Todos:
+Example:
+  ~/.emacs.d/init.el:19"
+  (if (string-match "\\(.*\\):\\([0-9]+\\)$" filename)
+      (let ((line (string-to-number (substring filename (match-beginning 2) (match-end 2))))
+	    (filename (substring filename (match-beginning 1) (match-end 1))))
+	ad-do-it
+	(and line (goto-line line)))
+    ad-do-it))
 
 (defun port-open (name)
   "Open the portfile for named MacPorts port."
@@ -31,9 +56,10 @@ not the gem's name in cases where they differ."
   (interactive "MGem: ")
   (let ((path (elt (split-string (shell-command-to-string (format "gem1.9 which %s" name)) "\n") 1)))
     (if (> (length path) 0)
-	(find-file-other-window path))))
+	(find-file-other-window path)
+      (message "Gem not found"))))
 
-(defun rotate-yank-pointer-backward () 
+(defun rotate-yank-pointer-backward ()
   "Step through the kill-ring, or the emacs clip board, and show
 the current content in the mini-buffer. Backwards."
   (interactive)
@@ -67,14 +93,14 @@ or directory, as a preview."
 
 (defun dired-iterate-item-or-descend (move-function)
   (let ((file (dired-get-file-for-visit)))
-    (cond 
+    (cond
      ((file-directory-p file) (find-file file))
      ((and (file-exists-p file) (file-readable-p file))
       (save-selected-window (find-file-other-window file))
       (funcall move-function 1))
      (t (error "Neither readable file nor directory")))))
 
-(add-hook 'dired-mode-hook 
+(add-hook 'dired-mode-hook
 	  '(lambda ()
 	     (define-key dired-mode-map " " 'dired-next-item-or-descend)
 	     (define-key dired-mode-map (kbd "S-SPC") 'dired-previous-item-or-descend)))
@@ -91,6 +117,95 @@ after a line to extend them."
   (forward-line -2))
 
 (global-set-key [S-return] 'move-up-rest-of-line)
+
+(defun insert-defun-in-repl ()
+  (interactive)
+  (let ((form (slime-defun-at-point)))
+    (save-excursion
+      (switch-to-buffer-other-window "*slime-repl clojure*")
+      (insert form))))
+
+(add-hook 'clojure-mode-hook
+	  '(lambda ()
+	     (define-key clojure-mode-map "\e\C-z" 'insert-defun-in-repl)))
+
+;; from Phil Hagelberg's blog at http://technomancy.us/126#c
+(defun clojure-project (path)
+  "Setup classpaths for a clojure project and starts a new SLIME session."
+  (interactive "DProject root: ")
+  (when (get-buffer "*inferior-lisp*")
+    (kill-buffer "*inferior-lisp*"))
+  (defvar swank-clojure-extra-vm-args nil)
+  (defvar slime-lisp-implementations nil)
+  (add-to-list 'swank-clojure-extra-vm-args
+               (format "-Dclojure.compile.path=%s"
+                       (expand-file-name "build/classes/" path)))
+  (setq swank-clojure-binary nil
+        swank-clojure-jar-path (expand-file-name "lib/" path)
+        swank-clojure-extra-classpaths
+        (append (mapcar (lambda (d) (expand-file-name d path))
+                        '("src_clojure/" "build/classes/" "test_unit_clojure/"))
+                (let ((lib (expand-file-name "lib" path)))
+                  (if (file-exists-p lib)
+                      (directory-files lib t ".jar$"))))
+        slime-lisp-implementations
+        (cons `(clojure ,(swank-clojure-cmd) :init swank-clojure-init)
+              (remove-if #'(lambda (x) (eq (car x) 'clojure))
+                         slime-lisp-implementations)))
+  (save-window-excursion
+    (slime)))
+
+;; referenced from Phil Hagelberg's blog, only needed for Emacs 22, 23
+;; contains it, it seems.
+
+;; Port this functionality back from Emacs 23 since it's Really Useful
+
+(unless (functionp 'locate-dominating-file)
+  (defun locate-dominating-file (file name)
+    "Look up the directory hierarchy from FILE for a file named NAME.
+Stop at the first parent directory containing a file NAME,
+and return the directory.  Return nil if not found."
+    ;; We used to use the above locate-dominating-files code, but the
+    ;; directory-files call is very costly, so we're much better off doing
+    ;; multiple calls using the code in here.
+    ;;
+    ;; Represent /home/luser/foo as ~/foo so that we don't try to look for
+    ;; `name' in /home or in /.
+    (setq file (abbreviate-file-name file))
+    (let ((root nil)
+          (prev-file file)
+          ;; `user' is not initialized outside the loop because
+          ;; `file' may not exist, so we may have to walk up part of the
+          ;; hierarchy before we find the "initial UID".
+          (user nil)
+          try)
+      (while (not (or root
+                      (null file)
+                      ;; FIXME: Disabled this heuristic because it is sometimes
+                      ;; inappropriate.
+                      ;; As a heuristic, we stop looking up the hierarchy of
+                      ;; directories as soon as we find a directory belonging
+                      ;; to another user.  This should save us from looking in
+                      ;; things like /net and /afs.  This assumes that all the
+                      ;; files inside a project belong to the same user.
+                      ;; (let ((prev-user user))
+                      ;;   (setq user (nth 2 (file-attributes file)))
+                      ;;   (and prev-user (not (equal user prev-user))))
+                      (string-match locate-dominating-stop-dir-regexp file)))
+        (setq try (file-exists-p (expand-file-name name file)))
+        (cond (try (setq root file))
+              ((equal file (setq prev-file file
+                                 file (file-name-directory
+                                       (directory-file-name file))))
+               (setq file nil))))
+      root))
+
+  (defvar locate-dominating-stop-dir-regexp
+    "\\`\\(?:[\\/][\\/][^\\/]+\\|/\\(?:net\\|afs\\|\\.\\.\\.\\)/\\)\\'"))
+
+(provide 'dominating-file)
+
+;;; end clojure section
 
 ;;; Requires:
 
@@ -138,8 +253,8 @@ after a line to extend them."
 (defun symq ()
   "symbol quote, puts double quotes around word."
   (interactive)
-  (save-excursion 
-    (if (not (word-beginning-p)) 
+  (save-excursion
+    (if (not (word-beginning-p))
 	(backward-word 1))
     (insert-char ?\" 1)
     (forward-word 1)
@@ -158,7 +273,7 @@ after a line to extend them."
 
 (defun word-boundary (func)
   (if (equal (funcall func (bounds-of-thing-at-point 'word)) (point))
-      (progn 
+      (progn
 	(message "cursor is at a word boundary")
 	t)
     nil))
@@ -198,7 +313,7 @@ after a line to extend them."
 
 (global-set-key (kbd "C-c d") 'insert-date)
 
-(defvar ruby-break-file "~/dev/rptn/b" 
+(defvar ruby-break-file "~/dev/rptn/b"
   "*The file to save breakpoint in")
 
 (defun ruby-break ()
@@ -249,49 +364,45 @@ and save it."
 ;; workstation-specific settings.
 (let ((hostname (system-name)))
   (cond
-   ((equal hostname "dev14.iconmobile.de")
-    (message "Intializing for host %s" hostname)
-    (require 'psvn)
-    (find-file "~/TODO"))
-   (nil ;; todo: test for ubuntu laptop
-    (message "Intializing for host %s" hostname)
-    (let ((slime-dir-path "~/slime"))
-      (if (file-exists-p slime-dir-path)
-	  (add-to-list 'load-path slime-dir-path)
-	(with-output-to-temp-buffer "*slime init warnings*" 
-	  (princ (format "slime-dir-path does not exist: '%s'" slime-dir-path))))))
-   ((equal hostname "flomac.local")
+   ((equal hostname "flomac.local") ;; home macbook
     (message "Initializing for host %s" hostname)
-    (setq default-frame-alist '((top . 1) (left . 1) 
+    (setq default-frame-alist '((top . 1) (left . 1)
 				(width . 125) (height . 35)))
     (setq mail-host-address "florian.ebeling@gmail.com")
     ;; erlang
-    (setq otp-path "/opt/local/lib/erlang/lib/tools-2.6.2/emacs/")
+    (setq otp-path "/opt/local/lib/erlang/lib/tools-2.6.4/emacs/")
     (setq load-path (cons otp-path load-path))
     (setq erlang-root-dir "/opt/local/bin")
     (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
     (require 'erlang-start)
     )
    ((equal hostname "ws-febeling.office.nugg.ad")
-    (setq default-frame-alist '((top . 1) (left . 1) 
+    (setq default-frame-alist '((top . 1) (left . 1)
 				(width . 220) (height . 55)))
     (message "Initializing for nugg.ad")
     (setq mail-host-address "florian.ebeling@nugg.ad")
-    ;;    (find-file "~/dev/febeling/TODO")
-    (setq otp-path "/opt/local/lib/erlang/lib/tools-2.6.2/emacs/")
+    ;; erlang
+    (setq otp-path "/opt/local/lib/erlang/lib/tools-2.6.4/emacs/")
     (setq load-path (cons otp-path load-path))
     (setq erlang-root-dir "/opt/local/lib/erlang")
     (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
     (require 'erlang-start)
-    ;; This is needed for Distel setup
     (let ((distel-dir "/Users/febeling/personal/distel/elisp"))
       (unless (member distel-dir load-path)
- 	;; Add distel-dir to the end of load-path
  	(setq load-path (append load-path (list distel-dir)))))
     (require 'distel)
     (distel-setup)
-    ;;
-    )))
+    ;; slime
+;;     (add-to-list 'load-path "~/personal/slime")
+;;     (setq inferior-lisp-program "/opt/sbcl/bin/sbcl")
+;;     (require 'slime)
+;;     (slime-setup)
+
+    ;; clojure-install slime
+    (setq clojure-src-root "/Users/febeling/.emacs.de/clojure-install")
+    (eval-after-load 'clojure-mode '(clojure-slime-config))
+
+     )))
 
 ;;(setq make-backup-files nil)
 (setq Man-width 70)
@@ -306,7 +417,7 @@ and save it."
 (setq visible-bell t)
 
 ;; for emacsclient
-(server-start) 
+(server-start)
 
 (defalias 'qrr 'query-replace-regexp)
 (defalias 'qr 'query-replace)
@@ -321,22 +432,22 @@ and save it."
 (read-abbrev-file)
 (setq save-abbrevs nil)
 
-(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1)) 
-(if (fboundp 'tool-bar-mode) (tool-bar-mode -1)) 
-;;(if (fboundp 'menu-bar-mode) (menu-bar-mode -1)) 
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+;;(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 
 ;; enable copy-paste within X Window under Linux
 (setq x-select-enable-clipboard t)
 (if x-no-window-manager
-    (progn 
+    (progn
       (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
       (message "cut-and-paste with x enabled")))
 
 ;;; general key remapping
 
 ;; free strokes
-;; C-# -> as new/custom duplicate-line keybinding  
-;; M-p 
+;; C-# -> as new/custom duplicate-line keybinding
+;; M-p
 ;; C-f8 -> make ruby local_var from region
 
 (global-set-key (kbd "C-.") 'find-file-at-point)
@@ -367,18 +478,18 @@ and save it."
 
 (autoload 'css-mode "css-mode")
 
-(add-hook 'nxml-mode-hook 
+(add-hook 'nxml-mode-hook
 	  '(lambda ()
 	     (define-key nxml-mode-map [C-tab] 'nxml-complete)))
-(add-hook 'emacs-lisp-mode-hook 
-	  '(lambda () 
+(add-hook 'emacs-lisp-mode-hook
+	  '(lambda ()
 	     (define-key emacs-lisp-mode-map [C-tab] 'lisp-complete-symbol)))
 
 (require 'snippet)
 
-(add-hook 'c-mode-hook 
+(add-hook 'c-mode-hook
 	  '(lambda ()
-	     (snippet-with-abbrev-table 
+	     (snippet-with-abbrev-table
 	      'c-mode-abbrev-table
 	      ("tc" . "START_TEST ($${test_name})
 {
@@ -399,15 +510,15 @@ $.
 
 (add-hook 'ruby-mode
 	  '(lambda ()
-	     (snippet-with-abbrev-table 
+	     (snippet-with-abbrev-table
 	      'ruby-mode-abbrev-table
 	      ("defm" . "def$.
 
   end"))))
 
-(add-hook 'cperl-mode-hook 
-	  '(lambda () 
-	     (snippet-with-abbrev-table 
+(add-hook 'cperl-mode-hook
+	  '(lambda ()
+	     (snippet-with-abbrev-table
 	      'cperl-mode-abbrev-table
 	      ("head" . "=head3$.\n\n=cut\n"))))
 
@@ -431,9 +542,9 @@ $.
 
 ;;(require 'slime)
 ;;; Optionally, specify the lisp program to use. Default is "lisp"
-;; ;(setq inferior-lisp-program "cmucl") 
-;; ;(setq inferior-lisp-program "clisp -K full") 
-(setq inferior-lisp-program "sbcl")
+;; ;(setq inferior-lisp-program "cmucl")
+;; ;(setq inferior-lisp-program "clisp -K full")
+;;(setq inferior-lisp-program "sbcl")
 ;; ;(setq inferior-lisp-program "guile")
 ;; ;(setq inferior-lisp-program "scheme48")
 ;;(setq inferior-lisp-program "~/dev/vendor/arc0/arc.sh")
@@ -467,19 +578,20 @@ $.
 (add-to-list 'auto-mode-alist '("\\.haml\\'" . haml-mode) auto-mode-alist)
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(Man-width nil t)
  '(safe-local-variable-values (quote ((encoding . iso-8859-1) (encoding . utf-8) (cperl-indent-level . 4) (cperl-indent-level . 2))))
  '(speedbar-show-unknown-files t))
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(default ((t (:stipple nil :background "white" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :family "apple-monaco"))))
  '(show-paren-match ((((class color) (background light)) (:background "lemon chiffon")))))
 
 (put 'erase-buffer 'disabled nil)
+
