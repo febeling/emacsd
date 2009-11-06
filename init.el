@@ -419,6 +419,7 @@ and save it."
 (setq-default uniquify-buffer-name-style 'post-forward)
 (setq-default tab-width 8)
 (setq-default scroll-margin 2)
+(setq-default indent-tab-mode nil)
 
 (global-font-lock-mode 1)
 (show-paren-mode 1)
