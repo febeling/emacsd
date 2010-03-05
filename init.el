@@ -157,9 +157,6 @@ after a line to extend them."
   (save-window-excursion
     (slime)))
 
-(provide 'dominating-file)
-
-;;; end clojure section
 
 ;;; Requires:
 
