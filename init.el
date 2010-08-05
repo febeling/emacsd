@@ -9,6 +9,19 @@
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/ruby-test-mode")
 
+;; sudo-edit
+(defun sudo-edit (&optional arg)
+ (interactive "p")
+ (if (or arg (not buffer-file-name))
+     (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
+   (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+
+;;(require 'org-install)
+(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+(setq org-log-done t)
+
 ;;; This was (originally) installed by
 ;;; package-install.el.  This provides support for
 ;;; the package system and interfacing with ELPA,
