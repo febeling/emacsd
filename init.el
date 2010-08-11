@@ -9,6 +9,19 @@
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/ruby-test-mode")
 
+(if (locate-library "edit-server")
+    (progn
+      (require 'edit-server)
+;;      (setq edit-server-new-frame nil)
+      (edit-server-start)))
+
+(defun turn-on-paredit ()
+  (paredit-mode t))
+
+(dolist (x '(scheme emacs-lisp lisp clojure))
+  (add-hook
+   (intern (concat (symbol-name x) "-mode-hook")) 'turn-on-paredit))
+
 ;; sudo-edit
 (defun sudo-edit (&optional arg)
  (interactive "p")
@@ -360,6 +373,11 @@ and save it."
 ;; make mac option key the Hyper
 ;;(setq mac-option-modifier 'hyper)
 
+(setq mac-option-key-is-meta nil)
+(setq mac-command-key-is-meta t)
+(setq mac-command-modifier 'meta)
+(setq mac-option-modifier nil)
+
 (global-set-key (kbd "H-j") (lambda () (interactive) (insert "{}") (backward-char 1)))
 (global-set-key (kbd "H-k") (lambda () (interactive) (insert "()") (backward-char 1)))
 (global-set-key (kbd "H-l") (lambda () (interactive) (insert "[]") (backward-char 1)))
@@ -420,8 +438,8 @@ and save it."
 ;;     (slime-setup)
 
     ;; clojure-install slime
-    (setq clojure-src-root "/Users/febeling/.emacs.de/clojure-install")
-    (eval-after-load 'clojure-mode '(clojure-slime-config))
+;;     (setq clojure-src-root "/Users/febeling/.emacs.de/clojure-install")
+;;     (eval-after-load 'clojure-mode '(clojure-slime-config))
 
      )))
 
@@ -433,7 +451,7 @@ and save it."
 (setq uniquify-buffer-name-style 'forward)
 (setq-default tab-width 8)
 (setq-default scroll-margin 2)
-(setq-default indent-tab-mode nil)
+(setq-default indent-tabs-mode nil)
 
 (global-font-lock-mode 1)
 (show-paren-mode 1)
@@ -554,8 +572,8 @@ $.
 	     (setq coding "utf-8")
 	     (make-local-variable 'tab-width)
 	     (setq tab-width 4)
-	     (make-local-variable 'indent-tab-mode)
-	     (setq indent-tab-mode nil)
+	     (make-local-variable 'indent-tabs-mode)
+	     (setq indent-tabs-mode nil)
 	     (make-local-variable 'c-basic-offset)
 	     (setq c-basic-offset 4)
 	     ;; (setq tcl-indent-level 8)
@@ -606,7 +624,7 @@ $.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  '(Man-width nil t)
- '(safe-local-variable-values (quote ((sh-basic-offset . 3) (encoding . utf-8) (cperl-indent-level . 4) (cperl-indent-level . 2))))
+ '(safe-local-variable-values (quote ((encoding . iso-8859-1) (sh-basic-offset . 3) (encoding . utf-8) (cperl-indent-level . 4) (cperl-indent-level . 2))))
  '(speedbar-show-unknown-files t))
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
