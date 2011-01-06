@@ -9,13 +9,21 @@
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/ruby-test-mode")
 
+(defalias 'yes-or-no-p 'y-or-n-p)
+
 (if (locate-library "edit-server")
     (progn
       (require 'edit-server)
 ;;      (setq edit-server-new-frame nil)
       (edit-server-start)))
 
+(autoload 'git-blame-mode "git-blame" "Minor mode for incremental blame for Git." t)
+
+(require 'paredit)
+(require 'yasnippet)
+
 (defun turn-on-paredit ()
+  (interactive)
   (paredit-mode t))
 
 (dolist (x '(scheme emacs-lisp lisp clojure))
@@ -603,34 +611,31 @@ $.
 
 ;;; File extension mode settings
 
-(setq auto-mode-alist (cons '("\\.cap\\'" . ruby-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.rb\\'" . ruby-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.cap$" . ruby-mode) auto-mode-alist))
+;;(setq auto-mode-alist (cons '("\\.rb$" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("Rakefile" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("Capfile" . ruby-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.rake\\'" . ruby-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.rhtml\\'" . html-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.smil\\'" . sgml-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.asd\\'" . lisp-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.css\\'" . css-mode) auto-mode-alist))
-;;(add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
-(add-to-list 'auto-mode-alist '("Portfile" . tcl-mode))
-(add-to-list 'auto-mode-alist '("\\.r[hl]\\'" . c-mode))
-(add-to-list 'auto-mode-alist '("\\.xml\\'" . nxml-mode) auto-mode-alist)
-(add-to-list 'auto-mode-alist '("\\.haml\\'" . haml-mode) auto-mode-alist)
+(setq auto-mode-alist (cons '("\\.rake$" . ruby-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.rhtml$" . html-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.css$" . css-mode) auto-mode-alist))
+(add-to-list 'auto-mode-alist '("\\.r[hl]$" . c-mode))
+(add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.haml$" . haml-mode))
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(Man-width nil t)
+ '(blink-cursor-mode nil)
  '(safe-local-variable-values (quote ((encoding . iso-8859-1) (sh-basic-offset . 3) (encoding . utf-8) (cperl-indent-level . 4) (cperl-indent-level . 2))))
  '(speedbar-show-unknown-files t))
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(default ((t (:stipple nil :background "white" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :family "apple-monaco"))))
  '(show-paren-match ((((class color) (background light)) (:background "lemon chiffon")))))
 
