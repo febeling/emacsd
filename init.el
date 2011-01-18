@@ -13,6 +13,40 @@
 
 (setq indent-tabs-mode nil)
 
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+(if (locate-library "edit-server")
+    (progn
+      (require 'edit-server)
+;;      (setq edit-server-new-frame nil)
+      (edit-server-start)))
+
+(autoload 'git-blame-mode "git-blame" "Minor mode for incremental blame for Git." t)
+
+(require 'paredit)
+(require 'yasnippet)
+
+(defun turn-on-paredit ()
+  (interactive)
+  (paredit-mode t))
+
+(dolist (x '(scheme emacs-lisp lisp clojure))
+  (add-hook
+   (intern (concat (symbol-name x) "-mode-hook")) 'turn-on-paredit))
+
+;; sudo-edit
+(defun sudo-edit (&optional arg)
+ (interactive "p")
+ (if (or arg (not buffer-file-name))
+     (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
+   (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+
+;;(require 'org-install)
+(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+(setq org-log-done t)
+
 ;;; This was (originally) installed by
 ;;; package-install.el.  This provides support for
 ;;; the package system and interfacing with ELPA,
@@ -273,6 +307,11 @@ and save it."
 ;; make mac option key the Hyper
 ;;(setq mac-option-modifier 'hyper)
 
+(setq mac-option-key-is-meta nil)
+(setq mac-command-key-is-meta t)
+(setq mac-command-modifier 'meta)
+(setq mac-option-modifier nil)
+
 (global-set-key (kbd "H-j") (lambda () (interactive) (insert "{}") (backward-char 1)))
 (global-set-key (kbd "H-k") (lambda () (interactive) (insert "()") (backward-char 1)))
 (global-set-key (kbd "H-l") (lambda () (interactive) (insert "[]") (backward-char 1)))
@@ -327,8 +366,8 @@ and save it."
 ;;     (slime-setup)
 
     ;; clojure-install slime
-    (setq clojure-src-root "/Users/febeling/.emacs.de/clojure-install")
-    (eval-after-load 'clojure-mode '(clojure-slime-config))
+;;     (setq clojure-src-root "/Users/febeling/.emacs.de/clojure-install")
+;;     (eval-after-load 'clojure-mode '(clojure-slime-config))
 
      )))
 
@@ -340,7 +379,7 @@ and save it."
 (setq uniquify-buffer-name-style 'forward)
 (setq-default tab-width 8)
 (setq-default scroll-margin 2)
-(setq-default indent-tab-mode nil)
+(setq-default indent-tabs-mode nil)
 
 (global-font-lock-mode 1)
 (show-paren-mode 1)
@@ -461,8 +500,8 @@ $.
 	     (setq coding "utf-8")
 	     (make-local-variable 'tab-width)
 	     (setq tab-width 4)
-	     (make-local-variable 'indent-tab-mode)
-	     (setq indent-tab-mode nil)
+	     (make-local-variable 'indent-tabs-mode)
+	     (setq indent-tabs-mode nil)
 	     (make-local-variable 'c-basic-offset)
 	     (setq c-basic-offset 4)
 	     ;; (setq tcl-indent-level 8)
@@ -492,36 +531,33 @@ $.
 
 ;;; File extension mode settings
 
-(setq auto-mode-alist (cons '("\\.cap\\'" . ruby-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.rb\\'" . ruby-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.cap$" . ruby-mode) auto-mode-alist))
+;;(setq auto-mode-alist (cons '("\\.rb$" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("Rakefile" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("Capfile" . ruby-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.rake\\'" . ruby-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.rhtml\\'" . html-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.smil\\'" . sgml-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.asd\\'" . lisp-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.css\\'" . css-mode) auto-mode-alist))
-;;(add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
-(add-to-list 'auto-mode-alist '("Portfile" . tcl-mode))
-(add-to-list 'auto-mode-alist '("\\.r[hl]\\'" . c-mode))
-(add-to-list 'auto-mode-alist '("\\.xml\\'" . nxml-mode) auto-mode-alist)
-(add-to-list 'auto-mode-alist '("\\.haml\\'" . haml-mode) auto-mode-alist)
+(setq auto-mode-alist (cons '("\\.rake$" . ruby-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.rhtml$" . html-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.css$" . css-mode) auto-mode-alist))
+(add-to-list 'auto-mode-alist '("\\.r[hl]$" . c-mode))
+(add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.haml$" . haml-mode))
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(Man-width nil t)
  '(ns-alternate-modifier (quote super))
  '(ns-command-modifier (quote meta))
  '(safe-local-variable-values (quote ((sh-basic-offset . 3) (encoding . utf-8) (cperl-indent-level . 4) (cperl-indent-level . 2))))
+ '(blink-cursor-mode nil)
  '(speedbar-show-unknown-files t))
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(default ((t (:stipple nil :background "white" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :family "apple-monaco"))))
  '(show-paren-match ((((class color) (background light)) (:background "lemon chiffon")))))
 
