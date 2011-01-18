@@ -11,6 +11,8 @@
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/ruby-test-mode")
 
+(setq indent-tabs-mode nil)
+
 ;;; This was (originally) installed by
 ;;; package-install.el.  This provides support for
 ;;; the package system and interfacing with ELPA,
@@ -301,13 +303,7 @@ and save it."
 ;;     (require 'erlang-start)
     ;; slime and clojure
     (autoload 'clojure-mode "clojure-mode" "A major mode for Clojure" t)
-    (add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode))
-
-    (add-hook 'clojure-mode-hook 
-	      '(lambda ()
-		 (clojure-slime-config "/Users/febeling/.emacs.d/clojure-install-src")))
-	     
-    )
+    (add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode)))
    ((equal hostname "ws-febeling.office.nugg.ad")
     (setq default-frame-alist '((top . 1) (left . 1)
 				(width . 220) (height . 55)))
