@@ -24,7 +24,7 @@
 (autoload 'git-blame-mode "git-blame" "Minor mode for incremental blame for Git." t)
 
 (require 'paredit)
-(require 'yasnippet)
+;;(require 'yasnippet)
 
 (defun turn-on-paredit ()
   (interactive)
@@ -41,10 +41,12 @@
      (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
-;;(require 'org-install)
+(require 'org-install)
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 (define-key global-map "\C-cl" 'org-store-link)
 (define-key global-map "\C-ca" 'org-agenda)
+;;(setq org-default-notes-file (concat org-directory "/todo.org"))
+;;(define-key global-map "\C-cc" 'org-capture)
 (setq org-log-done t)
 
 ;;; This was (originally) installed by
