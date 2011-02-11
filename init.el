@@ -424,6 +424,7 @@ and save it."
 (global-set-key (kbd "C-.") 'find-file-at-point)
 ;;(global-set-key [C-S-left] 'previous-buffer)
 ;;(global-set-key [C-S-right] 'next-buffer)
+(global-set-key (kbd "M-RET") 'magit-status)
 
 (fset 'to-java-string
       [?\C-a ?" ?\C-e ?" ?  ?+ down])
