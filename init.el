@@ -13,6 +13,9 @@
 
 (setq indent-tabs-mode nil)
 
+(setq ispell-program-name "aspell")
+(setq ispell-dictionary "en")
+
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (if (locate-library "edit-server")
