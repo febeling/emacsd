@@ -8,6 +8,8 @@
 
 (set-cursor-color "gray46")
 
+(setq js-indent-level 2)
+
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/ruby-test-mode")
 
