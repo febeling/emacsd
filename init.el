@@ -543,12 +543,15 @@ $.
 (setq auto-mode-alist (cons '("Rakefile" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("Capfile" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("Gemfile" . ruby-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("Vagrantfile" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.rake$" . ruby-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.rhtml$" . html-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.css$" . css-mode) auto-mode-alist))
 (add-to-list 'auto-mode-alist '("\\.r[hl]$" . c-mode))
 (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
 (add-to-list 'auto-mode-alist '("\\.haml$" . haml-mode))
+(add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
+(add-to-list 'auto-mode-alist '("\\.yaml$ ." yaml-mode))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
