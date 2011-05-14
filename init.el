@@ -1,4 +1,4 @@
-;; emacs init.el - Florian Ebeling
+; emacs init.el - Florian Ebeling
 
 ;; please remember eventually:
 ;; C-M-arrows: up, down, next-sib, prev-sib
@@ -552,6 +552,7 @@ $.
 (add-to-list 'auto-mode-alist '("\\.haml$" . haml-mode))
 (add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
 (add-to-list 'auto-mode-alist '("\\.yaml$ ." yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.feature$ ." feature-mode))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -559,10 +560,10 @@ $.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(Man-width nil t)
+ '(blink-cursor-mode nil)
  '(ns-alternate-modifier (quote super))
  '(ns-command-modifier (quote meta))
- '(safe-local-variable-values (quote ((sh-basic-offset . 3) (encoding . utf-8) (cperl-indent-level . 4) (cperl-indent-level . 2))))
- '(blink-cursor-mode nil)
+ '(safe-local-variable-values (quote ((js2-basic-offset . 2) (erlang-indent-level . 4) (sh-basic-offset . 3) (encoding . utf-8) (cperl-indent-level . 4) (cperl-indent-level . 2))))
  '(speedbar-show-unknown-files t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
