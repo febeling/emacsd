@@ -60,10 +60,10 @@
 ;;; the package archive.  Move this code earlier
 ;;; if you want to reference packages in your
 ;;; .emacs.
-(when
-    (load
-     (expand-file-name "~/.emacs.d/elpa/package.el"))
-  (package-initialize))
+;; (when
+;;     (load
+;;      (expand-file-name "~/.emacs.d/elpa/package.el"))
+;;   (package-initialize))
 
 ;; (set-foreground-color "gainsboro")
 ;; (set-background-color "gray8")
@@ -99,7 +99,7 @@ Example:
   "Open named the ruby gem directory. Specify the require name,
 not the gem's name in cases where they differ."
   (interactive "MGem: ")
-  (let ((path (elt (split-string (shell-command-to-string (format "gem1.9 which %s" name)) "\n") 1)))
+  (let ((path (elt (split-string (shell-command-to-string (format "gem which %s" name)) "\n") 1)))
     (if (> (length path) 0)
 	(find-file-other-window path)
       (message "Gem not found"))))
@@ -342,11 +342,12 @@ and save it."
 				(width . 125) (height . 35)))
     (setq mail-host-address "florian.ebeling@gmail.com")
     ;; erlang
-;;     (setq otp-path "/opt/local/lib/erlang/lib/tools-2.6.4/emacs/")
-;;     (setq load-path (cons otp-path load-path))
-;;     (setq erlang-root-dir "/opt/local/bin")
-;;     (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
-;;     (require 'erlang-start)
+    ;;              /opt/local/lib/erlang/lib/tools-2.6.6.2/emacs/erlang.el
+    (setq otp-path "/opt/local/lib/erlang/lib/tools-2.6.6.2/emacs/")
+    (setq load-path (cons otp-path load-path))
+    (setq erlang-root-dir "/opt/local/bin")
+    (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
+    (require 'erlang-start)
     ;; slime and clojure
     (autoload 'clojure-mode "clojure-mode" "A major mode for Clojure" t)
     (add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode)))
@@ -553,6 +554,7 @@ $.
 (add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
 (add-to-list 'auto-mode-alist '("\\.yaml$ ." yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.feature$ ." feature-mode))
+(add-to-list 'auto-mode-alist '("\\.level$ ." whitespace-mode))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -574,3 +576,4 @@ $.
  '(show-paren-match ((((class color) (background light)) (:background "lemon chiffon")))))
 
 (put 'erase-buffer 'disabled nil)
+(put 'upcase-region 'disabled nil)
