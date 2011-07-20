@@ -1,4 +1,6 @@
 elpa
 ruby-test-mode
 *~
-games
+/games
+/tramp
+/places
