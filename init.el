@@ -30,6 +30,7 @@
 
 (require 'paredit)
 ;;(require 'yasnippet)
+(require 'ido)
 
 (defun turn-on-paredit ()
   (interactive)
@@ -182,6 +183,11 @@ after a line to extend them."
 (require 'oddmuse)
 ;; (setq url-proxy-services '(("http" . "your.proxy.host:portnumber")) ; if needed
 (oddmuse-mode-initialize)
+
+(require 'package)
+(add-to-list 'package-archives
+             '("marmalade" . 
+               "http://marmalade-repo.org/packages/") t)
 
 ;;;
 
@@ -342,42 +348,18 @@ and save it."
 				(width . 125) (height . 35)))
     (setq mail-host-address "florian.ebeling@gmail.com")
     ;; erlang
-    ;;              /opt/local/lib/erlang/lib/tools-2.6.6.2/emacs/erlang.el
+    ;; /opt/local/lib/erlang/lib/tools-2.6.6.2/emacs/erlang.el
     (setq otp-path "/opt/local/lib/erlang/lib/tools-2.6.6.2/emacs/")
     (setq load-path (cons otp-path load-path))
     (setq erlang-root-dir "/opt/local/bin")
     (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
     (require 'erlang-start)
-    ;; slime and clojure
-    (autoload 'clojure-mode "clojure-mode" "A major mode for Clojure" t)
-    (add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode)))
-   ((equal hostname "ws-febeling.office.nugg.ad")
-    (setq default-frame-alist '((top . 1) (left . 1)
-				(width . 220) (height . 55)))
-    (message "Initializing for nugg.ad")
-    (setq mail-host-address "florian.ebeling@nugg.ad")
     ;; erlang
     (setq otp-path "/opt/local/lib/erlang/lib/tools-2.6.4/emacs/")
     (setq load-path (cons otp-path load-path))
     (setq erlang-root-dir "/opt/local/lib/erlang")
     (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
-    (require 'erlang-start)
-    (let ((distel-dir "/Users/febeling/personal/distel/elisp"))
-      (unless (member distel-dir load-path)
- 	(setq load-path (append load-path (list distel-dir)))))
-    (require 'distel)
-    (distel-setup)
-    ;; slime
-;;     (add-to-list 'load-path "~/personal/slime")
-;;     (setq inferior-lisp-program "/opt/sbcl/bin/sbcl")
-;;     (require 'slime)
-;;     (slime-setup)
-
-    ;; clojure-install slime
-;;     (setq clojure-src-root "/Users/febeling/.emacs.de/clojure-install")
-;;     (eval-after-load 'clojure-mode '(clojure-slime-config))
-
-     )))
+    (require 'erlang-start))))
 
 ;;(setq make-backup-files nil)
 (setq Man-width 70)
