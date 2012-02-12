@@ -348,22 +348,18 @@ and save it."
 ;; workstation-specific settings.
 (let ((hostname (system-name)))
   (cond
-   ((equal hostname "flomac.local") ;; home macbook
+   ((or (equal hostname "flomac.local")
+        (equal hostname "flomac"))
     (message "Initializing for host %s" hostname)
+    (ido-mode)
     (setq default-frame-alist '((top . 1) (left . 1)
 				(width . 125) (height . 35)))
     (setq mail-host-address "florian.ebeling@gmail.com")
     ;; erlang
-    ;; /opt/local/lib/erlang/lib/tools-2.6.6.2/emacs/erlang.el
-    (setq otp-path "/opt/local/lib/erlang/lib/tools-2.6.6.2/emacs/")
+    ;; /opt/local/lib/erlang/lib/tools-2.6.6.5/emacs/erlang.el
+    (setq otp-path "/opt/local/lib/erlang/lib/tools-2.6.6.5/emacs/")
     (setq load-path (cons otp-path load-path))
     (setq erlang-root-dir "/opt/local/bin")
-    (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
-    (require 'erlang-start)
-    ;; erlang
-    (setq otp-path "/opt/local/lib/erlang/lib/tools-2.6.4/emacs/")
-    (setq load-path (cons otp-path load-path))
-    (setq erlang-root-dir "/opt/local/lib/erlang")
     (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
     (require 'erlang-start))))
 
@@ -371,11 +367,13 @@ and save it."
 (setq Man-width 70)
 (setq default-case-fold-search t)
 (setq auto-compression-mode t)
+
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
-(setq-default tab-width 8)
-(setq-default scroll-margin 2)
+
+(setq-default tab-width 4)
 (setq-default indent-tabs-mode nil)
+(setq-default scroll-margin 2)
 
 (global-font-lock-mode 1)
 (show-paren-mode 1)
@@ -443,6 +441,7 @@ and save it."
 (global-set-key (kbd "C-S-c C-S-c") 'uncomment-region)
 
 (autoload 'css-mode "css-mode")
+(autoload 'yaml-mode "yaml-mode")
 
 (add-hook 'nxml-mode-hook
 	  '(lambda ()
@@ -469,43 +468,24 @@ and save it."
 	     ;; (setq tcl-tab-always-indent 'smart)
 	     ))
 
-;;(require 'slime)
-;;; Optionally, specify the lisp program to use. Default is "lisp"
-;; ;(setq inferior-lisp-program "cmucl")
-;; ;(setq inferior-lisp-program "clisp -K full")
-;;(setq inferior-lisp-program "sbcl")
-;; ;(setq inferior-lisp-program "guile")
-;; ;(setq inferior-lisp-program "scheme48")
-;;(setq inferior-lisp-program "~/dev/vendor/arc0/arc.sh")
-;;(slime-setup)
-
-(add-hook 'slime-mode-hook
-	  (lambda ()
-	    (unless (slime-connected-p)
-	      (save-excursion (slime)))))
-
-(setq slime-net-coding-system 'utf-8-unix)
-
-;; nxml
-;;(load "/Applications/Emacs.app/Contents/Resources/site-lisp/nxml/autostart.el")
-
 ;;; File extension mode settings
 
-(setq auto-mode-alist (cons '("\\.cap$" . ruby-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("Rakefile" . ruby-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("Capfile" . ruby-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("Gemfile" . ruby-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("Vagrantfile" . ruby-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.rake$" . ruby-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.rhtml$" . html-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.css$" . css-mode) auto-mode-alist))
+(add-to-list 'auto-mode-alist '("\\.cap$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Rakefile" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Capfile" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Gemfile" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Vagrantfile" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.rhtml$" . html-mode))
+(add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
 (add-to-list 'auto-mode-alist '("\\.r[hl]$" . c-mode))
 (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
 (add-to-list 'auto-mode-alist '("\\.haml$" . haml-mode))
 (add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
-(add-to-list 'auto-mode-alist '("\\.yaml$ ." yaml-mode))
-(add-to-list 'auto-mode-alist '("\\.feature$ ." feature-mode))
-(add-to-list 'auto-mode-alist '("\\.level$ ." whitespace-mode))
+(add-to-list 'auto-mode-alist '("\\.yaml$ ." . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.feature$ ." . feature-mode))
+(add-to-list 'auto-mode-alist '("\\.level$ ." . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.pde$ ." . java-mode))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
