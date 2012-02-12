@@ -445,43 +445,6 @@ and save it."
 	  '(lambda ()
 	     (define-key emacs-lisp-mode-map [C-tab] 'lisp-complete-symbol)))
 
-;(require 'snippet)
-
-(add-hook 'c-mode-hook
-	  '(lambda ()
-	     (snippet-with-abbrev-table
-	      'c-mode-abbrev-table
-	      ("tc" . "START_TEST ($${test_name})
-{
-$.fail(\"+++\");
-}
-END_TEST
-")
-	      ("inc" . "#include \"$${header}.h\"")
-	      ("ins" . "#include <$${header}.h>")
-	      ("hf" . "#ifndef $${name}_H
-#define $${name}_H
-
-$.
-
-#endif /* $${name}_H */
-")
-	      ("tca" . "tcase_add_test(tc_core, test_$${name});$>"))))
-
-(add-hook 'ruby-mode
-	  '(lambda ()
-	     (snippet-with-abbrev-table
-	      'ruby-mode-abbrev-table
-	      ("defm" . "def$.
-
-  end"))))
-
-(add-hook 'cperl-mode-hook
-	  '(lambda ()
-	     (snippet-with-abbrev-table
-	      'cperl-mode-abbrev-table
-	      ("head" . "=head3$.\n\n=cut\n"))))
-
 ;; Modeline from the macports guide:
 ;; # -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
 (add-hook 'tcl-mode-hook
