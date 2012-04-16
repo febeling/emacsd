@@ -11,7 +11,14 @@
 (setq js-indent-level 2)
 
 (add-to-list 'load-path "~/.emacs.d")
+(add-to-list 'load-path "~/.emacs.d/elpa")
 (add-to-list 'load-path "~/.emacs.d/ruby-test-mode")
+
+(when (load "package")
+  (package-initialize)
+  (setq package-archives '(("ELPA" . "http://tromey.com/elpa/") 
+                           ("gnu" . "http://elpa.gnu.org/packages/")
+                           ("marmalade" . "http://marmalade-repo.org/packages/"))))
 
 (setq indent-tabs-mode nil)
 
@@ -54,17 +61,6 @@
 ;;(setq org-default-notes-file (concat org-directory "/todo.org"))
 ;;(define-key global-map "\C-cc" 'org-capture)
 (setq org-log-done t)
-
-;;; This was (originally) installed by
-;;; package-install.el.  This provides support for
-;;; the package system and interfacing with ELPA,
-;;; the package archive.  Move this code earlier
-;;; if you want to reference packages in your
-;;; .emacs.
-;; (when
-;;     (load
-;;      (expand-file-name "~/.emacs.d/elpa/package.el"))
-;;   (package-initialize))
 
 ;; (set-foreground-color "gainsboro")
 ;; (set-background-color "gray8")
@@ -222,11 +218,6 @@ after a line to extend them."
 (require 'oddmuse)
 ;; (setq url-proxy-services '(("http" . "your.proxy.host:portnumber")) ; if needed
 (oddmuse-mode-initialize)
-
-(require 'package)
-(add-to-list 'package-archives
-             '("marmalade" . 
-               "http://marmalade-repo.org/packages/") t)
 
 ;;;
 
@@ -390,11 +381,12 @@ and save it."
     (setq mail-host-address "florian.ebeling@gmail.com")
     ;; erlang
     ;; /opt/local/lib/erlang/lib/tools-2.6.6.5/emacs/erlang.el
-    (setq otp-path "/opt/local/lib/erlang/lib/tools-2.6.6.5/emacs/")
-    (setq load-path (cons otp-path load-path))
-    (setq erlang-root-dir "/opt/local/bin")
-    (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
-    (require 'erlang-start))))
+;    (setq otp-path "/opt/local/lib/erlang/lib/tools-2.6.6.5/emacs/")
+;    (setq load-path (cons otp-path load-path))
+;    (setq erlang-root-dir "/opt/local/bin")
+;    (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
+;    (require 'erlang-start)
+    )))
 
 ;;(setq make-backup-files nil)
 (setq Man-width 70)
