@@ -123,6 +123,34 @@ the current content in the mini-buffer. Forwards."
 
 (global-set-key [C-S-right] 'rotate-yank-pointer-forward)
 
+(defun shuffle-list (list)
+  "Randomly permute the elements of LIST.
+All permutations equally likely."
+  (let ((i 0)
+        j
+        temp
+        (len (length list)))
+    (while (< i len)
+      (setq j (+ i (random (- len i))))
+      (setq temp (nth i list))
+      (setcar (nthcdr i list) (nth j list))
+      (setcar (nthcdr j list) temp)
+      (setq i (1+ i))))
+  list)
+
+(defun shuffle-line ()
+  (interactive)
+  (let* ((b (line-beginning-position))
+         (e (line-end-position))
+         (l (delete-and-extract-region b e))
+         (ws (split-string l))
+         (ns (shuffle-list ws))
+         (nl (mapconcat 'identity ns " ")))
+    (insert "  ")
+    (insert nl)))
+
+(global-set-key (kbd "M-p") 'shuffle-line)
+
 ;; Paging through a dired listing with SPC (and Shift-SPC, backwards)
 
 (defun dired-next-item-or-descend ()
