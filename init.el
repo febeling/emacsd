@@ -6,6 +6,10 @@
 
 ;;; Todos:
 
+(setq smtpmail-stream-type 'ssl)
+(setq smtpmail-smtp-server "smtp.gmail.com")
+(setq smtpmail-smtp-service 465)
+
 (set-cursor-color "gray46")
 
 (setq js-indent-level 2)
@@ -359,8 +363,11 @@ and save it."
 (global-set-key (kbd "H-k") (lambda () (interactive) (insert "()") (backward-char 1)))
 (global-set-key (kbd "H-l") (lambda () (interactive) (insert "[]") (backward-char 1)))
 
-(global-set-key (kbd "C-c b") 'ruby-break)
+;(global-set-key (kbd "C-c b") 'ruby-break)
+(global-set-key (kbd "C-c b") 'sgml-skip-tag-backward) ;; definition compatible with tmux
 (global-set-key (kbd "C-c C-b") 'ruby-break)
+
+(global-set-key (kbd "C-x w") 'whitespace-mode)
 
 ;; configuration section
 
@@ -468,6 +475,9 @@ and save it."
 (autoload 'css-mode "css-mode")
 (autoload 'yaml-mode "yaml-mode")
 
+(add-hook 'css-mode-hook
+	  '(lambda ()
+         (setq css-indent-level 2)))
 (add-hook 'nxml-mode-hook
 	  '(lambda ()
 	     (define-key nxml-mode-map [C-tab] 'nxml-complete)))
@@ -496,13 +506,14 @@ and save it."
 ;;; File extension mode settings
 
 (add-to-list 'auto-mode-alist '("\\.cap$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.gemspec$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Rakefile" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Capfile" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Gemfile" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Vagrantfile" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rhtml$" . html-mode))
-(add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
+(add-to-list 'auto-mode-alist '("\\.s?css$" . css-mode))
 (add-to-list 'auto-mode-alist '("\\.r[hl]$" . c-mode))
 (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
 (add-to-list 'auto-mode-alist '("\\.haml$" . haml-mode))
@@ -522,6 +533,7 @@ and save it."
  '(ns-alternate-modifier (quote super))
  '(ns-command-modifier (quote meta))
  '(safe-local-variable-values (quote ((js2-basic-offset . 2) (erlang-indent-level . 4) (sh-basic-offset . 3) (encoding . utf-8) (cperl-indent-level . 4) (cperl-indent-level . 2))))
+ '(send-mail-function (quote smtpmail-send-it))
  '(speedbar-show-unknown-files t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
