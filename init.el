@@ -220,8 +220,16 @@ after a line to extend them."
 (require 'ruby-mode)
 (require 'ruby-test)
 (require 'oddmuse)
-;; (setq url-proxy-services '(("http" . "your.proxy.host:portnumber")) ; if needed
 (oddmuse-mode-initialize)
+
+(add-to-list 'load-path "~/.emacs.d/coffee-mode")
+(require 'coffee-mode)
+
+(defun coffee-custom ()
+  "coffee-mode-hook"
+  (define-key coffee-mode-map [(meta r)] 'coffee-compile-buffer))
+
+(add-hook 'coffee-mode-hook '(lambda () (coffee-custom)))
 
 ;;;
 
@@ -519,9 +527,10 @@ and save it."
 (add-to-list 'auto-mode-alist '("\\.haml$" . haml-mode))
 (add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
 (add-to-list 'auto-mode-alist '("\\.yaml$ ." . yaml-mode))
-(add-to-list 'auto-mode-alist '("\\.feature$ ." . feature-mode))
-(add-to-list 'auto-mode-alist '("\\.level$ ." . yaml-mode))
-(add-to-list 'auto-mode-alist '("\\.pde$ ." . java-mode))
+(add-to-list 'auto-mode-alist '("\\.feature$" . feature-mode))
+(add-to-list 'auto-mode-alist '("\\.level$" . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.pde$" . java-mode))
+(add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
