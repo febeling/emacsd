@@ -533,6 +533,9 @@ and save it."
 (add-to-list 'auto-mode-alist '("\\.level$" . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.pde$" . java-mode))
 (add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
+(setq auto-mode-alist
+      (append '(("\\.rst\\'" . rst-mode)
+                ("\\.rest\\'" . rst-mode)) auto-mode-alist))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
