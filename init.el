@@ -224,6 +224,8 @@ after a line to extend them."
 
 (add-to-list 'load-path "~/.emacs.d/coffee-mode")
 (require 'coffee-mode)
+(add-to-list 'load-path "~/.emacs.d/rhtml")
+(require 'rhtml-mode)
 
 (defun coffee-custom ()
   "coffee-mode-hook"
@@ -544,13 +546,7 @@ and save it."
  '(safe-local-variable-values (quote ((js2-basic-offset . 2) (erlang-indent-level . 4) (sh-basic-offset . 3) (encoding . utf-8) (cperl-indent-level . 4) (cperl-indent-level . 2))))
  '(send-mail-function (quote smtpmail-send-it))
  '(speedbar-show-unknown-files t))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:stipple nil :background "white" :foreground "black" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :family "apple-monaco"))))
- '(show-paren-match ((((class color) (background light)) (:background "lemon chiffon")))))
+
 
 (put 'erase-buffer 'disabled nil)
 (put 'upcase-region 'disabled nil)
