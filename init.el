@@ -17,6 +17,7 @@
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/elpa")
 (add-to-list 'load-path "~/.emacs.d/ruby-test-mode")
+(add-to-list 'load-path "~/.emacs.d/zencoding")
 
 (when (load "package")
   (package-initialize)
@@ -38,6 +39,9 @@
       (edit-server-start)))
 
 (autoload 'git-blame-mode "git-blame" "Minor mode for incremental blame for Git." t)
+(autoload 'zencoding-mode "zencoding-mode" "Minor mode for Zencoding HTML." t)
+
+(add-hook 'sgml-mode-hook 'zencoding-mode) ;; Auto-start on any markup modes
 
 (require 'paredit)
 ;;(require 'yasnippet)
@@ -488,6 +492,10 @@ and save it."
 (add-hook 'css-mode-hook
 	  '(lambda ()
          (setq css-indent-level 2)))
+
+(autoload 'yaml-mode "yaml-mode")
+(autoload 'feature-mode "feature-mode")
+
 (add-hook 'nxml-mode-hook
 	  '(lambda ()
 	     (define-key nxml-mode-map [C-tab] 'nxml-complete)))
