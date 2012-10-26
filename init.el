@@ -18,6 +18,11 @@
 (add-to-list 'load-path "~/.emacs.d/elpa")
 (add-to-list 'load-path "~/.emacs.d/ruby-test-mode")
 (add-to-list 'load-path "~/.emacs.d/zencoding")
+(add-to-list 'load-path "~/.emacs.d/markdown-mode")
+
+(autoload 'auto-install-from-emacswiki "auto-install")
+(setq auto-install-directory "~/.emacs.d/auto-install-directory/")
+(add-to-list 'load-path "~/.emacs.d/auto-install-directory/")
 
 (when (load "package")
   (package-initialize)
@@ -43,9 +48,16 @@
 
 (add-hook 'sgml-mode-hook 'zencoding-mode) ;; Auto-start on any markup modes
 
+(autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
+
 (require 'paredit)
 ;;(require 'yasnippet)
 (require 'ido)
+(require 'yaml-mode)
+
+(require 'anything)
+;; (require 'anything-match-plugin)
+(require 'anything-config)
 
 (defun turn-on-paredit ()
   (interactive)
@@ -154,6 +166,7 @@ All permutations equally likely."
     (insert nl)))
 
 (global-set-key (kbd "M-p") 'shuffle-line)
+(global-set-key (kbd "S-M-t") 'transpose-words) ;; Avoid collision with textmate-mode find-in-project
 
 ;; Paging through a dired listing with SPC (and Shift-SPC, backwards)
 
@@ -523,27 +536,29 @@ and save it."
 
 ;;; File extension mode settings
 
-(add-to-list 'auto-mode-alist '("\\.cap$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.gemspec$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Rakefile" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Capfile" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Gemfile" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Vagrantfile" . ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.rhtml$" . html-mode))
-(add-to-list 'auto-mode-alist '("\\.s?css$" . css-mode))
-(add-to-list 'auto-mode-alist '("\\.r[hl]$" . c-mode))
-(add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
-(add-to-list 'auto-mode-alist '("\\.haml$" . haml-mode))
-(add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
-(add-to-list 'auto-mode-alist '("\\.yaml$ ." . yaml-mode))
-(add-to-list 'auto-mode-alist '("\\.feature$" . feature-mode))
-(add-to-list 'auto-mode-alist '("\\.level$" . yaml-mode))
-(add-to-list 'auto-mode-alist '("\\.pde$" . java-mode))
-(add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
-(setq auto-mode-alist
-      (append '(("\\.rst\\'" . rst-mode)
-                ("\\.rest\\'" . rst-mode)) auto-mode-alist))
+(add-to-list 'auto-mode-alist '("\\.cap$"      . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.gemspec$"  . ruby-mode))
+(add-to-list 'auto-mode-alist '("Rakefile"     . ruby-mode))
+(add-to-list 'auto-mode-alist '("Capfile"      . ruby-mode))
+(add-to-list 'auto-mode-alist '("Gemfile"      . ruby-mode))
+(add-to-list 'auto-mode-alist '("Vagrantfile"  . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.rake$"     . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.rhtml$"    . html-mode))
+(add-to-list 'auto-mode-alist '("\\.s?css$"    . css-mode))
+(add-to-list 'auto-mode-alist '("\\.r[hl]$"    . c-mode))
+(add-to-list 'auto-mode-alist '("\\.xml$"      . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.haml$"     . haml-mode))
+(add-to-list 'auto-mode-alist '("\\.js$"       . js-mode))
+(add-to-list 'auto-mode-alist '("\\.yaml$ ."   . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.yml$ ."    . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.feature$"  . feature-mode))
+(add-to-list 'auto-mode-alist '("\\.level$"    . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.pde$"      . java-mode))
+(add-to-list 'auto-mode-alist '("\\.coffee$"   . coffee-mode))
+(add-to-list 'auto-mode-alist '("\\.rest$"     . rst-mode))
+(add-to-list 'auto-mode-alist '("\\.rst$"      . rst-mode))
+(add-to-list 'auto-mode-alist '("\\.md"        . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.markdown"  . markdown-mode))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
