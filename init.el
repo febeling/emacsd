@@ -67,6 +67,15 @@
   (add-hook
    (intern (concat (symbol-name x) "-mode-hook")) 'turn-on-paredit))
 
+(defun underline ()
+  "Underline the current line with = characters, matching the length."
+  (interactive)
+  (save-excursion
+    (end-of-line)
+    (let ((right-pos (current-column)))
+      (insert "\n")
+      (insert (make-string right-pos ?=)))))
+
 ;; sudo-edit
 (defun sudo-edit (&optional arg)
  (interactive "p")
