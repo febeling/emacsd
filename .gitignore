@@ -4,3 +4,8 @@ ruby-test-mode
 /games
 /tramp
 /places
+/auto-install-directory/*
+/zencoding/
+/url/cookies
+/markdown-mode/
+/rhtml
