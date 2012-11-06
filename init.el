@@ -431,6 +431,12 @@ and save it."
 ;    (require 'erlang-start)
     )))
 
+(if (equal 'ns (window-system))
+    (progn
+      (message "setting.. ns")
+      (load-theme 'wombat t)
+      (set-face-attribute 'default nil :height 140)))
+
 ;;(setq make-backup-files nil)
 (setq Man-width 70)
 (setq default-case-fold-search t)
