@@ -176,6 +176,7 @@ All permutations equally likely."
 
 (global-set-key (kbd "M-p") 'shuffle-line)
 (global-set-key (kbd "S-M-t") 'transpose-words) ;; Avoid collision with textmate-mode find-in-project
+(global-set-key (kbd "C-x f") 'find-file-in-project)
 
 ;; Paging through a dired listing with SPC (and Shift-SPC, backwards)
 
