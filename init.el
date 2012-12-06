@@ -434,7 +434,6 @@ and save it."
 
 (if (equal 'ns (window-system))
     (progn
-      (message "setting.. ns")
       (load-theme 'wombat t)
       (set-face-attribute 'default nil :height 140)))
 
