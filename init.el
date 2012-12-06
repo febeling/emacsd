@@ -582,6 +582,7 @@ and save it."
  ;; If there is more than one, they won't work right.
  '(Man-width nil t)
  '(blink-cursor-mode nil)
+ '(grep-find-ignored-directories (quote ("SCCS" "RCS" "CVS" "MCVS" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "vendor" "log")))
  '(ns-alternate-modifier (quote super))
  '(ns-command-modifier (quote meta))
  '(safe-local-variable-values (quote ((js2-basic-offset . 2) (erlang-indent-level . 4) (sh-basic-offset . 3) (encoding . utf-8) (cperl-indent-level . 4) (cperl-indent-level . 2))))
