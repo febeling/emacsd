@@ -19,6 +19,12 @@
 (add-to-list 'load-path "~/.emacs.d/ruby-test-mode")
 (add-to-list 'load-path "~/.emacs.d/zencoding")
 (add-to-list 'load-path "~/.emacs.d/markdown-mode")
+(add-to-list 'load-path "~/.emacs.d/rdebug-dep")
+(add-to-list 'load-path "~/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/debugger-1.2.3/emacs")
+(require 'rdebug)
+
+(setenv "PATH" (concat (getenv "HOME") "/.rbenv/shims:" (getenv "HOME") "/.rbenv/bin:" (getenv "PATH")))
+(setq exec-path (cons (concat (getenv "HOME") "/.rbenv/shims") (cons (concat (getenv "HOME") "/.rbenv/bin") exec-path)))
 
 (autoload 'auto-install-from-emacswiki "auto-install")
 (setq auto-install-directory "~/.emacs.d/auto-install-directory/")
