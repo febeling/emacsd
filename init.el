@@ -20,8 +20,8 @@
 (add-to-list 'load-path "~/.emacs.d/zencoding")
 (add-to-list 'load-path "~/.emacs.d/markdown-mode")
 (add-to-list 'load-path "~/.emacs.d/rdebug-dep")
-(add-to-list 'load-path "~/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/debugger-1.2.3/emacs")
-(require 'rdebug)
+;(add-to-list 'load-path "~/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/debugger-1.2.3/emacs")
+;(require 'rdebug)
 
 (setenv "PATH" (concat (getenv "HOME") "/.rbenv/shims:" (getenv "HOME") "/.rbenv/bin:" (getenv "PATH")))
 (setq exec-path (cons (concat (getenv "HOME") "/.rbenv/shims") (cons (concat (getenv "HOME") "/.rbenv/bin") exec-path)))
@@ -38,7 +38,7 @@
 
 (setq indent-tabs-mode nil)
 
-(setq ispell-program-name "aspell")
+(setq ispell-program-name "/usr/local/bin/aspell")
 (setq ispell-dictionary "en")
 
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -64,6 +64,16 @@
 (require 'anything)
 ;; (require 'anything-match-plugin)
 (require 'anything-config)
+
+(defun remove-line-breaks ()
+  "Remove line endings in a paragraph."
+  (interactive)
+  (let ((fill-column (point-max)))
+    (fill-paragraph nil)))
+
+(add-hook 'text-mode-hook
+          '(lambda ()
+             (define-key text-mode-map (kbd "M-s-^") 'remove-line-breaks)))
 
 (defun turn-on-paredit ()
   (interactive)
@@ -354,7 +364,24 @@ after a line to extend them."
   (let ((files-only t))
     (switch-to-buffer (list-buffers-noselect files-only) 'norecord)))
 
-(global-set-key [C-S-up] 'buffer-select)
+;;(global-set-key [C-S-up] 'buffer-select)
+
+(setq ibuffer-formats
+      '((mark
+         modified
+         read-only " "
+         ;; More width for name
+         (name 40 40 :left :elide) " "
+         (size 9 -1 :right) " "
+         (mode 16 16 :left :elide) " "
+         filename-and-process)
+        (mark
+         " "
+         (name 16 -1)
+         " "
+         filename)))
+
+(global-set-key [C-S-up] 'ibuffer)
 
 (defun insert-date ()
   "Insert the current date at point"
@@ -564,6 +591,7 @@ and save it."
 (add-to-list 'auto-mode-alist '("Capfile"      . ruby-mode))
 (add-to-list 'auto-mode-alist '("Procfile"     . ruby-mode))
 (add-to-list 'auto-mode-alist '("Gemfile"      . ruby-mode))
+(add-to-list 'auto-mode-alist '("Guardfile"    . ruby-mode))
 (add-to-list 'auto-mode-alist '("Vagrantfile"  . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rake$"     . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rhtml$"    . html-mode))
@@ -589,7 +617,10 @@ and save it."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(Man-width nil t)
+ '(ansi-color-names-vector ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
  '(blink-cursor-mode nil)
+ '(custom-enabled-themes (quote (wombat)))
+ '(custom-safe-themes (quote ("5e067e71f4bfe1e1a696370dd861b7939ac283f19e1584f8e01e61c8c0bc729d" default)))
  '(grep-find-ignored-directories (quote ("SCCS" "RCS" "CVS" "MCVS" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "vendor" "log")))
  '(ns-alternate-modifier (quote super))
  '(ns-command-modifier (quote meta))
@@ -605,4 +636,4 @@ and save it."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(magit-item-highlight ((t nil))))
