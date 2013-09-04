@@ -69,6 +69,12 @@
 ;; (require 'anything-match-plugin)
 (require 'anything-config)
 
+(defun touch ()
+  "updates mtime on the file for the current buffer"
+  (interactive)
+  (shell-command (concat "touch " (shell-quote-argument (buffer-file-name))))
+  (clear-visited-file-modtime))
+
 (defun remove-line-breaks ()
   "Remove line endings in a paragraph."
   (interactive)
