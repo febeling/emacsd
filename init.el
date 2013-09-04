@@ -32,8 +32,9 @@
 
 (when (load "package")
   (package-initialize)
-  (setq package-archives '(("ELPA" . "http://tromey.com/elpa/") 
+  (setq package-archives '(("ELPA" . "http://tromey.com/elpa/")
                            ("gnu" . "http://elpa.gnu.org/packages/")
+                           ("melpa" . "http://melpa.milkbox.net/")
                            ("marmalade" . "http://marmalade-repo.org/packages/"))))
 
 (setq indent-tabs-mode nil)
