@@ -54,6 +54,9 @@
 
 (add-hook 'sgml-mode-hook 'zencoding-mode) ;; Auto-start on any markup modes
 
+(add-hook 'scss-mode '(lambda ()
+                        (setq scss-compile-at-save nil)))
+
 (autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
 
 (require 'paredit)
@@ -595,7 +598,8 @@ and save it."
 (add-to-list 'auto-mode-alist '("Vagrantfile"  . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rake$"     . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rhtml$"    . html-mode))
-(add-to-list 'auto-mode-alist '("\\.s?css$"    . css-mode))
+(add-to-list 'auto-mode-alist '("\\.css$"      . css-mode))
+(add-to-list 'auto-mode-alist '("\\.scss$"     . scss-mode))
 (add-to-list 'auto-mode-alist '("\\.r[hl]$"    . c-mode))
 (add-to-list 'auto-mode-alist '("\\.xml$"      . nxml-mode))
 (add-to-list 'auto-mode-alist '("\\.haml$"     . haml-mode))
