@@ -275,8 +275,9 @@ after a line to extend them."
 (require 'oddmuse)
 (oddmuse-mode-initialize)
 
-(add-to-list 'load-path "~/.emacs.d/coffee-mode")
-(require 'coffee-mode)
+(add-to-list 'load-path "~/.emacs.d/helm")
+(require 'helm-config)
+
 (add-to-list 'load-path "~/.emacs.d/rhtml")
 (require 'rhtml-mode)
 
