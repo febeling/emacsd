@@ -626,6 +626,7 @@ and save it."
  '(ns-command-modifier (quote meta))
  '(safe-local-variable-values (quote ((js2-basic-offset . 2) (erlang-indent-level . 4) (sh-basic-offset . 3) (encoding . utf-8) (cperl-indent-level . 4) (cperl-indent-level . 2))))
  '(send-mail-function (quote smtpmail-send-it))
+ '(show-trailing-whitespace t)
  '(speedbar-show-unknown-files t))
 
 
