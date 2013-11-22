@@ -1,5 +1,7 @@
 ; emacs init.el - Florian Ebeling
 
+(add-to-list 'load-path "~/.emacs.d")
+
 (setq smtpmail-stream-type 'ssl)
 (setq smtpmail-smtp-server "smtp.gmail.com")
 (setq smtpmail-smtp-service 465)
@@ -8,30 +10,14 @@
 
 (setq js-indent-level 2)
 
-(add-to-list 'load-path "~/.emacs.d")
-(add-to-list 'load-path "~/.emacs.d/elpa")
-(add-to-list 'load-path "~/.emacs.d/git/ruby-test-mode")
-(add-to-list 'load-path "~/.emacs.d/rdebug-dep")
-(add-to-list 'load-path "~/.emacs.d/auto-install-directory/")
-(add-to-list 'load-path "~/.emacs.d/helm")
+(load "personal/load-path")
+(load "personal/external")
+(load "personal/support")
+(load "personal/commands")
+(load "personal/settings")
+(load "personal/file-types")
 
-(setenv "PATH"
-        (mapconcat 'identity
-                   `("/usr/local/bin"
-                     "/usr/local/share/npm/bin"
-                     ,(getenv "HOME") "/.rbenv/shims"
-                     ,(getenv "HOME") "/.rbenv/bin"
-                     ,(getenv "PATH"))
-                   ":"))
-
-(add-to-list 'exec-path "/.rbenv/shims")
-(add-to-list 'exec-path "/.rbenv/bin")
-(add-to-list 'exec-path "/usr/local/bin")
-(add-to-list 'exec-path "/usr/local/share/npm/bin")
-
-(autoload 'auto-install-from-emacswiki "auto-install")
 (setq auto-install-directory "~/.emacs.d/auto-install-directory/")
-
 
 (when (load "package")
   (package-initialize)
@@ -53,15 +39,10 @@
 ;;      (setq edit-server-new-frame nil)
       (edit-server-start)))
 
-(autoload 'git-blame-mode "git-blame" "Minor mode for incremental blame for Git." t)
-(autoload 'zencoding-mode "zencoding-mode" "Minor mode for Zencoding HTML." t)
-
 (add-hook 'sgml-mode-hook 'zencoding-mode) ;; Auto-start on any markup modes
 
 (add-hook 'scss-mode '(lambda ()
                         (setq scss-compile-at-save nil)))
-
-(autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
 
 (require 'paredit)
 ;;(require 'yasnippet)
@@ -69,195 +50,23 @@
 (require 'yaml-mode)
 
 (require 'anything)
-;; (require 'anything-match-plugin)
 (require 'anything-config)
-
-(defun resort ()
-  "sort dashed string components"
-  (interactive)
-  (save-excursion
-    (kill-sexp)
-    (insert "\""
-            (mapconcat 'identity
-                       (sort (split-string (substring (car kill-ring-yank-pointer)
-                                                      1
-                                                      -1)
-                                           "-")
-                             'string<)
-                       "-")
-            "\"")))
-
-(defun touch ()
-  "updates mtime on the file for the current buffer"
-  (interactive)
-  (let ((command (concat "touch " (shell-quote-argument (buffer-file-name)))))
-    (shell-command command)
-    (clear-visited-file-modtime)
-    (message command)))
-
-(global-set-key (kbd "s-<return>") 'touch)
-
-(defun remove-line-breaks ()
-  "Remove line endings in a paragraph."
-  (interactive)
-  (let ((fill-column (point-max)))
-    (fill-paragraph nil)))
 
 (add-hook 'text-mode-hook
           '(lambda ()
              (define-key text-mode-map (kbd "M-s-^") 'remove-line-breaks)))
 
-(defun turn-on-paredit ()
-  (interactive)
-  (paredit-mode t))
-
-(dolist (x '(scheme emacs-lisp lisp clojure))
-  (add-hook
-   (intern (concat (symbol-name x) "-mode-hook")) 'turn-on-paredit))
-
-(defun underline ()
-  "Underline the current line with = characters, matching the length."
-  (interactive)
-  (save-excursion
-    (end-of-line)
-    (let ((right-pos (current-column)))
-      (insert "\n")
-      (insert (make-string right-pos ?=)))))
-
-;; sudo-edit
-(defun sudo-edit (&optional arg)
- (interactive "p")
- (if (or arg (not buffer-file-name))
-     (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
-   (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
-
 (require 'org-install)
-(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 (define-key global-map "\C-cl" 'org-store-link)
 (define-key global-map "\C-ca" 'org-agenda)
 ;;(setq org-default-notes-file (concat org-directory "/todo.org"))
 ;;(define-key global-map "\C-cc" 'org-capture)
 (setq org-log-done t)
 
-;; (set-foreground-color "gainsboro")
-;; (set-background-color "gray8")
-
-;; from http://blog.zenspider.com/2007/09/emacs-is-ber.html
-(defadvice find-file-at-point (around goto-line compile activate)
-  (let ((line (and (looking-at ".*:\\([0-9]+\\)")
-                   (string-to-number (match-string 1)))))
-    ad-do-it
-    (and line (goto-line line))))
-
-(defadvice find-file (around goto-line compile activate)
-  "Got to a line number in a file, if one is appended to the file
-name (separated by a colon).
-
-Example:
-  ~/.emacs.d/init.el:19"
-  (if (string-match "\\(.*\\):\\([0-9]+\\)$" filename)
-      (let ((line (string-to-number (substring filename (match-beginning 2) (match-end 2))))
-	    (filename (substring filename (match-beginning 1) (match-end 1))))
-	ad-do-it
-	(and line (goto-line line)))
-    ad-do-it))
-
-(defun port-open (name)
-  "Open the portfile for named MacPorts port."
-  (interactive "MPort: ")
-  (let ((path (substring (shell-command-to-string (format "port file %s" name)) 0 -1)))
-    (if (file-exists-p path)
-	(find-file-other-window path))))
-
-(defun gem-open (name)
-  "Open named the ruby gem directory. Specify the require name,
-not the gem's name in cases where they differ."
-  (interactive "MGem: ")
-  (let ((path (elt (split-string (shell-command-to-string (format "gem which %s" name)) "\n") 1)))
-    (if (> (length path) 0)
-	(find-file-other-window path)
-      (message "Gem not found"))))
-
-(defun rotate-yank-pointer-backward ()
-  "Step through the kill-ring, or the emacs clip board, and show
-the current content in the mini-buffer. Backwards."
-  (interactive)
-  (let ((text (current-kill -1)))
-    (message "%s" text)))
-
-(global-set-key [C-S-left] 'rotate-yank-pointer-backward)
-
-(defun rotate-yank-pointer-forward ()
-  "Step through the kill-ring, or the emacs clip board, and show
-the current content in the mini-buffer. Forwards."
-  (interactive)
-  (let ((text (current-kill 1)))
-    (message "%s" text)))
-
-(global-set-key [C-S-right] 'rotate-yank-pointer-forward)
-
-(defun shuffle-list (list)
-  "Randomly permute the elements of LIST.
-All permutations equally likely."
-  (let ((i 0)
-        j
-        temp
-        (len (length list)))
-    (while (< i len)
-      (setq j (+ i (random (- len i))))
-      (setq temp (nth i list))
-      (setcar (nthcdr i list) (nth j list))
-      (setcar (nthcdr j list) temp)
-      (setq i (1+ i))))
-  list)
-
-(defun shuffle-line ()
-  (interactive)
-  (let* ((b (line-beginning-position))
-         (e (line-end-position))
-         (l (delete-and-extract-region b e))
-         (ws (split-string l))
-         (ns (shuffle-list ws))
-         (nl (mapconcat 'identity ns " ")))
-    (insert "  ")
-    (insert nl)))
 
 (global-set-key (kbd "M-p") 'shuffle-line)
 (global-set-key (kbd "S-M-t") 'transpose-words) ;; Avoid collision with textmate-mode find-in-project
 (global-set-key (kbd "C-x f") 'find-file-in-project)
-
-;; Paging through a dired listing with SPC (and Shift-SPC, backwards)
-
-(defun dired-next-item-or-descend ()
-  "Easily step through dired view looking at each file or
-directory, as a preview."
-  (interactive)
-  (dired-iterate-item-or-descend 'dired-next-line))
-
-(defun dired-previous-item-or-descend ()
-  "Easily step backwards through dired view looking at each file
-or directory, as a preview."
-  (interactive)
-  (dired-iterate-item-or-descend 'dired-previous-line))
-
-(defun dired-iterate-item-or-descend (move-function)
-  (let ((file (dired-get-file-for-visit)))
-    (cond
-     ((file-directory-p file) (find-file file))
-     ((and (file-exists-p file) (file-readable-p file))
-      (save-selected-window (find-file-other-window file))
-      (funcall move-function 1))
-     (t (error "Neither readable file nor directory")))))
-
-(add-hook 'dired-mode-hook
-	  '(lambda ()
-	     (define-key dired-mode-map " " 'dired-next-item-or-descend)
-	     (define-key dired-mode-map (kbd "S-SPC") 'dired-previous-item-or-descend)))
-
-(add-hook 'find-file-hook
-          '(lambda ()
-             (if (string-match "\\.level$" (buffer-file-name (current-buffer)))
-                 (whitespace-mode 1))))
 
 (add-hook 'yaml-mode-hook
           '(lambda ()
@@ -265,29 +74,6 @@ or directory, as a preview."
              (make-local-variable 'fill-column)
 	     (setq fill-column 35)))
 
-;; Move rest of line above (mostly for moving comments at line ends)
-
-(defun move-up-rest-of-line ()
-  "Moves everthing from point to line end up into a new line
-directly above the current one. This is nice for moving comments
-after a line to extend them."
-  (interactive)
-  (insert "\n")
-  (transpose-lines 1)
-  (forward-line -2))
-
-(global-set-key [S-return] 'move-up-rest-of-line)
-
-(defun insert-defun-in-repl ()
-  (interactive)
-  (let ((form (slime-defun-at-point)))
-    (save-excursion
-      (switch-to-buffer-other-window "*slime-repl clojure*")
-      (insert form))))
-
-(add-hook 'clojure-mode-hook
-	  '(lambda ()
-	     (define-key clojure-mode-map "\e\C-z" 'insert-defun-in-repl)))
 
 ;;; This makes collections indent in a sane way in
 ;;; ruby-mode.
@@ -309,28 +95,6 @@ after a line to extend them."
 
 ;;; Commands
 
-(defun odd-p (i) (= 1 (mod i 2)))
-
-(defun even-p (i) (= 0 (mod i 2)))
-
-(defun pull-line-up ()
-  "Drags a line up by one, and moves point accordingly."
-  (interactive)
-  (transpose-lines 1)
-  (forward-line -2))
-
-(global-set-key [M-up] 'pull-line-up)
-(global-set-key (kbd "C-S-p") 'pull-line-up)
-
-(defun pull-line-down ()
-  "Drags a line down by one, and moves point accordingly."
-  (interactive)
-  (forward-line 1)
-  (transpose-lines 1)
-  (forward-line -1))
-
-(global-set-key [M-down] 'pull-line-down)
-(global-set-key (kbd "C-S-n") 'pull-line-down)
 
 (defun indent-buffer ()
   ;; Author: Mathias Creutz
@@ -340,62 +104,6 @@ after a line to extend them."
 
 ;; shadows tab-to-tab-stop binding.
 (global-set-key "\M-i" 'indent-buffer)
-
-(defun symq ()
-  "symbol quote, puts double quotes around word."
-  (interactive)
-  (save-excursion
-    (if (not (word-beginning-p))
-	(backward-word 1))
-    (insert-char ?\" 1)
-    (forward-word 1)
-    (insert-char ?\" 1))
-  (forward-word 2))
-
-(global-set-key [f8] 'symq)
-
-(defun word-beginning-p ()
-  (interactive)
-  (word-boundary 'car))
-
-(defun word-ending-p ()
-  (interactive)
-  (word-boundary 'cdr))
-
-(defun word-boundary (func)
-  (if (equal (funcall func (bounds-of-thing-at-point 'word)) (point))
-      (progn
-	(message "cursor is at a word boundary")
-	t)
-    nil))
-
-(defun scroll-up-1 ()
-  (interactive)
-  (scroll-up 1))
-
-(define-key global-map [S-down] 'scroll-up-1)
-;;(define-key global-map "\C-\S-n" 'scroll-up-1)
-
-(defun scroll-down-1 ()
-  (interactive)
-  (scroll-down 1))
-
-(define-key global-map [S-up] 'scroll-down-1)
-;;(define-key global-map [C-S-P] 'scroll-down-1)
-
-(defun flip-buffer ()
-  (interactive)
-  (switch-to-buffer nil))
-
-(global-set-key [C-S-down] 'flip-buffer)
-
-(defun buffer-select ()
-  "Select a buffer from a buffer-menu-like list, but do not put it into recent-buffer list."
-  (interactive)
-  (let ((files-only t))
-    (switch-to-buffer (list-buffers-noselect files-only) 'norecord)))
-
-;;(global-set-key [C-S-up] 'buffer-select)
 
 (setq ibuffer-formats
       '((mark
@@ -413,44 +121,6 @@ after a line to extend them."
          filename)))
 
 (global-set-key [C-S-up] 'ibuffer)
-
-(defun insert-date ()
-  "Insert the current date at point"
-  (interactive)
-  (insert (format-time-string "%Y-%m-%d")))
-
-(global-set-key (kbd "C-c d") 'insert-date)
-
-(defvar ruby-break-file "~/dev/rptn/b"
-  "*The file to save breakpoint in")
-
-(defun ruby-break ()
-  "Toggle ruby-debug breakpoint for current line, writing to a buffer `~/.rdebugrc',
-and save it."
-  (interactive)
-  (let ((breakpoint (format "break %s:%s" (buffer-file-name) (line-number-at-pos)))
-	line-seen)
-    (save-excursion
-      (let ((breakspoint-buffer (find-file-noselect ruby-break-file)))
-	(set-buffer breakspoint-buffer)
-	(goto-char (point-min))
-	(while (and (not line-seen) (< (point) (point-max)))
-	  (let ((this-line (buffer-substring (point) (line-end-position))))
-	    (setq line-seen (string= this-line breakpoint))
-	    (if line-seen
-		(progn
-		  (delete-region (point) (line-end-position))
-		  (if (char-equal (char-after) ?\n)
-		      (delete-char 1))))
-	    (forward-line)))
-	(if (not line-seen)
-	    (progn
-	      (insert breakpoint)
-	      (newline)))
-	(basic-save-buffer)))
-    (if line-seen
-	(message "Breakpoint *off*")
-      (message "Breakpoint *on*"))))
 
 ;; make mac option key the Hyper
 ;;(setq mac-option-modifier 'hyper)
@@ -573,72 +243,17 @@ and save it."
 (global-set-key (kbd "C-c C-c") 'comment-region)
 (global-set-key (kbd "C-S-c C-S-c") 'uncomment-region)
 
-(autoload 'css-mode "css-mode")
-(autoload 'yaml-mode "yaml-mode")
-
 (add-hook 'css-mode-hook
 	  '(lambda ()
          (setq css-indent-level 2)))
 
-(autoload 'yaml-mode "yaml-mode")
-(autoload 'feature-mode "feature-mode")
-
 (add-hook 'nxml-mode-hook
 	  '(lambda ()
 	     (define-key nxml-mode-map [C-tab] 'nxml-complete)))
+
 (add-hook 'emacs-lisp-mode-hook
 	  '(lambda ()
 	     (define-key emacs-lisp-mode-map [C-tab] 'lisp-complete-symbol)))
-
-;; Modeline from the macports guide:
-;; # -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
-(add-hook 'tcl-mode-hook
-	  '(lambda ()
-	     (message "[Running tcl-mode hook: '%s']" (current-buffer))
-	     (make-local-variable 'coding)
-	     (setq coding "utf-8")
-	     (make-local-variable 'tab-width)
-	     (setq tab-width 4)
-	     (make-local-variable 'indent-tabs-mode)
-	     (setq indent-tabs-mode nil)
-	     (make-local-variable 'c-basic-offset)
-	     (setq c-basic-offset 4)
-	     ;; (setq tcl-indent-level 8)
-	     ;; (setq tcl-continued-indent-level 8)
-	     ;; (setq tcl-tab-always-indent 'smart)
-	     ))
-
-;;; File extension mode settings
-
-(add-to-list 'auto-mode-alist '("\\.cap$"      . ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.gemspec$"  . ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.pp$"       . ruby-mode)) ;; Puppet file
-(add-to-list 'auto-mode-alist '("Rakefile"     . ruby-mode))
-(add-to-list 'auto-mode-alist '("Capfile"      . ruby-mode))
-(add-to-list 'auto-mode-alist '("Procfile"     . ruby-mode))
-(add-to-list 'auto-mode-alist '("Gemfile"      . ruby-mode))
-(add-to-list 'auto-mode-alist '("Guardfile"    . ruby-mode))
-(add-to-list 'auto-mode-alist '("Vagrantfile"  . ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.rake$"     . ruby-mode))
-(add-to-list 'auto-mode-alist '("^config.ru$"  . ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.rhtml$"    . html-mode))
-(add-to-list 'auto-mode-alist '("\\.erb$"      . html-mode))
-(add-to-list 'auto-mode-alist '("\\.css$"      . css-mode))
-(add-to-list 'auto-mode-alist '("\\.scss$"     . scss-mode))
-(add-to-list 'auto-mode-alist '("\\.r[hl]$"    . c-mode))
-(add-to-list 'auto-mode-alist '("\\.xml$"      . nxml-mode))
-(add-to-list 'auto-mode-alist '("\\.haml$"     . haml-mode))
-(add-to-list 'auto-mode-alist '("\\.js$"       . js-mode))
-(add-to-list 'auto-mode-alist '("\\.yaml$"     . yaml-mode))
-(add-to-list 'auto-mode-alist '("\\.yml$"      . yaml-mode))
-(add-to-list 'auto-mode-alist '("\\.feature$"  . feature-mode))
-(add-to-list 'auto-mode-alist '("\\.level$"    . yaml-mode))
-(add-to-list 'auto-mode-alist '("\\.pde$"      . java-mode))
-(add-to-list 'auto-mode-alist '("\\.coffee$"   . coffee-mode))
-(add-to-list 'auto-mode-alist '("\\.rest$"     . rst-mode))
-(add-to-list 'auto-mode-alist '("\\.rst$"      . rst-mode))
-(add-to-list 'auto-mode-alist '("\\.md"        . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.markdown"  . markdown-mode))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -658,7 +273,6 @@ and save it."
  '(send-mail-function (quote smtpmail-send-it))
  '(show-trailing-whitespace t)
  '(speedbar-show-unknown-files t))
-
 
 (put 'erase-buffer 'disabled nil)
 (put 'upcase-region 'disabled nil)
