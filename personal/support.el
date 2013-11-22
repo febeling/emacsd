@@ -22,3 +22,15 @@ All permutations equally likely."
 
 (defun even-p (i) (= 0 (mod i 2)))
 
+(defun join-string (list &optional separator omit-nulls)
+  "Join list to string using SEPARATOR, and drop NIL elements if
+OMIT-NULLS is given."
+  (if omit-nulls
+      (setq list (compact list)))
+  (message "%s" list)
+  (mapconcat 'identity list separator))
+
+(defun compact (list)
+  "Copy of LIST without NIL elements"
+  (delq nil (copy-tree list))
+  list)
