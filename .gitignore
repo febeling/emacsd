@@ -1,11 +1,11 @@
-elpa
-ruby-test-mode
+/elpa
 *~
 /games
 /tramp
 /places
 /auto-install-directory/*
-/zencoding/
 /url/cookies
-/markdown-mode/
-/rhtml
+/el-get
+/rdebug-dep
+/git
+/eshell
