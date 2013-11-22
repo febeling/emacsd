@@ -2,14 +2,6 @@
 
 (add-to-list 'load-path "~/.emacs.d")
 
-(setq smtpmail-stream-type 'ssl)
-(setq smtpmail-smtp-server "smtp.gmail.com")
-(setq smtpmail-smtp-service 465)
-
-(set-cursor-color "gray46")
-
-(setq js-indent-level 2)
-
 (load "personal/load-path")
 (load "personal/autoload")
 (load "personal/external")
@@ -18,12 +10,20 @@
 (load "personal/settings")
 (load "personal/file-types")
 
+(setq smtpmail-stream-type 'ssl)
+(setq smtpmail-smtp-server "smtp.gmail.com")
+(setq smtpmail-smtp-service 465)
+
+(set-cursor-color "gray46")
+
+(setq js-indent-level 2)
+
 (setq auto-install-directory "~/.emacs.d/auto-install-directory/")
 
 (when (load "package")
   (package-initialize)
   (setq package-archives '(("ELPA" . "http://tromey.com/elpa/")
-                           ("gnu" . "http://elpa.gnu.org/packages/")
+                           ;;("gnu" . "http://elpa.gnu.org/packages/")
                            ("melpa" . "http://melpa.milkbox.net/")
                            ("marmalade" . "http://marmalade-repo.org/packages/"))))
 
