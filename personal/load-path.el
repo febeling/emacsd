@@ -4,3 +4,4 @@
 
 (add-to-list 'load-path "~/.emacs.d/git/ruby-test-mode")
 (add-to-list 'load-path "~/.emacs.d/git/helm")
+(add-to-list 'load-path "~/.emacs.d/git/coffee-mode")

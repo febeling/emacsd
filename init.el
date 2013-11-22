@@ -11,6 +11,7 @@
 (setq js-indent-level 2)
 
 (load "personal/load-path")
+(load "personal/autoload")
 (load "personal/external")
 (load "personal/support")
 (load "personal/commands")
