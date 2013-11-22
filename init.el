@@ -1,11 +1,5 @@
 ; emacs init.el - Florian Ebeling
 
-;; please remember eventually:
-;; C-M-arrows: up, down, next-sib, prev-sib
-;; C-M-SPC: mark sexp
-
-;;; Todos:
-
 (setq smtpmail-stream-type 'ssl)
 (setq smtpmail-smtp-server "smtp.gmail.com")
 (setq smtpmail-smtp-service 465)
@@ -16,19 +10,28 @@
 
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/elpa")
-(add-to-list 'load-path "~/.emacs.d/ruby-test-mode")
-(add-to-list 'load-path "~/.emacs.d/zencoding")
-(add-to-list 'load-path "~/.emacs.d/markdown-mode")
+(add-to-list 'load-path "~/.emacs.d/git/ruby-test-mode")
 (add-to-list 'load-path "~/.emacs.d/rdebug-dep")
-;(add-to-list 'load-path "~/.rbenv/versions/1.9.3-p327/lib/ruby/gems/1.9.1/gems/debugger-1.2.3/emacs")
-;(require 'rdebug)
+(add-to-list 'load-path "~/.emacs.d/auto-install-directory/")
+(add-to-list 'load-path "~/.emacs.d/helm")
 
-(setenv "PATH" (concat (getenv "HOME") "/.rbenv/shims:" (getenv "HOME") "/.rbenv/bin:" (getenv "PATH")))
-(setq exec-path (cons (concat (getenv "HOME") "/.rbenv/shims") (cons (concat (getenv "HOME") "/.rbenv/bin") exec-path)))
+(setenv "PATH"
+        (mapconcat 'identity
+                   `("/usr/local/bin"
+                     "/usr/local/share/npm/bin"
+                     ,(getenv "HOME") "/.rbenv/shims"
+                     ,(getenv "HOME") "/.rbenv/bin"
+                     ,(getenv "PATH"))
+                   ":"))
+
+(add-to-list 'exec-path "/.rbenv/shims")
+(add-to-list 'exec-path "/.rbenv/bin")
+(add-to-list 'exec-path "/usr/local/bin")
+(add-to-list 'exec-path "/usr/local/share/npm/bin")
 
 (autoload 'auto-install-from-emacswiki "auto-install")
 (setq auto-install-directory "~/.emacs.d/auto-install-directory/")
-(add-to-list 'load-path "~/.emacs.d/auto-install-directory/")
+
 
 (when (load "package")
   (package-initialize)
@@ -69,11 +72,30 @@
 ;; (require 'anything-match-plugin)
 (require 'anything-config)
 
+(defun resort ()
+  "sort dashed string components"
+  (interactive)
+  (save-excursion
+    (kill-sexp)
+    (insert "\""
+            (mapconcat 'identity
+                       (sort (split-string (substring (car kill-ring-yank-pointer)
+                                                      1
+                                                      -1)
+                                           "-")
+                             'string<)
+                       "-")
+            "\"")))
+
 (defun touch ()
   "updates mtime on the file for the current buffer"
   (interactive)
-  (shell-command (concat "touch " (shell-quote-argument (buffer-file-name))))
-  (clear-visited-file-modtime))
+  (let ((command (concat "touch " (shell-quote-argument (buffer-file-name)))))
+    (shell-command command)
+    (clear-visited-file-modtime)
+    (message command)))
+
+(global-set-key (kbd "s-<return>") 'touch)
 
 (defun remove-line-breaks ()
   "Remove line endings in a paragraph."
@@ -267,19 +289,15 @@ after a line to extend them."
 	  '(lambda ()
 	     (define-key clojure-mode-map "\e\C-z" 'insert-defun-in-repl)))
 
+;;; This makes collections indent in a sane way in
+;;; ruby-mode.
+(add-hook 'ruby-mode-hook
+          '(lambda ()
+             (setq ruby-deep-indent-paren nil)))
+
 ;;; Requires:
 
-(require 'haml-mode "haml.el")
-(require 'ruby-mode)
 (require 'ruby-test)
-(require 'oddmuse)
-(oddmuse-mode-initialize)
-
-(add-to-list 'load-path "~/.emacs.d/helm")
-(require 'helm-config)
-
-(add-to-list 'load-path "~/.emacs.d/rhtml")
-(require 'rhtml-mode)
 
 (defun coffee-custom ()
   "coffee-mode-hook"
@@ -287,7 +305,9 @@ after a line to extend them."
 
 (add-hook 'coffee-mode-hook '(lambda () (coffee-custom)))
 
-;;;
+;;; Support Functions
+
+;;; Commands
 
 (defun odd-p (i) (= 1 (mod i 2)))
 
@@ -446,18 +466,21 @@ and save it."
 
 ;(global-set-key (kbd "C-c b") 'ruby-break)
 (global-set-key (kbd "C-c b") 'sgml-skip-tag-backward) ;; definition compatible with tmux
-(global-set-key (kbd "C-c C-b") 'ruby-break)
+;(global-set-key (kbd "C-c C-b") 'ruby-break)
 
-(global-set-key (kbd "C-x w") 'whitespace-mode)
+(global-unset-key (kbd "C-z")) ; disable suspend-frame
 
-;; configuration section
+;(global-set-key (kbd "C-x w") 'whitespace-mode)
+(global-set-key (kbd "C-x w") (lambda () (setq 'show-trailing-whitespace t)))
+
+;; show section
 
 (setq show-paren-style 'expression)
 (setq default-frame-alist '((top . 1) (left . 1) (width . 130) (height . 50)))
 
 (add-to-list 'Info-default-directory-list "/opt/local/share/info/")
 
-;; workstation-specific settings.
+;; Workstation-specific settings.
 (let ((hostname (system-name)))
   (cond
    ((or (equal hostname "flomac.local")
@@ -466,15 +489,7 @@ and save it."
     (ido-mode)
     (setq default-frame-alist '((top . 1) (left . 1)
 				(width . 125) (height . 35)))
-    (setq mail-host-address "florian.ebeling@gmail.com")
-    ;; erlang
-    ;; /opt/local/lib/erlang/lib/tools-2.6.6.5/emacs/erlang.el
-;    (setq otp-path "/opt/local/lib/erlang/lib/tools-2.6.6.5/emacs/")
-;    (setq load-path (cons otp-path load-path))
-;    (setq erlang-root-dir "/opt/local/bin")
-;    (setq exec-path (cons "/opt/local/lib/erlang" exec-path))
-;    (require 'erlang-start)
-    )))
+    (setq mail-host-address "florian.ebeling@gmail.com"))))
 
 (if (equal 'ns (window-system))
     (progn
@@ -520,7 +535,7 @@ and save it."
 ;; enable copy-paste within X Window under Linux
 (setq x-select-enable-clipboard t)
 (if (boundp 'x-no-window-manager)
-    (progn 
+    (progn
       (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
       (message "cut-and-paste with x enabled")))
 
@@ -605,7 +620,9 @@ and save it."
 (add-to-list 'auto-mode-alist '("Guardfile"    . ruby-mode))
 (add-to-list 'auto-mode-alist '("Vagrantfile"  . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rake$"     . ruby-mode))
+(add-to-list 'auto-mode-alist '("^config.ru$"  . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rhtml$"    . html-mode))
+(add-to-list 'auto-mode-alist '("\\.erb$"      . html-mode))
 (add-to-list 'auto-mode-alist '("\\.css$"      . css-mode))
 (add-to-list 'auto-mode-alist '("\\.scss$"     . scss-mode))
 (add-to-list 'auto-mode-alist '("\\.r[hl]$"    . c-mode))
@@ -637,6 +654,7 @@ and save it."
  '(ns-alternate-modifier (quote super))
  '(ns-command-modifier (quote meta))
  '(safe-local-variable-values (quote ((js2-basic-offset . 2) (erlang-indent-level . 4) (sh-basic-offset . 3) (encoding . utf-8) (cperl-indent-level . 4) (cperl-indent-level . 2))))
+ '(scss-compile-at-save nil)
  '(send-mail-function (quote smtpmail-send-it))
  '(show-trailing-whitespace t)
  '(speedbar-show-unknown-files t))
