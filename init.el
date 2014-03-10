@@ -20,19 +20,16 @@
 
 (setq auto-install-directory "~/.emacs.d/auto-install-directory/")
 
-(when (load "package")
-  (package-initialize)
-  (setq package-archives '(("ELPA" . "http://tromey.com/elpa/")
-                           ;;("gnu" . "http://elpa.gnu.org/packages/")
-                           ("melpa" . "http://melpa.milkbox.net/")
-                           ("marmalade" . "http://marmalade-repo.org/packages/"))))
+(when (require 'package)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+  (package-initialize))
 
 (setq indent-tabs-mode nil)
 
 (setq ispell-program-name "/usr/local/bin/aspell")
 (setq ispell-dictionary "en")
 
-(defalias 'yes-or-no-p 'y-or-n-p)
+;;(defalias 'yes-or-no-p 'y-or-n-p)
 
 (if (locate-library "edit-server")
     (progn
@@ -49,6 +46,7 @@
 ;;(require 'yasnippet)
 (require 'ido)
 (require 'yaml-mode)
+(require 'editorconfig)
 
 (require 'anything)
 (require 'anything-config)
@@ -264,7 +262,8 @@
  '(Man-width nil t)
  '(ansi-color-names-vector ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
  '(blink-cursor-mode nil)
- '(custom-enabled-themes (quote (wombat)))
+ '(column-number-mode t)
+ '(custom-enabled-themes (quote (deeper-blue)))
  '(custom-safe-themes (quote ("5e067e71f4bfe1e1a696370dd861b7939ac283f19e1584f8e01e61c8c0bc729d" default)))
  '(grep-find-ignored-directories (quote ("SCCS" "RCS" "CVS" "MCVS" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "vendor" "log")))
  '(ns-alternate-modifier (quote super))
