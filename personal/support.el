@@ -34,11 +34,6 @@ OMIT-NULLS is given."
   (delq nil (copy-tree list))
   list)
 
-(defun string-prefix-p (string prefix)
-  "Does STRING start with PREFIX?"
-  (string= (substring string 0 (length prefix))
-           prefix))
-
 (defun string-suffix-p (string suffix)
   "Does STRING end with SUFFIX?"
   (string= (substring string (- (length suffix)))

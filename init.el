@@ -9,20 +9,21 @@
 (load "personal/commands")
 (load "personal/settings")
 (load "personal/file-types")
-
-(setq smtpmail-stream-type 'ssl)
-(setq smtpmail-smtp-server "smtp.gmail.com")
-(setq smtpmail-smtp-service 465)
+(load "personal/mail-setup")
 
 (set-cursor-color "gray46")
 
 (setq js-indent-level 2)
 
+(add-hook 'objc-mode-hook
+          '(lambda ()
+             (setq-default c-basic-offset 4)))
+
 (setq auto-install-directory "~/.emacs.d/auto-install-directory/")
 
 (when (require 'package)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
-  (package-initialize))
+  (package-initialize)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t))
 
 (setq indent-tabs-mode nil)
 
@@ -41,6 +42,15 @@
 
 (add-hook 'scss-mode '(lambda ()
                         (setq scss-compile-at-save nil)))
+
+(add-hook 'org-mode-hook
+          '(lambda () (local-set-key (kbd "C-S-<up>") 'ibuffer)))
+
+(add-hook 'haskell-mode-hook
+          '(lambda ()
+             (turn-on-haskell-indentation)
+             (turn-on-haskell-doc)
+             (turn-on-haskell-decl-scan)))
 
 (require 'paredit)
 ;;(require 'yasnippet)
@@ -67,18 +77,13 @@
 (global-set-key (kbd "S-M-t") 'transpose-words) ;; Avoid collision with textmate-mode find-in-project
 (global-set-key (kbd "C-x f") 'find-file-in-project)
 
-(add-hook 'yaml-mode-hook
-          '(lambda ()
-             (fill-mode)
-             (make-local-variable 'fill-column)
-	     (setq fill-column 35)))
-
-
 ;;; This makes collections indent in a sane way in
 ;;; ruby-mode.
 (add-hook 'ruby-mode-hook
           '(lambda ()
              (setq ruby-deep-indent-paren nil)))
+
+;(add-hook 'org-)
 
 ;;; Requires:
 
@@ -281,4 +286,4 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(magit-item-highlight ((t nil))))
+ '(magit-item-highlight ((t nil)) t))
