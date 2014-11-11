@@ -144,8 +144,7 @@
 
 (global-unset-key (kbd "C-z")) ; disable suspend-frame
 
-;(global-set-key (kbd "C-x w") 'whitespace-mode)
-(global-set-key (kbd "C-x w") (lambda () (setq 'show-trailing-whitespace t)))
+(global-set-key (kbd "C-x w") 'whitespace-mode)
 
 ;; show section
 
