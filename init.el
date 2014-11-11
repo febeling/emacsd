@@ -32,11 +32,11 @@
 
 ;;(defalias 'yes-or-no-p 'y-or-n-p)
 
-(if (locate-library "edit-server")
-    (progn
-      (require 'edit-server)
-;;      (setq edit-server-new-frame nil)
-      (edit-server-start)))
+;; Edit Chromium textareas with Emacs
+(when (locate-library "edit-server")
+  (require 'edit-server)
+  ;;(setq edit-server-new-frame nil)
+  (edit-server-start))
 
 (add-hook 'sgml-mode-hook 'zencoding-mode) ;; Auto-start on any markup modes
 
@@ -274,10 +274,10 @@
  '(grep-find-ignored-directories (quote ("SCCS" "RCS" "CVS" "MCVS" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "vendor" "log")))
  '(ns-alternate-modifier (quote super))
  '(ns-command-modifier (quote meta))
- '(safe-local-variable-values (quote ((js2-basic-offset . 2) (erlang-indent-level . 4) (sh-basic-offset . 3) (encoding . utf-8) (cperl-indent-level . 4) (cperl-indent-level . 2))))
+ '(safe-local-variable-values (quote ((eval when (and (buffer-file-name) (string-match-p "\\.h\\'" (buffer-file-name)) (not (string-match-p "/gnulib/" (buffer-file-name)))) (c++-mode) (c-set-style "gnu")) (js2-basic-offset . 2) (erlang-indent-level . 4) (sh-basic-offset . 3) (encoding . utf-8) (cperl-indent-level . 4) (cperl-indent-level . 2))))
  '(scss-compile-at-save nil)
  '(send-mail-function (quote smtpmail-send-it))
- '(show-trailing-whitespace t)
+ '(show-trailing-whitespace nil)
  '(speedbar-show-unknown-files t))
 
 (put 'erase-buffer 'disabled nil)
@@ -287,4 +287,4 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(magit-item-highlight ((t nil)) t))
+ '(magit-item-highlight ((t nil))))
