@@ -6,6 +6,8 @@
 (global-set-key (kbd "s-s") 'sr-speedbar-toggle)
 (setq sr-speedbar-right-side nil)
 
+(global-set-key (kbd "M-s") 'er/expand-region)
+
 (dolist (x '(scheme emacs-lisp lisp clojure))
   (add-hook
    (intern (concat (symbol-name x) "-mode-hook")) 'turn-on-paredit))
