@@ -145,11 +145,6 @@ or directory, as a preview."
 	     (define-key dired-mode-map " " 'dired-next-item-or-descend)
 	     (define-key dired-mode-map (kbd "S-SPC") 'dired-previous-item-or-descend)))
 
-(add-hook 'find-file-hook
-          '(lambda ()
-             (if (string-match "\\.level$" (buffer-file-name (current-buffer)))
-                 (whitespace-mode 1))))
-
 ;;; Move rest of line above (mostly for moving comments at line ends
 ;;; to separate new line above)
 
