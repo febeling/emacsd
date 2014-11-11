@@ -186,8 +186,9 @@
 (show-paren-mode 1)
 (setq visible-bell t)
 
-;; for emacsclient
-(server-start)
+;; emacsclient
+(unless (server-running-p)
+  (server-start))
 
 (defalias 'qrr 'query-replace-regexp)
 (defalias 'qr 'query-replace)
