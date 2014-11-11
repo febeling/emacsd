@@ -11,6 +11,7 @@
 (add-to-list 'auto-mode-alist '("Vagrantfile"  . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rake$"     . ruby-mode))
 (add-to-list 'auto-mode-alist '("^config.ru$"  . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.jbuilder$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rhtml$"    . html-mode))
 (add-to-list 'auto-mode-alist '("\\.erb$"      . html-mode))
 (add-to-list 'auto-mode-alist '("\\.css$"      . css-mode))
