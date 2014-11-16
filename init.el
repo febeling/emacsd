@@ -1,6 +1,6 @@
 ; emacs init.el - Florian Ebeling
 
-(add-to-list 'load-path "~/.emacs.d")
+(add-to-list 'load-path "~/.emacs.d/lisp")
 
 (load "personal/load-path")
 (load "personal/autoload")
@@ -266,15 +266,37 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(Man-width nil t)
- '(ansi-color-names-vector ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
- '(blink-cursor-mode nil)
- '(column-number-mode t)
- '(custom-enabled-themes (quote (deeper-blue)))
- '(custom-safe-themes (quote ("5e067e71f4bfe1e1a696370dd861b7939ac283f19e1584f8e01e61c8c0bc729d" default)))
- '(grep-find-ignored-directories (quote ("SCCS" "RCS" "CVS" "MCVS" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "vendor" "log")))
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
+ '(ansi-color-names-vector
+   ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
+ '(custom-enabled-themes (quote (wombat)))
+ '(custom-safe-themes
+   (quote
+    ("a530c409754f051ff406059ab7199d3fc6f14183426734ca5739a76cf9989236" "5e067e71f4bfe1e1a696370dd861b7939ac283f19e1584f8e01e61c8c0bc729d" default)))
+ '(grep-find-ignored-directories
+   (quote
+    ("SCCS" "RCS" "CVS" "MCVS" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "vendor" "log")))
  '(ns-alternate-modifier (quote super))
  '(ns-command-modifier (quote meta))
- '(safe-local-variable-values (quote ((eval when (and (buffer-file-name) (string-match-p "\\.h\\'" (buffer-file-name)) (not (string-match-p "/gnulib/" (buffer-file-name)))) (c++-mode) (c-set-style "gnu")) (js2-basic-offset . 2) (erlang-indent-level . 4) (sh-basic-offset . 3) (encoding . utf-8) (cperl-indent-level . 4) (cperl-indent-level . 2))))
+ '(safe-local-variable-values
+   (quote
+    ((eval when
+           (and
+            (buffer-file-name)
+            (string-match-p "\\.h\\'"
+                            (buffer-file-name))
+            (not
+             (string-match-p "/gnulib/"
+                             (buffer-file-name))))
+           (c++-mode)
+           (c-set-style "gnu"))
+     (js2-basic-offset . 2)
+     (erlang-indent-level . 4)
+     (sh-basic-offset . 3)
+     (encoding . utf-8)
+     (cperl-indent-level . 4)
+     (cperl-indent-level . 2))))
  '(scss-compile-at-save nil)
  '(send-mail-function (quote smtpmail-send-it))
  '(show-trailing-whitespace nil)
@@ -287,4 +309,4 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(magit-item-highlight ((t nil))))
+ '(magit-item-highlight ((t nil)) t))

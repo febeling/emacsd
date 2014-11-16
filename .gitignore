@@ -10,3 +10,8 @@
 /git
 /eshell
 /abbrev_defs
+/var/
+/bookmarks
+/.cask/
+/.org-id-locations
+/.mc-lists.el
