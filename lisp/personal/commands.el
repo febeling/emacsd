@@ -1,3 +1,17 @@
+
+;; http://www.emacswiki.org/emacs/ExecuteExternalCommand
+;;
+;; `standard --format --stdin`
+;;
+;; Still needs to be send back to buffer for replacing the original.
+(defun shell-command-on-buffer ()
+  "Asks for a command and executes it in inferior shell with current buffer
+as input."
+  (interactive)
+  (shell-command-on-region
+   (point-min) (point-max)
+   (read-shell-command "Shell command on buffer: ")))
+
 (defun resort ()
   "sort dashed string components"
   (interactive)
@@ -50,13 +64,13 @@
    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
 ;; from http://blog.zenspider.com/2007/09/emacs-is-ber.html
-(defadvice find-file-at-point (around goto-line compile activate)
+(defadvice find-file-at-point (around forward-line compile activate)
   (let ((line (and (looking-at ".*:\\([0-9]+\\)")
                    (string-to-number (match-string 1)))))
     ad-do-it
-    (and line (goto-line line))))
+    (and line (forward-line line))))
 
-(defadvice find-file (around goto-line compile activate)
+(defadvice find-file (around forward-line compile activate)
   "Got to a line number in a file, if one is appended to the file
 name (separated by a colon).
 
@@ -66,7 +80,7 @@ Example:
       (let ((line (string-to-number (substring filename (match-beginning 2) (match-end 2))))
 	    (filename (substring filename (match-beginning 1) (match-end 1))))
 	ad-do-it
-	(and line (goto-line line)))
+	(and line (forward-line line)))
     ad-do-it))
 
 (defun port-open (name)
@@ -258,3 +272,64 @@ line to extend them."
 (setq ido-enable-flex-matching t)
 
 (global-set-key (kbd "M-n") 'ido-goto-symbol)
+
+;; http://pages.sachachua.com/.emacs.d/Sacha.html#sec-1-3-3
+
+(defun sacha/vsplit-last-buffer (prefix)
+  "Split the window vertically and display the previous buffer."
+  (interactive "p")
+  (split-window-vertically)
+  (other-window 1 nil)
+  (unless prefix
+    (switch-to-next-buffer)))
+
+(defun sacha/hsplit-last-buffer (prefix)
+  "Split the window horizontally and display the previous buffer."
+  (interactive "p")
+  (split-window-horizontally)
+  (other-window 1 nil)
+  (unless prefix (switch-to-next-buffer)))
+;(bind-key "C-x 2" 'sacha/vsplit-last-buffer)
+;(bind-key "C-x 3" 'sacha/hsplit-last-buffer)
+
+(defun sacha/search-word-backward ()
+  "Find the previous occurrence of the current word."
+  (interactive)
+  (let ((cur (point)))
+    (skip-syntax-backward "w_")
+    (goto-char
+     (if (re-search-backward (concat "\\_<" (current-word) "\\_>") nil t)
+         (match-beginning 0)
+       cur))))
+
+(defun sacha/search-word-forward ()
+  "Find the next occurrence of the current word."
+  (interactive)
+  (let ((cur (point)))
+    (skip-syntax-forward "w_")
+    (goto-char
+     (if (re-search-forward (concat "\\_<" (current-word) "\\_>") nil t)
+         (match-beginning 0)
+       cur))))
+
+(defadvice search-for-keyword (around sacha activate)
+  "Match in a case-insensitive way."
+  (let ((case-fold-search t))
+    ad-do-it))
+(global-set-key '[s-up] 'sacha/search-word-backward)
+(global-set-key '[s-down] 'sacha/search-word-forward)
+
+;; Transpose stuff with M-t
+;(bind-key "M-t" nil) ;; which used to be transpose-words
+;(bind-key "M-t l" 'transpose-lines)
+;(bind-key "M-t w" 'transpose-words)
+;(bind-key "M-t t" 'transpose-words)
+;(bind-key "M-t M-t" 'transpose-words)
+;(bind-key "M-t s" 'transpose-sexps)
+
+;; (helm :sources
+;;       (helm-build-sync-source "test"
+;;         :candidates '("foo" "foo bar" "foo bar foo"
+;;                       "foo bar foo bar" "bar" "baz")
+;;         :fuzzy-match t)
+;;       :buffer "*helm test*")

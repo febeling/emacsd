@@ -1,4 +1,28 @@
-(setq debug-on-error t)
+
+(ido-mode)
+
+;;(require 'yasnippet)
+;;(yas-global-mode)
+
+(setq enh-ruby-deep-indent-paren nil)
+
+;; (define-derived-mode fundamental-ansi-mode fundamental-mode "fundamental ansi"
+;;   "Fundamental mode that understands ansi colors."
+;;   (require 'ansi-color)
+;;   (ansi-color-apply-on-region (point-min) (point-max)))
+;;; -- still showing ^M characters, why?
+
+;; (global-set-key (kbd "C-:") 'avy-goto-char)
+(global-set-key (kbd "C-M-;") 'avy-goto-char)
+(global-set-key (kbd "C-'") 'avy-goto-char-2)
+(global-set-key (kbd "M-g g") 'avy-goto-line)
+
+;; (require 'jumpc)
+;; (jumpc)
+;; (global-set-key (kbd "C-i") 'jumpc-jump-backward)
+;; (global-set-key (kbd "<f9>") 'jumpc-jump-forward)
+
+(setq debug-on-error nil)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -8,9 +32,31 @@
 
 (global-set-key (kbd "M-s") 'er/expand-region)
 
+(global-set-key (kbd "M-T") 'helm-cmd-t)
+
 (dolist (x '(scheme emacs-lisp lisp clojure))
   (add-hook
    (intern (concat (symbol-name x) "-mode-hook")) 'turn-on-paredit))
+
+;;(require 'multiple-cursors)
+
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+
+;; web-mode
+
+(add-hook 'web-mode-hook
+          (lambda ()
+            ;; Hooks for Web mode.
+            (message "* web-mode-hook settings running")
+            (setq web-mode-markup-indent-offset 2)
+            (setq web-mode-css-indent-offset 2)
+            (setq web-mode-code-indent-offset 2)))
+
+;; org
 
 (require 'org)
 
@@ -42,3 +88,11 @@
          :kill-buffer t :prepend t :empty-lines 1)))
 
 (define-key global-map "\C-cc" 'org-capture)
+
+;; (helm :sources
+;;       (helm-build-sync-source "test"
+;;         :fuzzy-match t)
+;;       :buffer "*helm test*")
+
+;;(require 'projectile)
+;;(projectile-global-mode)

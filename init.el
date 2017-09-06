@@ -10,20 +10,48 @@
 (load "personal/settings")
 (load "personal/file-types")
 (load "personal/mail-setup")
+(load "personal/languages")
 
 (set-cursor-color "gray46")
 
-(setq js-indent-level 2)
+(setq ns-pop-up-frames nil)
+
+(when (require 'package)
+  (package-initialize)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t))
+
+(ido-mode)
+
+(global-hl-line-mode)
+
+(defun xah-syntax-color-hex ()
+  "Syntax color text of the form 「#ff1100」 in current buffer.
+URL `http://ergoemacs.org/emacs/emacs_CSS_colors.html'
+Version 2015-06-11"
+  (interactive)
+  (font-lock-add-keywords
+   nil
+   '(("#[ABCDEFabcdef[:digit:]]\\{6\\}"
+      (0 (put-text-property
+          (match-beginning 0)
+          (match-end 0)
+          'face (list :background (match-string-no-properties 0)))))))
+  (font-lock-fontify-buffer))
+
+(add-hook 'web-mode-hook 'xah-syntax-color-hex)
+(add-hook 'less-css-mode-hook 'xah-syntax-color-hex)
+
+(defun febeling-eldoc-argument-list (string)
+  "Upcase and fontify STRING for use with `eldoc-mode'."
+  (propertize (downcase string)
+              'face 'font-lock-variable-name-face))
+(setq eldoc-argument-case 'febeling-eldoc-argument-list)
 
 (add-hook 'objc-mode-hook
           '(lambda ()
              (setq-default c-basic-offset 4)))
 
 (setq auto-install-directory "~/.emacs.d/auto-install-directory/")
-
-(when (require 'package)
-  (package-initialize)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t))
 
 (setq indent-tabs-mode nil)
 
@@ -99,6 +127,9 @@
 
 ;;; Commands
 
+(defun insert-line-number ()
+  (interactive)
+  (insert " " (number-to-string (line-number-at-pos))))
 
 (defun indent-buffer ()
   ;; Author: Mathias Creutz
@@ -169,7 +200,7 @@
       (load-theme 'wombat t)
       (set-face-attribute 'default nil :height 140)))
 
-;;(setq make-backup-files nil)
+(setq make-backup-files nil)
 (setq Man-width 70)
 (setq default-case-fold-search t)
 (setq auto-compression-mode t)
@@ -183,7 +214,15 @@
 
 (global-font-lock-mode 1)
 (show-paren-mode 1)
-(setq visible-bell t)
+
+;; (setq visible-bell t) broken for osx 10.11
+
+(setq visible-bell nil)
+(setq ring-bell-function
+      (lambda ()
+        (invert-face 'mode-line)
+        (run-with-timer 0.1 nil 'invert-face 'mode-line)))
+
 
 ;; emacsclient
 (require 'server)
@@ -270,18 +309,38 @@
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
    ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
- '(custom-enabled-themes (quote (wombat)))
+ '(blink-cursor-alist (quote ((nil))))
+ '(blink-cursor-mode nil)
+ '(custom-enabled-themes (quote (misterioso)))
  '(custom-safe-themes
    (quote
-    ("a530c409754f051ff406059ab7199d3fc6f14183426734ca5739a76cf9989236" "5e067e71f4bfe1e1a696370dd861b7939ac283f19e1584f8e01e61c8c0bc729d" default)))
+    ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "ff02e8e37c9cfd192d6a0cb29054777f5254c17b1bf42023ba52b65e4307b76a" "3dafeadb813a33031848dfebfa0928e37e7a3c18efefa10f3e9f48d1993598d3" "e80932ca56b0f109f8545576531d3fc79487ca35a9a9693b62bf30d6d08c9aaf" "a530c409754f051ff406059ab7199d3fc6f14183426734ca5739a76cf9989236" "5e067e71f4bfe1e1a696370dd861b7939ac283f19e1584f8e01e61c8c0bc729d" default)))
+ '(fci-rule-color "#383838")
+ '(flycheck-disabled-checkers (quote (javascript-eslint)))
  '(grep-find-ignored-directories
    (quote
     ("SCCS" "RCS" "CVS" "MCVS" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "vendor" "log")))
+ '(js2-missing-semi-one-line-override t)
+ '(nrepl-message-colors
+   (quote
+    ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(ns-alternate-modifier (quote super))
  '(ns-command-modifier (quote meta))
+ '(package-selected-packages
+   (quote
+    (magit green-screen-theme ac-js2 rnc-mode rjsx-mode package-build shut-up epl commander f dash s zencoding-mode zenburn-theme yasnippet yari yard-mode yaml-mode web-mode toml-mode textmate swiper swift-mode sr-speedbar smart-mode-line scss-mode sass-mode rust-mode ruby-tools ruby-test-mode ruby-hash-syntax ruby-end ruby-electric ruby-block rubocop rinari reveal-in-finder restclient relax rails-log-mode projectile project-local-variables php-mode paredit nyan-mode multiple-cursors markdown-mode less-css-mode jumpc json-mode js2-mode jasminejs-mode highline helm-cmd-t haskell-mode hackernews groovy-mode grizzl go-mode gist full-ack free-keys fm flycheck flx-ido find-file-in-project expand-region ess enh-ruby-mode emoji-display edts editorconfig-core editorconfig dockerfile-mode debbugs csv-mode cmake-mode cm-mode cider cask babel avy anything-complete anything ansible-doc ansible angular-snippets anaphora alchemist ag ack 2048-game)))
+ '(projectile-global-mode t)
  '(safe-local-variable-values
    (quote
-    ((eval when
+    ((js-run . "swank-handler-tests.js")
+     (Syntax . ANSI-Common-Lisp)
+     (Base . 10)
+     (eval when
+           (require
+            (quote rainbow-mode)
+            nil t)
+           (rainbow-mode 1))
+     (eval when
            (and
             (buffer-file-name)
             (string-match-p "\\.h\\'"
@@ -292,6 +351,7 @@
            (c++-mode)
            (c-set-style "gnu"))
      (js2-basic-offset . 2)
+     (js-indent-level . 2)
      (erlang-indent-level . 4)
      (sh-basic-offset . 3)
      (encoding . utf-8)
@@ -300,7 +360,29 @@
  '(scss-compile-at-save nil)
  '(send-mail-function (quote smtpmail-send-it))
  '(show-trailing-whitespace nil)
- '(speedbar-show-unknown-files t))
+ '(speedbar-show-unknown-files t)
+ '(vc-annotate-background "#2B2B2B")
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#BC8383")
+     (40 . "#CC9393")
+     (60 . "#DFAF8F")
+     (80 . "#D0BF8F")
+     (100 . "#E0CF9F")
+     (120 . "#F0DFAF")
+     (140 . "#5F7F5F")
+     (160 . "#7F9F7F")
+     (180 . "#8FB28F")
+     (200 . "#9FC59F")
+     (220 . "#AFD8AF")
+     (240 . "#BFEBBF")
+     (260 . "#93E0E3")
+     (280 . "#6CA0A3")
+     (300 . "#7CB8BB")
+     (320 . "#8CD0D3")
+     (340 . "#94BFF3")
+     (360 . "#DC8CC3"))))
+ '(vc-annotate-very-old-color "#DC8CC3"))
 
 (put 'erase-buffer 'disabled nil)
 (put 'upcase-region 'disabled nil)
@@ -309,4 +391,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(magit-item-highlight ((t nil)) t))
+ '(cursor ((t (:background "IndianRed3"))))
+ '(magit-item-highlight ((t nil))))
+
+;; smart mode line
+(sml/setup)
+(put 'downcase-region 'disabled nil)

@@ -17,6 +17,18 @@ All permutations equally likely."
       (setq i (1+ i))))
   list)
 
+(defun shuffle-region-lines ()
+  "Casually speaking, the opposite of SORT-LINES.
+This manipulates the current region."
+  (interactive)
+  (let* ((reg (buffer-substring (region-beginning) (region-end)))
+         (list (split-string reg "\n" t))
+         (new-list (shuffle-list list))
+         (new-reg (mapconcat 'identity new-list "\n")))
+    (delete-region (region-beginning) (region-end))
+    (insert new-reg)
+    (insert "\n")))
+
 (defun odd-p (i) (= 1 (mod i 2)))
 
 (defun even-p (i) (= 0 (mod i 2)))
@@ -34,7 +46,8 @@ OMIT-NULLS is given."
   (delq nil (copy-tree list))
   list)
 
-(defun string-suffix-p (string suffix)
-  "Does STRING end with SUFFIX?"
-  (string= (substring string (- (length suffix)))
-           suffix))
+;; emacs 24 has this already defined:
+;; (defun string-suffix-p (string suffix)
+;;   "Does STRING end with SUFFIX?"
+;;   (string= (substring string (- (length suffix)))
+;;            suffix))
