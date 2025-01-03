@@ -53,12 +53,6 @@
 
 (global-set-key (kbd "M-T") 'helm-cmd-t)
 
-(dolist (x '(scheme emacs-lisp lisp clojure))
-  (add-hook
-   (intern (concat (symbol-name x) "-mode-hook")) 'turn-on-paredit))
-
-;;(require 'multiple-cursors)
-
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
 
 (global-set-key (kbd "C->") 'mc/mark-next-like-this)

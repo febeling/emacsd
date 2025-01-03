@@ -22,40 +22,32 @@
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
    ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
- '(blink-cursor-alist (quote ((nil))))
+ '(blink-cursor-alist '((nil)))
  '(blink-cursor-mode nil)
  '(coffee-tab-width 2)
  '(company-quickhelp-color-background "#4F4F4F")
  '(company-quickhelp-color-foreground "#DCDCCC")
- '(custom-enabled-themes (quote (smart-mode-line-dark)))
+ '(custom-enabled-themes '(smart-mode-line-dark))
  '(custom-safe-themes
-   (quote
-    ("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
+   '("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
  '(fci-rule-color "#383838")
- '(flycheck-disabled-checkers (quote (javascript-eslint)))
+ '(flycheck-disabled-checkers '(javascript-eslint))
  '(grep-find-ignored-directories
-   (quote
-    ("SCCS" "RCS" "CVS" "MCVS" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "vendor" "log")))
+   '("SCCS" "RCS" "CVS" "MCVS" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "vendor" "log"))
  '(js2-missing-semi-one-line-override t)
  '(nrepl-message-colors
-   (quote
-    ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
- '(ns-alternate-modifier (quote super))
- '(ns-command-modifier (quote meta))
+   '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
+ '(ns-alternate-modifier 'super)
+ '(ns-command-modifier 'meta)
  '(package-selected-packages
-   (quote
-    (company-solidity solidity-flycheck solidity-mode editorconfig crystal-mode graphql-mode typescript-mode dart-mode log4j-mode sql-indent visual-fill-column chocolate-theme ansi git pug-mode fiplr xah-find magit green-screen-theme ac-js2 rnc-mode rjsx-mode package-build shut-up epl commander f dash s zencoding-mode zenburn-theme yasnippet yari yard-mode yaml-mode web-mode toml-mode textmate swiper swift-mode sr-speedbar smart-mode-line scss-mode sass-mode rust-mode ruby-tools ruby-test-mode ruby-hash-syntax ruby-end ruby-electric ruby-block rubocop rinari reveal-in-finder restclient relax rails-log-mode projectile project-local-variables php-mode paredit nyan-mode multiple-cursors markdown-mode less-css-mode jumpc json-mode js2-mode jasminejs-mode highline helm-cmd-t haskell-mode hackernews groovy-mode grizzl go-mode gist full-ack free-keys fm flycheck flx-ido find-file-in-project expand-region ess enh-ruby-mode emoji-display edts editorconfig-core dockerfile-mode debbugs csv-mode cmake-mode cm-mode cider cask babel avy anything-complete anything ansible-doc ansible angular-snippets anaphora alchemist ag ack 2048-game)))
- '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
- '(projectile-global-mode t)
+   '(paredit editorconfig typescript-mode chocolate-theme git pug-mode fiplr magit rjsx-mode commander zenburn-theme yaml-mode web-mode markdown-mode json-mode js2-mode highline gist find-file-in-project editorconfig-core dockerfile-mode alchemist ag ack))
+ '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(safe-local-variable-values
-   (quote
-    ((js-run . "swank-handler-tests.js")
+   '((js-run . "swank-handler-tests.js")
      (Syntax . ANSI-Common-Lisp)
      (Base . 10)
      (eval when
-           (require
-            (quote rainbow-mode)
-            nil t)
+           (require 'rainbow-mode nil t)
            (rainbow-mode 1))
      (eval when
            (and
@@ -73,15 +65,14 @@
      (sh-basic-offset . 3)
      (encoding . utf-8)
      (cperl-indent-level . 4)
-     (cperl-indent-level . 2))))
+     (cperl-indent-level . 2)))
  '(scss-compile-at-save nil)
- '(send-mail-function (quote smtpmail-send-it))
+ '(send-mail-function 'smtpmail-send-it)
  '(show-trailing-whitespace nil)
  '(speedbar-show-unknown-files t)
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
-   (quote
-    ((20 . "#BC8383")
+   '((20 . "#BC8383")
      (40 . "#CC9393")
      (60 . "#DFAF8F")
      (80 . "#D0BF8F")
@@ -98,7 +89,7 @@
      (300 . "#7CB8BB")
      (320 . "#8CD0D3")
      (340 . "#94BFF3")
-     (360 . "#DC8CC3"))))
+     (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3"))
 
 
@@ -149,10 +140,6 @@ Version 2015-06-11"
 (setq ispell-program-name "/usr/local/bin/aspell")
 (setq ispell-dictionary "en")
 
-(projectile-mode +1)
-(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-
 ;;(defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; Edit Chromium textareas with Emacs
@@ -175,15 +162,11 @@ Version 2015-06-11"
              (turn-on-haskell-doc)
              (turn-on-haskell-decl-scan)))
 
-(require 'paredit)
 ;;(require 'yasnippet)
 (require 'ido)
 (require 'yaml-mode)
 (require 'editorconfig)
 (editorconfig-mode 1)
-
-(require 'anything)
-;;(require 'anything-config)
 
 (add-hook 'text-mode-hook
           '(lambda ()
@@ -413,5 +396,5 @@ Version 2015-06-11"
  '(magit-item-highlight ((t nil))))
 
 ;; smart mode line
-(sml/setup)
+;;(sml/setup)
 (put 'downcase-region 'disabled nil)

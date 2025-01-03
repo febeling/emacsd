@@ -43,10 +43,6 @@ as input."
   (let ((fill-column (point-max)))
     (fill-paragraph nil)))
 
-(defun turn-on-paredit ()
-  (interactive)
-  (paredit-mode t))
-
 (defun underline ()
   "Underline the current line with = characters, matching the length."
   (interactive)
