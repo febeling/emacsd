@@ -4,6 +4,25 @@
 ;;(require 'yasnippet)
 ;;(yas-global-mode)
 
+;; Find In Project - fuzzy find
+;; https://github.com/grizzl/fiplr
+;;
+(global-set-key (kbd "C-x f") 'fiplr-find-file)
+
+(setq fiplr-ignored-globs '((directories (
+                                          "_build"
+                                          "deps"
+                                          "node_modules"
+                                          ".git"
+                                          ".svn"
+                                          ))
+                            (files (
+                                    "*.jpg"
+                                    "*.png"
+                                    "*.zip"
+                                    "*~"
+                                    ))))
+
 (setq enh-ruby-deep-indent-paren nil)
 
 ;; (define-derived-mode fundamental-ansi-mode fundamental-mode "fundamental ansi"

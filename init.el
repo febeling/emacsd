@@ -12,13 +12,104 @@
 (load "personal/mail-setup")
 (load "personal/languages")
 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(Man-width nil t)
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
+ '(ansi-color-names-vector
+   ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
+ '(blink-cursor-alist (quote ((nil))))
+ '(blink-cursor-mode nil)
+ '(coffee-tab-width 2)
+ '(company-quickhelp-color-background "#4F4F4F")
+ '(company-quickhelp-color-foreground "#DCDCCC")
+ '(custom-enabled-themes (quote (smart-mode-line-dark)))
+ '(custom-safe-themes
+   (quote
+    ("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
+ '(fci-rule-color "#383838")
+ '(flycheck-disabled-checkers (quote (javascript-eslint)))
+ '(grep-find-ignored-directories
+   (quote
+    ("SCCS" "RCS" "CVS" "MCVS" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "vendor" "log")))
+ '(js2-missing-semi-one-line-override t)
+ '(nrepl-message-colors
+   (quote
+    ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
+ '(ns-alternate-modifier (quote super))
+ '(ns-command-modifier (quote meta))
+ '(package-selected-packages
+   (quote
+    (company-solidity solidity-flycheck solidity-mode editorconfig crystal-mode graphql-mode typescript-mode dart-mode log4j-mode sql-indent visual-fill-column chocolate-theme ansi git pug-mode fiplr xah-find magit green-screen-theme ac-js2 rnc-mode rjsx-mode package-build shut-up epl commander f dash s zencoding-mode zenburn-theme yasnippet yari yard-mode yaml-mode web-mode toml-mode textmate swiper swift-mode sr-speedbar smart-mode-line scss-mode sass-mode rust-mode ruby-tools ruby-test-mode ruby-hash-syntax ruby-end ruby-electric ruby-block rubocop rinari reveal-in-finder restclient relax rails-log-mode projectile project-local-variables php-mode paredit nyan-mode multiple-cursors markdown-mode less-css-mode jumpc json-mode js2-mode jasminejs-mode highline helm-cmd-t haskell-mode hackernews groovy-mode grizzl go-mode gist full-ack free-keys fm flycheck flx-ido find-file-in-project expand-region ess enh-ruby-mode emoji-display edts editorconfig-core dockerfile-mode debbugs csv-mode cmake-mode cm-mode cider cask babel avy anything-complete anything ansible-doc ansible angular-snippets anaphora alchemist ag ack 2048-game)))
+ '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
+ '(projectile-global-mode t)
+ '(safe-local-variable-values
+   (quote
+    ((js-run . "swank-handler-tests.js")
+     (Syntax . ANSI-Common-Lisp)
+     (Base . 10)
+     (eval when
+           (require
+            (quote rainbow-mode)
+            nil t)
+           (rainbow-mode 1))
+     (eval when
+           (and
+            (buffer-file-name)
+            (string-match-p "\\.h\\'"
+                            (buffer-file-name))
+            (not
+             (string-match-p "/gnulib/"
+                             (buffer-file-name))))
+           (c++-mode)
+           (c-set-style "gnu"))
+     (js2-basic-offset . 2)
+     (js-indent-level . 2)
+     (erlang-indent-level . 4)
+     (sh-basic-offset . 3)
+     (encoding . utf-8)
+     (cperl-indent-level . 4)
+     (cperl-indent-level . 2))))
+ '(scss-compile-at-save nil)
+ '(send-mail-function (quote smtpmail-send-it))
+ '(show-trailing-whitespace nil)
+ '(speedbar-show-unknown-files t)
+ '(vc-annotate-background "#2B2B2B")
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#BC8383")
+     (40 . "#CC9393")
+     (60 . "#DFAF8F")
+     (80 . "#D0BF8F")
+     (100 . "#E0CF9F")
+     (120 . "#F0DFAF")
+     (140 . "#5F7F5F")
+     (160 . "#7F9F7F")
+     (180 . "#8FB28F")
+     (200 . "#9FC59F")
+     (220 . "#AFD8AF")
+     (240 . "#BFEBBF")
+     (260 . "#93E0E3")
+     (280 . "#6CA0A3")
+     (300 . "#7CB8BB")
+     (320 . "#8CD0D3")
+     (340 . "#94BFF3")
+     (360 . "#DC8CC3"))))
+ '(vc-annotate-very-old-color "#DC8CC3"))
+
+
 (set-cursor-color "gray46")
 
 (setq ns-pop-up-frames nil)
 
 (when (require 'package)
-  (package-initialize)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t))
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+  (add-to-list 'package-archives '("elpa" . "https://elpa.gnu.org/packages/") t)
+  (package-initialize))
 
 (ido-mode)
 
@@ -51,12 +142,16 @@ Version 2015-06-11"
           '(lambda ()
              (setq-default c-basic-offset 4)))
 
-(setq auto-install-directory "~/.emacs.d/auto-install-directory/")
+;;(setq auto-install-directory "~/.emacs.d/auto-install-directory/")
 
 (setq indent-tabs-mode nil)
 
 (setq ispell-program-name "/usr/local/bin/aspell")
 (setq ispell-dictionary "en")
+
+(projectile-mode +1)
+(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
 ;;(defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -85,20 +180,22 @@ Version 2015-06-11"
 (require 'ido)
 (require 'yaml-mode)
 (require 'editorconfig)
+(editorconfig-mode 1)
 
 (require 'anything)
-(require 'anything-config)
+;;(require 'anything-config)
 
 (add-hook 'text-mode-hook
           '(lambda ()
              (define-key text-mode-map (kbd "M-s-^") 'remove-line-breaks)))
 
-(require 'org-install)
-(define-key global-map "\C-cl" 'org-store-link)
-(define-key global-map "\C-ca" 'org-agenda)
+;; This below broke on upgrade to 29.2, Feb 18 2024
+;;(require 'org-instqall)
+;;(define-key global-map "\C-cl" 'org-store-link)
+;;(define-key global-map "\C-ca" 'org-agenda)
 ;;(setq org-default-notes-file (concat org-directory "/todo.org"))
 ;;(define-key global-map "\C-cc" 'org-capture)
-(setq org-log-done t)
+;;(setq org-log-done t)
 
 
 (global-set-key (kbd "M-p") 'shuffle-line)
@@ -115,11 +212,12 @@ Version 2015-06-11"
 
 ;;; Requires:
 
-(require 'ruby-test)
+;;(require 'ruby-test)
 
-(defun coffee-custom ()
-  "coffee-mode-hook"
-  (define-key coffee-mode-map [(meta r)] 'coffee-compile-buffer))
+;; (defun coffee-custom ()
+;;   "coffee-mode-hook"
+;;   (define-key coffee-mode-map [(meta r)] 'coffee-compile-buffer))
+
 
 (add-hook 'coffee-mode-hook '(lambda () (coffee-custom)))
 
@@ -197,8 +295,8 @@ Version 2015-06-11"
 
 (if (equal 'ns (window-system))
     (progn
-      (load-theme 'wombat t)
-      (set-face-attribute 'default nil :height 140)))
+      (load-theme 'misterioso t)
+      (set-face-attribute 'default nil :height 200)))
 
 (setq make-backup-files nil)
 (setq Man-width 70)
@@ -214,6 +312,9 @@ Version 2015-06-11"
 
 (global-font-lock-mode 1)
 (show-paren-mode 1)
+
+;; Make `fill-paragraph' recognize list items without separting lines
+(setq paragraph-start "\f\\|[ \t]*$\\|[ \t]*[-+*] ")
 
 ;; (setq visible-bell t) broken for osx 10.11
 
@@ -299,90 +400,7 @@ Version 2015-06-11"
 	  '(lambda ()
 	     (define-key emacs-lisp-mode-map [C-tab] 'lisp-complete-symbol)))
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(Man-width nil t)
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(ansi-color-names-vector
-   ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
- '(blink-cursor-alist (quote ((nil))))
- '(blink-cursor-mode nil)
- '(custom-enabled-themes (quote (misterioso)))
- '(custom-safe-themes
-   (quote
-    ("3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "ff02e8e37c9cfd192d6a0cb29054777f5254c17b1bf42023ba52b65e4307b76a" "3dafeadb813a33031848dfebfa0928e37e7a3c18efefa10f3e9f48d1993598d3" "e80932ca56b0f109f8545576531d3fc79487ca35a9a9693b62bf30d6d08c9aaf" "a530c409754f051ff406059ab7199d3fc6f14183426734ca5739a76cf9989236" "5e067e71f4bfe1e1a696370dd861b7939ac283f19e1584f8e01e61c8c0bc729d" default)))
- '(fci-rule-color "#383838")
- '(flycheck-disabled-checkers (quote (javascript-eslint)))
- '(grep-find-ignored-directories
-   (quote
-    ("SCCS" "RCS" "CVS" "MCVS" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "vendor" "log")))
- '(js2-missing-semi-one-line-override t)
- '(nrepl-message-colors
-   (quote
-    ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
- '(ns-alternate-modifier (quote super))
- '(ns-command-modifier (quote meta))
- '(package-selected-packages
-   (quote
-    (magit green-screen-theme ac-js2 rnc-mode rjsx-mode package-build shut-up epl commander f dash s zencoding-mode zenburn-theme yasnippet yari yard-mode yaml-mode web-mode toml-mode textmate swiper swift-mode sr-speedbar smart-mode-line scss-mode sass-mode rust-mode ruby-tools ruby-test-mode ruby-hash-syntax ruby-end ruby-electric ruby-block rubocop rinari reveal-in-finder restclient relax rails-log-mode projectile project-local-variables php-mode paredit nyan-mode multiple-cursors markdown-mode less-css-mode jumpc json-mode js2-mode jasminejs-mode highline helm-cmd-t haskell-mode hackernews groovy-mode grizzl go-mode gist full-ack free-keys fm flycheck flx-ido find-file-in-project expand-region ess enh-ruby-mode emoji-display edts editorconfig-core editorconfig dockerfile-mode debbugs csv-mode cmake-mode cm-mode cider cask babel avy anything-complete anything ansible-doc ansible angular-snippets anaphora alchemist ag ack 2048-game)))
- '(projectile-global-mode t)
- '(safe-local-variable-values
-   (quote
-    ((js-run . "swank-handler-tests.js")
-     (Syntax . ANSI-Common-Lisp)
-     (Base . 10)
-     (eval when
-           (require
-            (quote rainbow-mode)
-            nil t)
-           (rainbow-mode 1))
-     (eval when
-           (and
-            (buffer-file-name)
-            (string-match-p "\\.h\\'"
-                            (buffer-file-name))
-            (not
-             (string-match-p "/gnulib/"
-                             (buffer-file-name))))
-           (c++-mode)
-           (c-set-style "gnu"))
-     (js2-basic-offset . 2)
-     (js-indent-level . 2)
-     (erlang-indent-level . 4)
-     (sh-basic-offset . 3)
-     (encoding . utf-8)
-     (cperl-indent-level . 4)
-     (cperl-indent-level . 2))))
- '(scss-compile-at-save nil)
- '(send-mail-function (quote smtpmail-send-it))
- '(show-trailing-whitespace nil)
- '(speedbar-show-unknown-files t)
- '(vc-annotate-background "#2B2B2B")
- '(vc-annotate-color-map
-   (quote
-    ((20 . "#BC8383")
-     (40 . "#CC9393")
-     (60 . "#DFAF8F")
-     (80 . "#D0BF8F")
-     (100 . "#E0CF9F")
-     (120 . "#F0DFAF")
-     (140 . "#5F7F5F")
-     (160 . "#7F9F7F")
-     (180 . "#8FB28F")
-     (200 . "#9FC59F")
-     (220 . "#AFD8AF")
-     (240 . "#BFEBBF")
-     (260 . "#93E0E3")
-     (280 . "#6CA0A3")
-     (300 . "#7CB8BB")
-     (320 . "#8CD0D3")
-     (340 . "#94BFF3")
-     (360 . "#DC8CC3"))))
- '(vc-annotate-very-old-color "#DC8CC3"))
+
 
 (put 'erase-buffer 'disabled nil)
 (put 'upcase-region 'disabled nil)

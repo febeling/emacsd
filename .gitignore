@@ -15,3 +15,7 @@
 /.cask/
 /.org-id-locations
 /.mc-lists.el
+/transient
+/network-security.data
+/edts
+/ac-comphist.dat

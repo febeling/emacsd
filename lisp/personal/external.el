@@ -7,6 +7,7 @@
                      "/usr/local/share/npm/bin"
                      ,(concat (getenv "HOME") "/.rbenv/shims")
                      ,(concat (getenv "HOME") "/.node/bin")
+                     ,(concat (getenv "HOME") "/.cargo/bin")
                      ,(concat (getenv "HOME") "/.rbenv/bin")
                      ,(getenv "PATH"))
                    ":"))
