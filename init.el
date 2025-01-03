@@ -321,11 +321,6 @@ Version 2015-06-11"
 (defalias 'bb 'beginning-of-buffer)
 (defalias 'eb 'end-of-buffer)
 
-(setq-default abbrev-file-name "~/.emacs.d/abbrev_defs")
-(setq-default abbrev-mode t)
-(read-abbrev-file)
-(setq save-abbrevs nil)
-
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 ;;(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
