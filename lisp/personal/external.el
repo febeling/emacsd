@@ -4,6 +4,7 @@
 (setenv "PATH"
         (mapconcat 'identity
                    `("/usr/local/bin"
+                     "/opt/homebrew/bin"
                      "/usr/local/share/npm/bin"
                      ,(concat (getenv "HOME") "/.rbenv/shims")
                      ,(concat (getenv "HOME") "/.node/bin")
@@ -15,6 +16,6 @@
 (add-to-list 'exec-path "/.rbenv/shims")
 (add-to-list 'exec-path "/.rbenv/bin")
 (add-to-list 'exec-path "/usr/local/bin")
+(add-to-list 'exec-path "/opt/homebrew/bin")
 (add-to-list 'exec-path "/usr/local/share/npm/bin")
 (add-to-list 'exec-path "/Users/febeling/.node/bin")
-

@@ -27,7 +27,7 @@
  '(coffee-tab-width 2)
  '(company-quickhelp-color-background "#4F4F4F")
  '(company-quickhelp-color-foreground "#DCDCCC")
- '(custom-enabled-themes '(smart-mode-line-dark))
+ '(custom-enabled-themes '(leuven-dark))
  '(custom-safe-themes
    '("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
  '(fci-rule-color "#383838")
@@ -40,7 +40,7 @@
  '(ns-alternate-modifier 'super)
  '(ns-command-modifier 'meta)
  '(package-selected-packages
-   '(paredit editorconfig typescript-mode chocolate-theme git pug-mode fiplr magit rjsx-mode commander zenburn-theme yaml-mode web-mode markdown-mode json-mode js2-mode highline gist find-file-in-project editorconfig-core dockerfile-mode alchemist ag ack))
+   '(chatgpt-shell kotlin-mode terraform-mode paredit editorconfig typescript-mode chocolate-theme git pug-mode fiplr magit rjsx-mode commander zenburn-theme yaml-mode web-mode markdown-mode json-mode js2-mode highline gist find-file-in-project editorconfig-core dockerfile-mode alchemist ag ack))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(safe-local-variable-values
    '((js-run . "swank-handler-tests.js")
