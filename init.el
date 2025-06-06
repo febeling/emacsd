@@ -17,11 +17,13 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(Man-width nil t)
+ '(Man-width nil)
+ '(ag-ignore-list '(".git" "node_modules" "dist" "build"))
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
-   ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
+   ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f"
+    "#f6f3e8"])
  '(blink-cursor-alist '((nil)))
  '(blink-cursor-mode nil)
  '(coffee-tab-width 2)
@@ -29,42 +31,39 @@
  '(company-quickhelp-color-foreground "#DCDCCC")
  '(custom-enabled-themes '(leuven-dark))
  '(custom-safe-themes
-   '("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
+   '("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e"
+     "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa"
+     default))
  '(fci-rule-color "#383838")
  '(flycheck-disabled-checkers '(javascript-eslint))
  '(grep-find-ignored-directories
-   '("SCCS" "RCS" "CVS" "MCVS" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs" "{arch}" "vendor" "log"))
+   '("SCCS" "RCS" "CVS" "MCVS" ".svn" ".git" ".hg" ".bzr" "_MTN" "_darcs"
+     "{arch}" "vendor" "log"))
  '(js2-missing-semi-one-line-override t)
  '(nrepl-message-colors
-   '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
+   '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3"
+     "#94BFF3" "#DC8CC3"))
  '(ns-alternate-modifier 'super)
  '(ns-command-modifier 'meta)
  '(package-selected-packages
-   '(chatgpt-shell kotlin-mode terraform-mode paredit editorconfig typescript-mode chocolate-theme git pug-mode fiplr magit rjsx-mode commander zenburn-theme yaml-mode web-mode markdown-mode json-mode js2-mode highline gist find-file-in-project editorconfig-core dockerfile-mode alchemist ag ack))
+   '(ack affe ag alchemist chatgpt-shell commander dockerfile-mode
+         editorconfig editorconfig-core find-file-in-project fiplr
+         gist git highline js2-mode json-mode kotlin-mode magit
+         magit-annex markdown-mode paredit pug-mode rjsx-mode
+         terraform-mode typescript-mode web-mode yaml-mode))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(safe-local-variable-values
-   '((js-run . "swank-handler-tests.js")
-     (Syntax . ANSI-Common-Lisp)
+   '((js-run . "swank-handler-tests.js") (Syntax . ANSI-Common-Lisp)
      (Base . 10)
+     (eval when (require 'rainbow-mode nil t) (rainbow-mode 1))
      (eval when
-           (require 'rainbow-mode nil t)
-           (rainbow-mode 1))
-     (eval when
-           (and
-            (buffer-file-name)
-            (string-match-p "\\.h\\'"
-                            (buffer-file-name))
-            (not
-             (string-match-p "/gnulib/"
-                             (buffer-file-name))))
-           (c++-mode)
-           (c-set-style "gnu"))
-     (js2-basic-offset . 2)
-     (js-indent-level . 2)
-     (erlang-indent-level . 4)
-     (sh-basic-offset . 3)
-     (encoding . utf-8)
-     (cperl-indent-level . 4)
+           (and (buffer-file-name)
+                (string-match-p "\\.h\\'" (buffer-file-name))
+                (not (string-match-p "/gnulib/" (buffer-file-name))))
+           (c++-mode) (c-set-style "gnu"))
+     (js2-basic-offset . 2) (js-indent-level . 2)
+     (erlang-indent-level . 4) (sh-basic-offset . 3)
+     (encoding . utf-8) (cperl-indent-level . 4)
      (cperl-indent-level . 2)))
  '(scss-compile-at-save nil)
  '(send-mail-function 'smtpmail-send-it)
@@ -72,24 +71,12 @@
  '(speedbar-show-unknown-files t)
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
-   '((20 . "#BC8383")
-     (40 . "#CC9393")
-     (60 . "#DFAF8F")
-     (80 . "#D0BF8F")
-     (100 . "#E0CF9F")
-     (120 . "#F0DFAF")
-     (140 . "#5F7F5F")
-     (160 . "#7F9F7F")
-     (180 . "#8FB28F")
-     (200 . "#9FC59F")
-     (220 . "#AFD8AF")
-     (240 . "#BFEBBF")
-     (260 . "#93E0E3")
-     (280 . "#6CA0A3")
-     (300 . "#7CB8BB")
-     (320 . "#8CD0D3")
-     (340 . "#94BFF3")
-     (360 . "#DC8CC3")))
+   '((20 . "#BC8383") (40 . "#CC9393") (60 . "#DFAF8F") (80 . "#D0BF8F")
+     (100 . "#E0CF9F") (120 . "#F0DFAF") (140 . "#5F7F5F")
+     (160 . "#7F9F7F") (180 . "#8FB28F") (200 . "#9FC59F")
+     (220 . "#AFD8AF") (240 . "#BFEBBF") (260 . "#93E0E3")
+     (280 . "#6CA0A3") (300 . "#7CB8BB") (320 . "#8CD0D3")
+     (340 . "#94BFF3") (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3"))
 
 
@@ -274,12 +261,7 @@ Version 2015-06-11"
     (ido-mode)
     (setq default-frame-alist '((top . 1) (left . 1)
 				(width . 125) (height . 35)))
-    (setq mail-host-address "florian.ebeling@gmail.com"))))
-
-(if (equal 'ns (window-system))
-    (progn
-      (load-theme 'misterioso t)
-      (set-face-attribute 'default nil :height 200)))
+    (setq mail-host-address "mail@florianebeling.com"))))
 
 (setq make-backup-files nil)
 (setq Man-width 70)
@@ -387,6 +369,7 @@ Version 2015-06-11"
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(default ((t (:inherit nil :extend nil :stipple nil :background "#25202a" :foreground "#cfccd2" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight regular :height 170 :width normal :foundry "nil" :family "Fira Code"))))
  '(cursor ((t (:background "IndianRed3"))))
  '(magit-item-highlight ((t nil))))
 
